@@ -15,7 +15,7 @@ function HomePage() {
                 <h2 className='home-page-subtitle2'>So you at home can sing along!</h2>
             </div>
             <button className='start-button'
-                onClick={()=>navigate('/')}>Get Started!
+                onClick={()=>navigate('/line-text-info')}>Get Started!
             </button>
         </div>
     )
