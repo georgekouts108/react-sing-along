@@ -1,11 +1,11 @@
 .line-text-info-page-main {
     background-image: url('../../assets/images/backgrounds/turquoise_bg.png');
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-position: center;
-    background-size: cover;
-    width: 100vw;                
-    height: 100vh;               
-    overflow: hidden;
+    background-size: auto;
+    width: auto;                
+    height: auto;     
+    /* overflow: hidden; */
     display: block;
 }
 .header {

@@ -81,12 +81,12 @@ function LineEntryForm(props) {
 
     return (
         <div>
-            <h3>LINE {`#${lineId}`}</h3>
+            <h3>LINE {`#${lineId + 1}`}</h3>
             {   
                 (lineId > 0 && displayChoice==='default') &&
                 <>
                     <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={lineConfirmed && props.getPreviousLine(lineId).lineConfirmed} type='checkbox' defaultChecked={false} />
-                    <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId-1} (this line must be confirmed)</label>
+                    <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId} (this line must be confirmed)</label>
                     <br/><br/>
                 </>
             }
