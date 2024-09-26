@@ -6,15 +6,25 @@
     width: 100vw;                
     height: 100vh;               
     overflow: hidden;
-    /* display: grid; */
-    /* place-items: center; */
+    display: block;
 }
 .header {
     position: absolute;
     top: 0;
     left: 0;
     padding-top: 0.5%;
+}
+
+.content {
+    margin-top: 100px; /* Adds space below the header if needed */
+    padding: 20px;
+    text-align: left; /* Prevents centering of content */
   }
+
+.main-controls {
+    position: absolute;
+    /* display: grid; */
+}
 
 /* .home-page-content {
     display: grid;
