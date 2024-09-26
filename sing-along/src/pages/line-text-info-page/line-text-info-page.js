@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './line-text-info-page.styles.css'
 import SingAlongSongsLogo from '../../components/sing-along-songs-logo/sing-along-songs-logo';
 import { staff } from '../../assets/misc/misc';
+import LineEntryForm from '../../components/line-entry-form';
 
 function LineTextInfoPage() {
     document.title = 'Line Text Info: Sing-Along Subtitle Generator'
@@ -20,7 +21,7 @@ function LineTextInfoPage() {
             }
         }
         else {
-            setLines([...lines, {id:lineCount}])
+            setLines([...lines, {id:lineCount, lineConfirmed:false}])
             setLineCount(lineCount + 1);
         }
     }
@@ -37,6 +38,11 @@ function LineTextInfoPage() {
             setLines(updatedLines);
         }
     }
+
+    const getPreviousLine = (currentLineId) => {
+        return lines[currentLineId - 1];
+    }
+
     const confirmAllLines = () => {
         const data = {
             lines: lines, 
@@ -50,7 +56,7 @@ function LineTextInfoPage() {
     }
 
     return (
-        <div className='main'>
+        <div className='line-text-info-page-main'>
             <header className='header'>
                 <SingAlongSongsLogo/>
             </header>
@@ -58,13 +64,20 @@ function LineTextInfoPage() {
             <div className='content'>
                 {staff()}
                 <h1>Line Text Information</h1>
+                <h4>Total number of lines: <span style={{color: (lineCount===0 ? 'rgb(216, 5, 5)': 'white') }}>{lineCount}</span></h4>
                 <button onClick={()=>updateLineCount(true)}>Add New Line</button>
                 <button disabled={!lineCount} onClick={()=>updateLineCount(false)}>Delete Latest Line</button>
                 <button disabled={!lineCount} onClick={()=>confirmAllLines()}>Confirm All Lines</button>
-                <h4>Total number of lines: <span style={{color: (lineCount===0 ? 'rgb(216, 5, 5)': 'white') }}>{lineCount}</span></h4>
                 <hr/>
+                {
+                lineCount>0 &&
+                lines.map((line) => (
+                    <div key={line.id}> 
+                        <LineEntryForm getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
+                    </div>
+                ))
+            }
             </div>
-            
         </div>
     )
 }

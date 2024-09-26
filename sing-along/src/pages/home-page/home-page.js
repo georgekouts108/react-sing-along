@@ -8,9 +8,9 @@ function HomePage() {
     const navigate = useNavigate();
 
     return (
-        <div className='main'>
+        <div className='home-page-main'>
             <div className='home-page-content'>
-                <img className='dsas-logo' src={dsasLogo} alt='dsas-logo'/> 
+                <img className='dsas-logo-home' src={dsasLogo} alt='dsas-logo'/> 
                 <h1 className='home-page-subtitle'>SUBTITLE GENERATOR</h1>
                 <h2 className='home-page-subtitle2'>So you at home can sing along!</h2>
             </div>
