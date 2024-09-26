@@ -13,7 +13,7 @@ function LineTextInfoPage() {
     const [lineCount, setLineCount] = useState(0)
     const [lines, setLines] = useState([])
 
-    const updateLineCount = (up) => {
+    const updateLineCount = (up, cloned=false, clonedLineID=undefined) => {
         if (!up) {
             if (lineCount > 0) {
                 setLineCount(lineCount - 1);
@@ -21,9 +21,36 @@ function LineTextInfoPage() {
             }
         }
         else {
-            setLines([...lines, {id:lineCount, lineConfirmed:false}])
             setLineCount(lineCount + 1);
+            if (!cloned) {
+                setLines([...lines, {
+                    id:lineCount, 
+                    lineConfirmed:false, 
+                    wasCloned:cloned, 
+                    clonedLineID:clonedLineID
+                }])
+            }
+            else {
+                const clonedLine = lines[clonedLineID];
+                
+                const _clone = {
+                    id:lineCount, 
+                    lineConfirmed:false, 
+                    wasCloned:cloned, 
+                    clonedLineID:clonedLineID,
+                    displayChoice: clonedLine.displayChoice,
+                    indexesOfShownWordsSung: clonedLine.indexesOfShownWordsSung,
+                    repeatsPreviousTextShown: clonedLine.repeatsPreviousTextShown,
+                    textHeard: clonedLine.textHeard,
+                    textShown: clonedLine.textShown
+                }
+
+                setLines([...lines, _clone])
+            }
         }
+    }
+    const cloneLine = (originalLineID) => {
+        updateLineCount(true, true, originalLineID);
     }
 
     const updateLines = (lineObject) => {
@@ -65,7 +92,7 @@ function LineTextInfoPage() {
                 {staff()}
                 <h1>Line Text Information</h1>
                 <h4>Total number of lines: <span style={{color: (lineCount===0 ? 'rgb(216, 5, 5)': 'white') }}>{lineCount}</span></h4>
-                <button onClick={()=>updateLineCount(true)}>Add New Line</button>
+                <button onClick={()=>updateLineCount(true)}>Add New Blank Line</button>
                 <button disabled={!lineCount} onClick={()=>updateLineCount(false)}>Delete Latest Line</button>
                 <button disabled={!lineCount} onClick={()=>confirmAllLines()}>Confirm All Lines</button>
                 <hr/>
@@ -73,7 +100,7 @@ function LineTextInfoPage() {
                 lineCount>0 &&
                 lines.map((line) => (
                     <div key={line.id}> 
-                        <LineEntryForm getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
+                        <LineEntryForm clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
                     </div>
                 ))
             }

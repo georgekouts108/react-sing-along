@@ -3,14 +3,25 @@ import React, {useState} from 'react'
 function LineEntryForm(props) {
     const [lineId] = useState(props.line.id)
 
-    const [repeatsPreviousTextShown, setRepeatsPreviousTextShown] = useState(false);
-    const [displayChoice, setDisplayChoice] = useState('default');
-    const [textShown, setTextShown] = useState('');
-    const [wordsShown, setWordsShown] = useState([]);
-    const [textHeard, setTextHeard] = useState('');
-    let indexesOfSungWords = undefined;
+    const [repeatsPreviousTextShown, setRepeatsPreviousTextShown] = useState(props.line.wasCloned ? props.line.repeatsPreviousTextShown:false);
+    const [displayChoice, setDisplayChoice] = useState(props.line.wasCloned ? props.line.displayChoice:'default');
+    const [textShown, setTextShown] = useState(props.line.wasCloned ? props.line.textShown:'');
+    
+    const [textHeard, setTextHeard] = useState(props.line.wasCloned ? props.line.textHeard:'');
+    let indexesOfSungWords = props.line.wasCloned ? props.line.indexesOfShownWordsSung:undefined;
 
-    const [lineConfirmed, setLineConfirmed] = useState(false);
+    const [lineConfirmed, setLineConfirmed] = useState(props.line.wasCloned ? props.line.lineConfirmed:false);
+
+    const getWords = (text) => {
+        const wordArray = [];
+        const words = text.trim().split(' ');
+        for (let w = 0; w < words.length; w++) {
+            wordArray.push({ wordId: w, word: words[w] });
+        }
+        return wordArray;
+    }
+
+    const [wordsShown, setWordsShown] = useState(props.line.wasCloned ? getWords(props.line.textShown):[]);
 
     const updateTextShown = (newText) => {
         
@@ -18,12 +29,7 @@ function LineEntryForm(props) {
         setTextHeard(newText);
         
         if (newText !== '') {
-            const updatedWords = [];
-            const words = newText.trim().split(' ');
-            for (let w = 0; w < words.length; w++) {
-                updatedWords.push({ wordId: w, word: words[w] });
-            }
-            setWordsShown(updatedWords);
+            setWordsShown(getWords(newText));
         }
         else {
             setWordsShown([])
@@ -56,15 +62,16 @@ function LineEntryForm(props) {
         }
         setLineConfirmed(true);
         
-        props.confirmEntry({
-            id: lineId, 
-            lineConfirmed: true,
-            displayMethod: displayChoice, 
-            textShown: textShown, 
-            textHeard: textHeard, 
-            indexesOfShownWordsSung: indexesOfSungWords, 
-            repeatsPreviousTextShown: repeatsPreviousTextShown
-        })
+        const _line = props.line;
+        _line.id = lineId
+        _line.lineConfirmed = true
+        _line.displayChoice = displayChoice 
+        _line.textShown = textShown
+        _line.textHeard = textHeard 
+        _line.indexesOfShownWordsSung = indexesOfSungWords
+        _line.repeatsPreviousTextShown = repeatsPreviousTextShown
+
+        props.confirmEntry(_line)
     }
     const repeatPreviousTextShown = (isChecked) => {
         setRepeatsPreviousTextShown(isChecked)
@@ -82,10 +89,13 @@ function LineEntryForm(props) {
     return (
         <div>
             <h3>LINE {`#${lineId + 1}`}</h3>
+            {props.line.wasCloned && <h4>{`(Cloned from LINE #${props.line.clonedLineID+1})`}</h4>}
+            <button disabled={!lineConfirmed} onClick={()=>props.clone(lineId)}>Clone This Line</button>
+            <br/><br/>
             {   
                 (lineId > 0 && displayChoice==='default') &&
                 <>
-                    <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={lineConfirmed && props.getPreviousLine(lineId).lineConfirmed} type='checkbox' defaultChecked={false} />
+                    <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={(lineConfirmed && props.getPreviousLine(lineId).lineConfirmed)} type='checkbox' defaultChecked={false} />
                     <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId} (this line must be confirmed)</label>
                     <br/><br/>
                 </>
@@ -99,7 +109,7 @@ function LineEntryForm(props) {
             
             <br/><br/>
             {
-                displayChoice==='default' && 
+                (displayChoice==='default') && 
                 <>
                 Text Shown: <input 
                 disabled={lineConfirmed || repeatsPreviousTextShown}
@@ -121,7 +131,7 @@ function LineEntryForm(props) {
             <br/><br/>
 
             {
-                displayChoice==='default' && 
+                (displayChoice==='default') && 
                 (<>
                     <p>
                         Select the words that will actually be highlighted:<br/>
@@ -154,7 +164,7 @@ function LineEntryForm(props) {
                 )
             }
 
-            <button disabled={lineConfirmed} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId}`}</button>
+            <button disabled={lineConfirmed} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId+1}`}</button>
             <hr/>
         </div>
     )
