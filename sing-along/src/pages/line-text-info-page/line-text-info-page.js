@@ -24,10 +24,10 @@ function LineTextInfoPage() {
             setLineCount(lineCount + 1);
             if (!cloned) {
                 setLines([...lines, {
-                    id:lineCount, 
-                    lineConfirmed:false, 
-                    wasCloned:cloned, 
-                    clonedLineID:clonedLineID
+                    id: lineCount, 
+                    lineConfirmed: false, 
+                    wasCloned: false, 
+                    clonedLineID: clonedLineID
                 }])
             }
             else {
@@ -35,10 +35,9 @@ function LineTextInfoPage() {
                 
                 const _clone = {
                     id:lineCount, 
-                    lineConfirmed:false, 
-                    wasCloned:cloned, 
-                    clonedLineID:clonedLineID,
-                    displayChoice: clonedLine.displayChoice,
+                    lineConfirmed: false, 
+                    wasCloned: true, 
+                    clonedLineID: clonedLineID,
                     indexesOfShownWordsSung: clonedLine.indexesOfShownWordsSung,
                     repeatsPreviousTextShown: clonedLine.repeatsPreviousTextShown,
                     textHeard: clonedLine.textHeard,
@@ -91,10 +90,6 @@ function LineTextInfoPage() {
             <div className='content'>
                 {staff()}
                 <h1>Line Text Information</h1>
-                {/* <h4>Total number of lines: <span style={{color: (lineCount===0 ? 'rgb(216, 5, 5)': 'white') }}>{lineCount}</span></h4>
-                <button onClick={()=>updateLineCount(true)}>Add New Blank Line</button>
-                <button disabled={!lineCount} onClick={()=>updateLineCount(false)}>Delete Latest Line</button>
-                <button disabled={!lineCount} onClick={()=>confirmAllLines()}>Confirm All Lines</button> */}
                 <hr/>
                 {
                 lineCount>0 &&
