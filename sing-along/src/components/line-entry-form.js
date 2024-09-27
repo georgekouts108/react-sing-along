@@ -36,9 +36,9 @@ function LineEntryForm(props) {
         }
         selectAllWords(false);
     }
-    const updateTextHeard = (textHeard) => {
-        setTextHeard(textHeard);
-    }
+    // const updateTextHeard = (textHeard) => {
+    //     setTextHeard(textHeard);
+    // }
 
     const selectAllWords = (choice) => {
         for (let w = 0; w < wordsShown.length; w++) {
@@ -86,6 +86,13 @@ function LineEntryForm(props) {
         }
     }
 
+    const updateDisplayChoice = (dchoice) => {
+        setDisplayChoice(dchoice);
+        updateTextShown('');
+        setTextHeard('');
+        
+
+    }
     return (
         <div>
             <h3>LINE {`#${lineId + 1}`}</h3>
@@ -101,10 +108,10 @@ function LineEntryForm(props) {
                 </>
             }
 
-            <input disabled={lineConfirmed} defaultChecked={true} onClick={()=>{setDisplayChoice('default')}} type='radio' name={`displayType${lineId}`} value='default' id={`lineId_${lineId}_displayChoice_default`}/>
+            <input disabled={lineConfirmed} defaultChecked={true} onClick={()=>{updateDisplayChoice('default')}} type='radio' name={`displayType${lineId}`} value='default' id={`lineId_${lineId}_displayChoice_default`}/>
             <label htmlFor={`lineId_${lineId}_displayChoice_default`}>Default Display (Text Shown required)</label><br/>
             
-            <input disabled={lineConfirmed} onClick={()=>{setDisplayChoice('custom')}} type='radio' name={`displayType${lineId}`} value='custom' id={`lineId_${lineId}_displayChoice_custom`}/>
+            <input disabled={lineConfirmed} defaultChecked={props.line.displayChoice==='custom' || false} onClick={()=>{updateDisplayChoice('custom')}} type='radio' name={`displayType${lineId}`} value='custom' id={`lineId_${lineId}_displayChoice_custom`}/>
             <label htmlFor={`lineId_${lineId}_displayChoice_custom`}>Custom Display</label>
             
             <br/><br/>
@@ -125,7 +132,7 @@ function LineEntryForm(props) {
             disabled={lineConfirmed}
             style={{width:300}} 
             value={textHeard}
-            onChange={(e) =>updateTextHeard(e.target.value)}
+            onChange={(e) =>setTextHeard(e.target.value)}
             type='text' 
             placeholder={`#${lineId} text heard`}/>
             <br/><br/>
