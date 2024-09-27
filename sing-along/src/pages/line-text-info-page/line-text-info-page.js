@@ -12,12 +12,14 @@ function LineTextInfoPage() {
 
     const [lineCount, setLineCount] = useState(0)
     const [lines, setLines] = useState([])
+    const [latestLineConfirmed, setLatestLineConfirmed] = useState(false)
 
     const updateLineCount = (up, cloned=false, clonedLineID=undefined) => {
         if (!up) {
             if (lineCount > 0) {
                 setLineCount(lineCount - 1);
                 setLines(lines.slice(0, lines.length-1))
+                setLatestLineConfirmed(true)
             }
         }
         else {
@@ -46,6 +48,7 @@ function LineTextInfoPage() {
 
                 setLines([...lines, _clone])
             }
+            setLatestLineConfirmed(false)
         }
     }
     const cloneLine = (originalLineID) => {
@@ -62,6 +65,7 @@ function LineTextInfoPage() {
                 }
             }
             setLines(updatedLines);
+            setLatestLineConfirmed(true);
         }
     }
 
@@ -95,12 +99,12 @@ function LineTextInfoPage() {
                 lineCount>0 &&
                 lines.map((line) => (
                     <div key={line.id}> 
-                        <LineEntryForm clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
+                        <LineEntryForm latestLineIsConfirmed={latestLineConfirmed} clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
                     </div>
                 ))
             }
             <h4>Total number of lines: <span style={{color: (lineCount===0 ? 'rgb(216, 5, 5)': 'white') }}>{lineCount}</span></h4>
-                <button onClick={()=>updateLineCount(true)}>Add New Blank Line</button>
+                <button disabled={!latestLineConfirmed && lineCount>0} onClick={()=>updateLineCount(true)}>Add New Blank Line</button>
                 <button disabled={!lineCount} onClick={()=>updateLineCount(false)}>Delete Latest Line</button>
                 <button disabled={!lineCount} onClick={()=>confirmAllLines()}>Confirm All Lines</button>
             </div>

@@ -82,7 +82,7 @@ function LineEntryForm(props) {
         <div>
             <h3>LINE {`#${lineId + 1}`}</h3>
             {props.line.wasCloned && <h4>{`(Cloned from LINE #${props.line.clonedLineID+1})`}</h4>}
-            <button disabled={!lineConfirmed} onClick={()=>props.clone(lineId)}>Clone This Line</button>
+            <button disabled={!props.latestLineIsConfirmed} onClick={()=>props.clone(lineId)}>Clone This Line</button>
             <br/><br/>
             {   
                 (lineId > 0) &&
