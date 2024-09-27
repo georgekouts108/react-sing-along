@@ -80,70 +80,86 @@ function LineEntryForm(props) {
 
     return (
         <div>
-            <h3>LINE {`#${lineId + 1}`}</h3>
-            {props.line.wasCloned && <h4>{`(Cloned from LINE #${props.line.clonedLineID+1})`}</h4>}
-            <button disabled={!props.latestLineIsConfirmed} onClick={()=>props.clone(lineId)}>Clone This Line</button>
-            <br/><br/>
-            {   
-                (lineId > 0) &&
-                <>
-                    <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={(lineConfirmed && props.getPreviousLine(lineId).lineConfirmed)} type='checkbox' defaultChecked={false} />
-                    <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId} (this line must be confirmed)</label>
-                    <br/><br/>
-                </>
-            }
-            
-            <>
-            Text Shown: <input 
-            disabled={lineConfirmed || repeatsPreviousTextShown}
-            style={{width:300}}
-            value={textShown}
-            onChange={(e) => updateTextShown(e.target.value)}
-            type='text' 
-            placeholder={`#${lineId+1} text shown`}/><br/>
-            </>
-
-            Text Heard: <input
-            disabled={lineConfirmed}
-            style={{width:300}} 
-            value={textHeard}
-            onChange={(e) =>setTextHeard(e.target.value)}
-            type='text' 
-            placeholder={`#${lineId+1} text heard`}/>
-            <br/>
-            <>
-                <p>
-                    Select the words that will actually be highlighted:<br/>
-                    {wordsShown.length===0 && '(no words entered yet)'}
-                </p>
-                {
-                    
-                    wordsShown.length>0 && 
-                    <div>
-                        <button disabled={lineConfirmed} onClick={()=>selectAllWords(true)}>Select All Words</button>
-                        <button disabled={lineConfirmed} onClick={()=>selectAllWords(false)}>Deselect All Words</button>
-                        <br/>
-                        {
-                            wordsShown.map((word)=>(
-                                <>
-                                    <input 
-                                    disabled={lineConfirmed}
-                                    onClick={()=>updateIndexesOfSungWords()}
-                                    name={`lineId_${lineId}_wordId_${word.wordId}`}
-                                    type='checkbox' 
-                                    id={`lineId_${lineId}_wordId_${word.wordId}`} />
-                                    <label htmlFor={`lineId_${lineId}_wordId_${word.wordId}`}>{word.word}</label>
-                                </>
-                            ))
+            <table style={{border: '3px solid black'}}>
+                <tbody>
+                    <tr>
+                        <td style={{textAlign:'center',border: '3px solid black'}}>LINE {`#${lineId + 1}`}<br/><br/>
+                            <button disabled={!props.latestLineIsConfirmed} onClick={()=>props.clone(lineId)}>Duplicate</button>
+                        </td>
+                        <td style={{textAlign:'center',border: '3px solid black'}}>
+                        {   
+                            (lineId > 0) &&
+                            <>
+                                <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={(lineConfirmed && props.getPreviousLine(lineId).lineConfirmed)} type='checkbox' defaultChecked={false} />
+                                <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId}<br/>(this line must be confirmed)</label>
+                                <br/><br/>
+                            </>
                         }
-                        <br/>
-                    </div>
-                }
-            </>
-                
+                        {
+                            lineId === 0 &&
+                            <>
+                                <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={true} type='checkbox' defaultChecked={false} />
+                                <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId}<br/>(this line must be confirmed)<br/>NOT APPLICABLE FOR LINE #1</label>
+                                <br/><br/>
+                            </>
+                        }
+                        </td>
+                        <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <>
+                            Text Shown: <input 
+                            disabled={lineConfirmed || repeatsPreviousTextShown}
+                            style={{width:300}}
+                            value={textShown}
+                            onChange={(e) => updateTextShown(e.target.value)}
+                            type='text' 
+                            placeholder={`#${lineId+1} text shown`}/><br/>
+                            </>
 
-            <button disabled={lineConfirmed} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId+1}`}</button>
-            <hr/>
+                            Text Heard: <input
+                            disabled={lineConfirmed}
+                            style={{width:300}} 
+                            value={textHeard}
+                            onChange={(e) =>setTextHeard(e.target.value)}
+                            type='text' 
+                            placeholder={`#${lineId+1} text heard`}/>
+                        </td>
+                        <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <>
+                                <p>
+                                    Select the words that will actually be highlighted:<br/>
+                                    {wordsShown.length===0 && '(no words entered yet)'}
+                                </p>
+                                {
+                                    
+                                    wordsShown.length>0 && 
+                                    <div>
+                                        <button disabled={lineConfirmed} onClick={()=>selectAllWords(true)}>Select All Words</button>
+                                        <button disabled={lineConfirmed} onClick={()=>selectAllWords(false)}>Deselect All Words</button>
+                                        <br/>
+                                        {
+                                            wordsShown.map((word)=>(
+                                                <>
+                                                    <input 
+                                                    disabled={lineConfirmed}
+                                                    onClick={()=>updateIndexesOfSungWords()}
+                                                    name={`lineId_${lineId}_wordId_${word.wordId}`}
+                                                    type='checkbox' 
+                                                    id={`lineId_${lineId}_wordId_${word.wordId}`} />
+                                                    <label htmlFor={`lineId_${lineId}_wordId_${word.wordId}`}>{word.word}</label>
+                                                </>
+                                            ))
+                                        }
+                                        <br/>
+                                    </div>
+                                }
+                            </>
+                        </td>
+                        <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <button disabled={lineConfirmed} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId+1}`}</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     )
 }
