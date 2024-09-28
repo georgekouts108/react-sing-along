@@ -7,7 +7,8 @@ function LineEntryForm(props) {
     const [textShown, setTextShown] = useState(props.line.wasCloned ? props.line.textShown : '');
     
     const [textHeard, setTextHeard] = useState(props.line.wasCloned ? props.line.textHeard : '');
-    let indexesOfSungWords = props.line.wasCloned ? props.line.indexesOfShownWordsSung : undefined;
+    
+    let indexesOfSungWords = props.line.wasCloned ? props.line.indexesOfShownWordsSung : '';
 
     const [lineConfirmed, setLineConfirmed] = useState(props.line.wasCloned ? props.line.lineConfirmed : false);
 
@@ -156,7 +157,8 @@ function LineEntryForm(props) {
                             </>
                         </td>
                         <td style={{textAlign:'center',border: '3px solid black'}}>
-                            <button disabled={lineConfirmed} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId+1}`}</button>
+                            <button disabled={lineConfirmed || !textShown} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId+1}`}</button>
+                            <br/>{lineConfirmed && <h1>✅</h1>}
                         </td>
                     </tr>
                 </tbody>
