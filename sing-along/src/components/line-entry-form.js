@@ -140,7 +140,7 @@ function LineEntryForm(props) {
                                         <br/>
                                         {
                                             wordsShown.map((word)=>(
-                                                <>
+                                                <span key={word.wordId}>
                                                     <input 
                                                     disabled={lineConfirmed}
                                                     onClick={()=>updateIndexesOfSungWords()}
@@ -148,7 +148,7 @@ function LineEntryForm(props) {
                                                     type='checkbox' 
                                                     id={`lineId_${lineId}_wordId_${word.wordId}`} />
                                                     <label htmlFor={`lineId_${lineId}_wordId_${word.wordId}`}>{word.word}</label>
-                                                </>
+                                                </span>
                                             ))
                                         }
                                         <br/>
