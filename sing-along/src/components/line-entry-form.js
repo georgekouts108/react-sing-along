@@ -23,12 +23,13 @@ function LineEntryForm(props) {
     const [wordsShown, setWordsShown] = useState(props.line.wasCloned ? getWords(props.line.textShown) : []);
 
     const updateTextShown = (newText) => {
+        let cleanedText = newText.replace(/\s+/g, ' ');
         
-        setTextShown(newText);
-        setTextHeard(newText);
+        setTextShown(cleanedText);
+        setTextHeard(cleanedText);
         
-        if (newText !== '') {
-            setWordsShown(getWords(newText));
+        if (cleanedText !== '') {
+            setWordsShown(getWords(cleanedText));
         }
         else {
             setWordsShown([])
@@ -106,22 +107,22 @@ function LineEntryForm(props) {
                         </td>
                         <td style={{textAlign:'center',border: '3px solid black'}}>
                             <>
-                            Text Shown: <input 
+                            Text Shown:<br/><input 
                             disabled={lineConfirmed || repeatsPreviousTextShown}
-                            style={{width:300}}
+                            style={{width:300, textAlign:'center'}}
                             value={textShown}
                             onChange={(e) => updateTextShown(e.target.value)}
                             type='text' 
-                            placeholder={`#${lineId+1} text shown`}/><br/>
+                            placeholder={`text shown for line #${lineId+1}`}/><br/>
                             </>
-
-                            Text Heard: <input
+                            <br/>
+                            Text Heard:<br/><input
                             disabled={lineConfirmed}
-                            style={{width:300}} 
+                            style={{width:300, textAlign:'center'}} 
                             value={textHeard}
                             onChange={(e) =>setTextHeard(e.target.value)}
                             type='text' 
-                            placeholder={`#${lineId+1} text heard`}/>
+                            placeholder={`text heard for line #${lineId+1}`}/>
                         </td>
                         <td style={{textAlign:'center',border: '3px solid black'}}>
                             <>
