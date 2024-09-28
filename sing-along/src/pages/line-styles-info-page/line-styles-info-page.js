@@ -107,10 +107,11 @@ function LineStylesInfoPage() {
                 {
                     lineCount>0 &&
                     lines.map((line) =>{
+                        console.log(line)
                         const _words = line.textShown.split(' ')
                         const words = []
                         for (let w = 0; w < _words.length; w++) {
-                            words.push([w, _words[w]])
+                            words.push({wordId:w, word:_words[w], willBeSung:line.indexesOfShownWordsSung.includes(w)})
                         }
                         return (
                             <div key={line.id}> 

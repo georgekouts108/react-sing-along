@@ -95,8 +95,9 @@ function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolor
                         </td>
                         {
                             words.map((word) => (
-                                <td key={word[0]} style={{border: '3px solid black'}}>
-                                    {word[1]}
+                                <td key={word.wordId} style={{border: '3px solid black'}}>
+                                    {word.word}
+                                    <span><br/>{word.willBeSung ? '🎤' : '🔇'}</span>
                                 </td>
                             ))
                         }
@@ -125,11 +126,11 @@ function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolor
                         {
                             preColorChoice==='multiple' && 
                             words.map((word) => (
-                                <td key={word[0]} style={{border: '3px solid black'}}>
-                                    <input id={`pre_color_for_line${lineInfo.id}_word${word[0]}`} 
+                                <td key={word.wordId} style={{border: '3px solid black'}}>
+                                    <input id={`pre_color_for_line${lineInfo.id}_word${word.wordId}`} 
                                     type='color' 
-                                    onChange={(e)=>changeMultiColor(e.target.value, word[0], 'pre')}
-                                    value={multiplePrecolors[word[0]]}/>
+                                    onChange={(e)=>changeMultiColor(e.target.value, word.wordId, 'pre')}
+                                    value={multiplePrecolors[word.wordId]}/>
                                 </td>
                             ))
                         }
@@ -156,11 +157,11 @@ function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolor
                         {
                             postColorChoice==='multiple' && 
                             words.map((word) => (
-                                <td key={word[0]} style={{border: '3px solid black'}}>
-                                    <input id={`post_color_for_line${lineInfo.id}_word${word[0]}`} 
+                                <td key={word.wordId} style={{border: '3px solid black'}}>
+                                    <input id={`post_color_for_line${lineInfo.id}_word${word.wordId}`} 
                                     type='color' 
-                                    onChange={(e)=>changeMultiColor(e.target.value, word[0], 'post')}
-                                    value={multiplePostcolors[word[0]]} />
+                                    onChange={(e)=>changeMultiColor(e.target.value, word.wordId, 'post')}
+                                    value={multiplePostcolors[word.wordId]} />
                                 </td>
                             ))
                         }
