@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import './line-text-info-page.styles.css'
-import SingAlongSongsLogo from '../../components/sing-along-songs-logo/sing-along-songs-logo';
-import { staff } from '../../assets/misc/misc';
+// import SingAlongSongsLogo from '../../components/sing-along-songs-logo/sing-along-songs-logo';
+// import { staff } from '../../assets/misc/misc';
 import LineEntryForm from '../../components/line-entry-form';
 
 function LineTextInfoPage() {
@@ -78,21 +78,20 @@ function LineTextInfoPage() {
             lines: lines, 
             lineCount: lineCount
         }
-        console.log(data)
+        // console.log(data)
 
-        // navigate('/line-text-info', { 
-        //     state: data
-        // });
+        navigate('/line-styles-info', { 
+            state: {data: data}
+        });
     }
 
     return (
         <div className='line-text-info-page-main'>
             <header className='header'>
-                <SingAlongSongsLogo/>
+                {/* <SingAlongSongsLogo/> */}
             </header>
             
             <div className='content'>
-                {staff()}
                 <h1>Line Text Information</h1>
                 <hr/>
                 {
