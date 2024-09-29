@@ -1,8 +1,6 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import './line-text-info-page.styles.css'
-// import SingAlongSongsLogo from '../../components/sing-along-songs-logo/sing-along-songs-logo';
-// import { staff } from '../../assets/misc/misc';
 import LineEntryForm from '../../components/line-entry-form';
 
 function LineTextInfoPage() {

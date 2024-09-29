@@ -68,6 +68,7 @@ function LineStylesInfoPage() {
             } 
         }
         setLines(updatedLines);
+        console.log(lines);
     }
 
     return (

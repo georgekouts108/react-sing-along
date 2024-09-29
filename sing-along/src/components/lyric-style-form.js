@@ -128,21 +128,11 @@ function LyricStyleForm({
 
     const changePostColorChoice = (choice) => {
         setPostColorChoice(choice);
-        console.log(choice)
         lineInfo.postColorChoice=choice;
-        confirmStyleInfo(lineInfo);
-
-        // TODO: find a way for subsequent lines (which repeat the textShown)
-        // to automatically have their pre-color-choice set to 'choice'
     }
     const changeSinglePostColor = (color) => {
         setSinglePostcolor(color);
-        console.log(color)
         lineInfo.postColors = new Array(_words.length).fill(color)
-        confirmStyleInfo(lineInfo);
-
-        // TODO: find a way for subsequent lines (which repeat the textShown)
-        // to automatically have their pre-color set to 'color'
     }
 
     return (
@@ -180,7 +170,6 @@ function LyricStyleForm({
                             preColorChoice==='single' && 
                             <td colSpan={words.length} style={{border: '3px solid black'}}>
                                 <input  
-                                disabled={lineInfo.repeatsPreviousTextShown}
                                 id={`single_pre_color_for_line${lineInfo.id}`} 
                                 type='color' 
                                 onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
@@ -193,7 +182,6 @@ function LyricStyleForm({
                             words.map((word) => (
                                 <td key={word.wordId} style={{border: '3px solid black'}}>
                                     <input id={`pre_color_for_line${lineInfo.id}_word${word.wordId}`} 
-                                    disabled={lineInfo.repeatsPreviousTextShown}
                                     type='color' 
                                     onChange={(e)=>changeMultiColor(e.target.value, word.wordId, 'pre')}
                                     value={multiplePrecolors[word.wordId]}/>
