@@ -158,36 +158,55 @@ function LyricStyleForm({
                     </tr>
                     
                     <tr>
-                        <td style={{border: '3px solid black'}}>
-                            PRE-COLOR(S)<br/><br/>
-                            <input defaultChecked={lineInfo.preColorChoice==='single'} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
-                            <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_single`}>Same color for all words</label><br/>
-                            <input defaultChecked={lineInfo.preColorChoice==='multiple'} onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
-                            <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_multiple`}>Different color for each word</label><br/>
-                        </td>
-
                         {
-                            preColorChoice==='single' && 
-                            <td colSpan={words.length} style={{border: '3px solid black'}}>
-                                <input  
-                                id={`single_pre_color_for_line${lineInfo.id}`} 
-                                type='color' 
-                                onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
-                                value={singlePrecolor} />
+                            lineInfo.repeatsPreviousTextShown &&
+                            <>
+                            <td  style={{border: '3px solid black'}}>
+                                PRE-COLOR(S) 
                             </td>
+                            <td colSpan={words.length} style={{border: '3px solid black'}}>
+                                POST-COLOR(S) for LINE {lineInfo.id}
+                            </td>
+                            </>
+                        }
+                        {
+                            !lineInfo.repeatsPreviousTextShown &&
+                            <>
+                                <td style={{border: '3px solid black'}}>
+                                    PRE-COLOR(S)<br/><br/>
+                                    <input defaultChecked={lineInfo.preColorChoice==='single'} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
+                                    <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_single`}>Same color for all words</label><br/>
+                                    <input defaultChecked={lineInfo.preColorChoice==='multiple'} onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
+                                    <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_multiple`}>Different color for each word</label><br/>
+                                </td>
+
+                                {
+                                    preColorChoice==='single' && 
+                                    <td colSpan={words.length} style={{border: '3px solid black'}}>
+                                        <input  
+                                        id={`single_pre_color_for_line${lineInfo.id}`} 
+                                        type='color' 
+                                        onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
+                                        value={singlePrecolor} />
+                                    </td>
+                                }
+
+                                {
+                                    preColorChoice==='multiple' && 
+                                    words.map((word) => (
+                                        <td key={word.wordId} style={{border: '3px solid black'}}>
+                                            <input id={`pre_color_for_line${lineInfo.id}_word${word.wordId}`} 
+                                            type='color' 
+                                            onChange={(e)=>changeMultiColor(e.target.value, word.wordId, 'pre')}
+                                            value={multiplePrecolors[word.wordId]}/>
+                                        </td>
+                                    ))
+                                }
+                            </>
                         }
 
-                        {
-                            preColorChoice==='multiple' && 
-                            words.map((word) => (
-                                <td key={word.wordId} style={{border: '3px solid black'}}>
-                                    <input id={`pre_color_for_line${lineInfo.id}_word${word.wordId}`} 
-                                    type='color' 
-                                    onChange={(e)=>changeMultiColor(e.target.value, word.wordId, 'pre')}
-                                    value={multiplePrecolors[word.wordId]}/>
-                                </td>
-                            ))
-                        }
+
+                        
                     </tr>
 
                     <tr>
