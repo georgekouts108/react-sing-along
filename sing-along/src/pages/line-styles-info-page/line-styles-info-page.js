@@ -19,8 +19,8 @@ function LineStylesInfoPage() {
     const [defaultPreColor, setDefaultPreColor] = useState('#ffff00')
     const [defaultPostColor, setDefaultPostColor] = useState('#ffffff')
 
-    const [defaultEnterTransition, setDefaultEnterTransition] = useState('slide_in')
-    const [defaultExitTransition, setDefaultExitTransition] = useState('slide_out')
+    const [defaultEnterTransition, setDefaultEnterTransition] = useState('slidein')
+    const [defaultExitTransition, setDefaultExitTransition] = useState('slideout')
     const transitionOptions = ['slide', 'cut', 'fade'];
 
     const [grammar, setGrammar] = useState('original')
@@ -74,8 +74,8 @@ function LineStylesInfoPage() {
                                 {
                                     transitionOptions.map((option) => (
                                         <div key={option}>
-                                            <input onClick={()=>setDefaultEnterTransition(option+'_in')} defaultChecked={option==='slide'} id={`defaultEnterTransition_${option}`} name='defaultEnterTransition' type='radio' value={`${option}_in`} />
-                                            <label htmlFor={`defaultEnterTransition_${option}`}>{`${option} In`}</label>
+                                            <input onClick={()=>setDefaultEnterTransition(option+'in')} defaultChecked={option==='slide'} id={`defaultEnterTransition_${option}`} name='defaultEnterTransition' type='radio' value={`${option}in`} />
+                                            <label htmlFor={`defaultEnterTransition_${option}`}>{`${option} in`}</label>
                                             <br/>
                                         </div>
                                     ))
@@ -85,8 +85,8 @@ function LineStylesInfoPage() {
                             {
                                 transitionOptions.map((option) => (
                                     <div key={option}>
-                                        <input onClick={()=>setDefaultExitTransition(option+'_out')} defaultChecked={option==='slide'} id={`defaultExitTransition_${option}`} name='defaultExitTransition' type='radio' value={`${option}_out`} />
-                                        <label htmlFor={`defaultExitTransition_${option}`}>{`${option} Out`}</label>
+                                        <input onClick={()=>setDefaultExitTransition(option+'out')} defaultChecked={option==='slide'} id={`defaultExitTransition_${option}`} name='defaultExitTransition' type='radio' value={`${option}out`} />
+                                        <label htmlFor={`defaultExitTransition_${option}`}>{`${option} out`}</label>
                                         <br/>
                                     </div>
                                 ))
@@ -116,12 +116,14 @@ function LineStylesInfoPage() {
                         return (
                             <div key={line.id}> 
                                 <LyricStyleForm 
-                                defaultPrecolor={defaultPreColor} 
-                                defaultPostcolor={defaultPostColor}
-                                precolors={new Array(words.length).fill(defaultPreColor)} 
-                                postcolors={new Array(words.length).fill(defaultPostColor)} 
-                                lineInfo={line} 
-                                words={words}/>
+                                    defaultEnterTrans={defaultEnterTransition}
+                                    defaultExitTrans={defaultExitTransition}
+                                    defaultPrecolor={defaultPreColor} 
+                                    defaultPostcolor={defaultPostColor}
+                                    precolors={new Array(words.length).fill(defaultPreColor)} 
+                                    postcolors={new Array(words.length).fill(defaultPostColor)} 
+                                    lineInfo={line} 
+                                    words={words}/>
                                 <br/>
                             </div>
                         )

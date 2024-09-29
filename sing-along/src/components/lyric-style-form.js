@@ -1,9 +1,21 @@
 import React, {useState, useEffect} from 'react'
 
-function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolors, lineInfo, words}) {
+function LyricStyleForm({
+    defaultPrecolor, defaultPostcolor, precolors, postcolors, 
+    lineInfo, words, defaultEnterTrans, defaultExitTrans}) {
 
     const [preColorChoice, setPreColorChoice] = useState('single')
     const [postColorChoice, setPostColorChoice] = useState('single')
+
+    const [enterTransition, setEnterTransition] = useState(defaultEnterTrans);
+    useEffect(() => {
+        setEnterTransition(defaultEnterTrans);
+      }, [defaultEnterTrans]);
+
+      const [exitTransition, setExitTransition] = useState(defaultExitTrans);
+      useEffect(() => {
+          setExitTransition(defaultExitTrans);
+        }, [defaultExitTrans]);
 
     const [singlePrecolor, setSinglePrecolor] = useState(defaultPrecolor);
     useEffect(() => {
@@ -37,8 +49,8 @@ function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolor
         }
     }
 
-    const [enterTransition, setEnterTransition] = useState('slidein')
-    const [exitTransition, setExitTransition] = useState('slideout')
+    // const [enterTransition, setEnterTransition] = useState('slidein')
+    // const [exitTransition, setExitTransition] = useState('slideout')
     
     const enterTransitionIDs = {'cutin':0, 'slidein':1, 'fadein':2};
     const exitTransitionIDs = {'cutout':0, 'slideout':1, 'fadeout':2};
@@ -75,10 +87,11 @@ function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolor
 
         lineInfo.enterTransition = enterTransitionIDs[enterTransition];
         lineInfo.exitTransition = exitTransitionIDs[exitTransition];
-        lineInfo.preColors = "["+preColors.toString().toUpperCase()+"]";
-        lineInfo.postColors = "["+postColors.toString().toUpperCase()+"]";
+        lineInfo.preColors = preColors;
+        lineInfo.postColors = postColors;
 
         // props.confirmColors(lineInfo);
+    
     }
 
     return (
@@ -169,17 +182,17 @@ function LyricStyleForm({defaultPrecolor, defaultPostcolor, precolors, postcolor
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
                             Entering Transition:
-                            <input defaultChecked={true} onClick={()=>setEnterTransition('slidein')} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
-                            <input onClick={()=>setEnterTransition('cutin')} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
-                            <input onClick={()=>setEnterTransition('fadein')} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
+                            <input checked={enterTransition==='slidein'} onClick={()=>setEnterTransition('slidein')} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
+                            <input checked={enterTransition==='cutin'} onClick={()=>setEnterTransition('cutin')} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
+                            <input checked={enterTransition==='fadein'} onClick={()=>setEnterTransition('fadein')} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
                             Exiting Transition:
-                            <input defaultChecked={true} onClick={()=>setExitTransition('slideout')} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
-                            <input onClick={()=>setExitTransition('cutout')} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
-                            <input onClick={()=>setExitTransition('fadeout')} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
+                            <input checked={exitTransition==='slideout'} onClick={()=>setExitTransition('slideout')} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
+                            <input checked={exitTransition==='cutout'} onClick={()=>setExitTransition('cutout')} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
+                            <input checked={exitTransition==='fadeout'} onClick={()=>setExitTransition('fadeout')} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
