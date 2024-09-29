@@ -107,7 +107,6 @@ function LineStylesInfoPage() {
                 {
                     lineCount>0 &&
                     lines.map((line) =>{
-                        console.log(line)
                         const _words = line.textShown.split(' ')
                         const words = []
                         for (let w = 0; w < _words.length; w++) {

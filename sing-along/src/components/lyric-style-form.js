@@ -4,37 +4,45 @@ function LyricStyleForm({
     defaultPrecolor, defaultPostcolor, precolors, postcolors, 
     lineInfo, words, defaultEnterTrans, defaultExitTrans}) {
 
+    const [infoSaved, setInfoSaved] = useState(false);
+
     const [preColorChoice, setPreColorChoice] = useState('single')
     const [postColorChoice, setPostColorChoice] = useState('single')
 
     const [enterTransition, setEnterTransition] = useState(defaultEnterTrans);
     useEffect(() => {
         setEnterTransition(defaultEnterTrans);
+        setInfoSaved(false);
       }, [defaultEnterTrans]);
 
       const [exitTransition, setExitTransition] = useState(defaultExitTrans);
       useEffect(() => {
           setExitTransition(defaultExitTrans);
+          setInfoSaved(false);
         }, [defaultExitTrans]);
 
     const [singlePrecolor, setSinglePrecolor] = useState(defaultPrecolor);
     useEffect(() => {
         setSinglePrecolor(defaultPrecolor);
+        setInfoSaved(false);
       }, [defaultPrecolor]);
 
     const [multiplePrecolors, setMultiplePrecolors] = useState(precolors);
     useEffect(() => {
         setMultiplePrecolors(precolors);
+        setInfoSaved(false);
       }, [precolors]);
 
       const [singlePostcolor, setSinglePostcolor] = useState(defaultPostcolor);
     useEffect(() => {
         setSinglePostcolor(defaultPostcolor);
+        setInfoSaved(false);
       }, [defaultPostcolor]);
 
       const [multiplePostcolors, setMultiplePostcolors] = useState(postcolors);
     useEffect(() => {
         setMultiplePostcolors(postcolors);
+        setInfoSaved(false);
       }, [postcolors]);
 
     const changeMultiColor = (color, index, preOrPost) => {
@@ -47,19 +55,17 @@ function LyricStyleForm({
         else {
             setMultiplePostcolors(palette);
         }
+        setInfoSaved(false);
     }
-
-    // const [enterTransition, setEnterTransition] = useState('slidein')
-    // const [exitTransition, setExitTransition] = useState('slideout')
     
     const enterTransitionIDs = {'cutin':0, 'slidein':1, 'fadein':2};
     const exitTransitionIDs = {'cutout':0, 'slideout':1, 'fadeout':2};
 
-    const saveDetails = () => {
+    const saveLineStyleDetails = () => {
         
         const preColors = [];
         if (preColorChoice === 'single') {
-            const color = document.getElementById(`pre_color_for_line${lineInfo.id}`).value
+            const color = document.getElementById(`single_pre_color_for_line${lineInfo.id}`).value
             for (let w = 0; w < words.length; w++) {
                 preColors.push(color);
             }
@@ -73,7 +79,7 @@ function LyricStyleForm({
 
         const postColors = [];
         if (postColorChoice === 'single') {
-            const color = document.getElementById(`post_color_for_line${lineInfo.id}`).value
+            const color = document.getElementById(`single_post_color_for_line${lineInfo.id}`).value
             for (let w = 0; w < words.length; w++) {
                 postColors.push(color)
             }
@@ -85,10 +91,15 @@ function LyricStyleForm({
             }
         }
 
-        lineInfo.enterTransition = enterTransitionIDs[enterTransition];
-        lineInfo.exitTransition = exitTransitionIDs[exitTransition];
+        lineInfo.enterTransition = enterTransition;
+        lineInfo.exitTransition = exitTransition;
+        lineInfo.enterTransitionId = enterTransitionIDs[enterTransition];
+        lineInfo.exitTransitionId = exitTransitionIDs[exitTransition];
         lineInfo.preColors = preColors;
         lineInfo.postColors = postColors;
+
+        console.log(lineInfo)
+        setInfoSaved(true);
 
         // props.confirmColors(lineInfo);
     
@@ -100,11 +111,11 @@ function LyricStyleForm({
      
                 <tbody>
                     <tr colSpan={1+words.length} style={{fontWeight:'bold'}}>
-                        LINE {lineInfo.id}
+                        LINE {lineInfo.id +1}
                     </tr>
                     <tr>
                         <td style={{border: '3px solid black'}}>
-                            WORD
+                            WORD(S)
                         </td>
                         {
                             words.map((word) => (
@@ -118,10 +129,10 @@ function LyricStyleForm({
                     
                     <tr>
                         <td style={{border: '3px solid black'}}>
-                            PRE-COLOR<br/><br/>
-                            <input defaultChecked={true} onClick={()=>{setPreColorChoice('single')}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
+                            PRE-COLOR(S)<br/><br/>
+                            <input defaultChecked={true} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_single`}>Same color for all words</label><br/>
-                            <input onClick={()=>{setPreColorChoice('multiple')}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
+                            <input onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_multiple`}>Different color for each word</label><br/>
                         </td>
 
@@ -131,7 +142,7 @@ function LyricStyleForm({
                                 <input  
                                 id={`single_pre_color_for_line${lineInfo.id}`} 
                                 type='color' 
-                                onChange={(e)=>setSinglePrecolor(e.target.value)}
+                                onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false)}}
                                 value={singlePrecolor} />
                             </td>
                         }
@@ -151,18 +162,18 @@ function LyricStyleForm({
 
                     <tr>
                         <td style={{border: '3px solid black'}}>
-                            POST-COLOR<br/><br/>
-                            <input defaultChecked={true} onClick={()=>{setPostColorChoice('single')}} type='radio' name={`postColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_postColorChoice_single`}/>
+                            POST-COLOR(S)<br/><br/>
+                            <input defaultChecked={true} onClick={()=>{setPostColorChoice('single'); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_postColorChoice_single`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_postColorChoice_single`}>Same color for all words</label><br/>
-                            <input onClick={()=>{setPostColorChoice('multiple')}} type='radio' name={`postColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_postColorChoice_multiple`}/>
+                            <input onClick={()=>{setPostColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_postColorChoice_multiple`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_postColorChoice_multiple`}>Different color for each word</label><br/>
                         </td>
                         {
                             postColorChoice==='single' && 
                             <td colSpan={words.length} style={{border: '3px solid black'}}>
-                                <input id={`post_color_for_line${lineInfo.id}`} 
+                                <input id={`single_post_color_for_line${lineInfo.id}`} 
                                 type='color' 
-                                onChange={(e)=>setSinglePostcolor(e.target.value)}
+                                onChange={(e)=>{setSinglePostcolor(e.target.value); setInfoSaved(false)}}
                                 value={singlePostcolor} />
                             </td>
                         }
@@ -181,23 +192,23 @@ function LyricStyleForm({
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
-                            Entering Transition:
-                            <input checked={enterTransition==='slidein'} onClick={()=>setEnterTransition('slidein')} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
-                            <input checked={enterTransition==='cutin'} onClick={()=>setEnterTransition('cutin')} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
-                            <input checked={enterTransition==='fadein'} onClick={()=>setEnterTransition('fadein')} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
+                            Enter Transition:
+                            <input checked={enterTransition==='slidein'} onClick={()=>{setEnterTransition('slidein'); setInfoSaved(false)}} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
+                            <input checked={enterTransition==='cutin'} onClick={()=>{setEnterTransition('cutin'); setInfoSaved(false)}} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
+                            <input checked={enterTransition==='fadein'} onClick={()=>{setEnterTransition('fadein'); setInfoSaved(false)}} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
-                            Exiting Transition:
-                            <input checked={exitTransition==='slideout'} onClick={()=>setExitTransition('slideout')} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
-                            <input checked={exitTransition==='cutout'} onClick={()=>setExitTransition('cutout')} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
-                            <input checked={exitTransition==='fadeout'} onClick={()=>setExitTransition('fadeout')} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
+                            Exit Transition:
+                            <input checked={exitTransition==='slideout'} onClick={()=>{setExitTransition('slideout'); setInfoSaved(false)}} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
+                            <input checked={exitTransition==='cutout'} onClick={()=>{setExitTransition('cutout'); setInfoSaved(false)}} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
+                            <input checked={exitTransition==='fadeout'} onClick={()=>{setExitTransition('fadeout'); setInfoSaved(false)}} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
-                            <button onClick={()=>saveDetails()}>Save Details</button>
+                            <button disabled={infoSaved} onClick={()=>saveLineStyleDetails()}>Save Style Details</button>
                         </td>
                     </tr>
                     
