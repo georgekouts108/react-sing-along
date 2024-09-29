@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react'
 
 function LyricStyleForm({
     defaultPrecolor, defaultPostcolor, precolors, postcolors, 
-    lineInfo, words, defaultEnterTrans, defaultExitTrans}) {
-
+    lineInfo, words, defaultEnterTrans, defaultExitTrans, confirmStyleInfo}) {
+    const _words=words;
     const [infoSaved, setInfoSaved] = useState(false);
     const [colorsRefreshed, setColorsRefreshed] = useState(false);
 
@@ -12,8 +12,8 @@ function LyricStyleForm({
         setInfoSaved(false);
     }, [colorsRefreshed]);
 
-    const [preColorChoice, setPreColorChoice] = useState('single')
-    const [postColorChoice, setPostColorChoice] = useState('single')
+    const [preColorChoice, setPreColorChoice] = useState(lineInfo.preColorChoice)
+    const [postColorChoice, setPostColorChoice] = useState(lineInfo.postColorChoice)
 
     const [enterTransition, setEnterTransition] = useState(defaultEnterTrans);
     
@@ -118,11 +118,31 @@ function LyricStyleForm({
             lineInfo.exitTransitionId = exitTransitionIDs[exitTransition];
             lineInfo.preColors = preColors;
             lineInfo.postColors = postColors;
+            lineInfo.preColorChoice = preColorChoice;
+            lineInfo.postColorChoice = postColorChoice;
 
-            console.log(lineInfo)
             setInfoSaved(true);
-            // props.confirmColors(lineInfo);
+            confirmStyleInfo(lineInfo);
         }
+    }
+
+    const changePostColorChoice = (choice) => {
+        setPostColorChoice(choice);
+        console.log(choice)
+        lineInfo.postColorChoice=choice;
+        confirmStyleInfo(lineInfo);
+
+        // TODO: find a way for subsequent lines (which repeat the textShown)
+        // to automatically have their pre-color-choice set to 'choice'
+    }
+    const changeSinglePostColor = (color) => {
+        setSinglePostcolor(color);
+        console.log(color)
+        lineInfo.postColors = new Array(_words.length).fill(color)
+        confirmStyleInfo(lineInfo);
+
+        // TODO: find a way for subsequent lines (which repeat the textShown)
+        // to automatically have their pre-color set to 'color'
     }
 
     return (
@@ -131,7 +151,7 @@ function LyricStyleForm({
      
                 <tbody>
                     <tr colSpan={1+words.length} style={{fontWeight:'bold'}}>
-                        LINE {lineInfo.id +1}
+                        LINE {lineInfo.id +1} <span style={{color:'yellow'}}>{lineInfo.repeatsPreviousTextShown ? `(Repeats Line ${lineInfo.id}'s shown text)` : ''}</span>
                     </tr>
                     <tr>
                         <td style={{border: '3px solid black'}}>
@@ -150,9 +170,9 @@ function LyricStyleForm({
                     <tr>
                         <td style={{border: '3px solid black'}}>
                             PRE-COLOR(S)<br/><br/>
-                            <input defaultChecked={true} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
+                            <input defaultChecked={lineInfo.preColorChoice==='single'} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_single`}>Same color for all words</label><br/>
-                            <input onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
+                            <input defaultChecked={lineInfo.preColorChoice==='multiple'} onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_multiple`}>Different color for each word</label><br/>
                         </td>
 
@@ -160,6 +180,7 @@ function LyricStyleForm({
                             preColorChoice==='single' && 
                             <td colSpan={words.length} style={{border: '3px solid black'}}>
                                 <input  
+                                disabled={lineInfo.repeatsPreviousTextShown}
                                 id={`single_pre_color_for_line${lineInfo.id}`} 
                                 type='color' 
                                 onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
@@ -172,6 +193,7 @@ function LyricStyleForm({
                             words.map((word) => (
                                 <td key={word.wordId} style={{border: '3px solid black'}}>
                                     <input id={`pre_color_for_line${lineInfo.id}_word${word.wordId}`} 
+                                    disabled={lineInfo.repeatsPreviousTextShown}
                                     type='color' 
                                     onChange={(e)=>changeMultiColor(e.target.value, word.wordId, 'pre')}
                                     value={multiplePrecolors[word.wordId]}/>
@@ -183,9 +205,9 @@ function LyricStyleForm({
                     <tr>
                         <td style={{border: '3px solid black'}}>
                             POST-COLOR(S)<br/><br/>
-                            <input defaultChecked={true} onClick={()=>{setPostColorChoice('single'); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_postColorChoice_single`}/>
+                            <input defaultChecked={lineInfo.postColorChoice==='single'} onClick={(e)=>{changePostColorChoice(e.target.value); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_postColorChoice_single`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_postColorChoice_single`}>Same color for all words</label><br/>
-                            <input onClick={()=>{setPostColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_postColorChoice_multiple`}/>
+                            <input defaultChecked={lineInfo.postColorChoice==='multiple'} onClick={(e)=>{changePostColorChoice(e.target.value); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_postColorChoice_multiple`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_postColorChoice_multiple`}>Different color for each word</label><br/>
                         </td>
                         {
@@ -193,7 +215,7 @@ function LyricStyleForm({
                             <td colSpan={words.length} style={{border: '3px solid black'}}>
                                 <input id={`single_post_color_for_line${lineInfo.id}`} 
                                 type='color' 
-                                onChange={(e)=>{setSinglePostcolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
+                                onChange={(e)=>{changeSinglePostColor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
                                 value={singlePostcolor} />
                             </td>
                         }

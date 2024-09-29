@@ -1,24 +1,44 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import './line-styles-info-page.styles.css'
-// import SingAlongSongsLogo from '../../components/sing-along-songs-logo/sing-along-songs-logo';
-// import { staff } from '../../assets/misc/misc';
 import LyricStyleForm from '../../components/lyric-style-form';
 
 function LineStylesInfoPage() {
     document.title = 'Line Styles Info: Sing-Along Subtitle Generator'
-    
+   
     const navigate = useNavigate();
     const location = useLocation();
 
-    const data = location.state?.data;
-
-    const [lineCount, setLineCount] = useState(data.lineCount)
-    const [lines, setLines] = useState(data.lines)
-
-    const [defaultPreColor, setDefaultPreColor] = useState('#ffff00')
+    const [defaultPreColor, setDefaultPreColor] = useState('#05dfd7')
     const [defaultPostColor, setDefaultPostColor] = useState('#ffffff')
 
+    const data = location.state?.data;
+
+    const elaboratedLines = [];
+    for (let l = 0; l < data.lines.length; l++) {
+        const _line = data.lines[l];
+        const _words = _line.textShown.split(' ')
+
+        _line.enterTransition = 'slidein';
+        _line.exitTransition = 'slideout';
+        _line.enterTransitionId = 1;
+        _line.exitTransitionId = 1;
+
+        _line.preColors = new Array(_words.length).fill(defaultPreColor);
+        _line.postColors = new Array(_words.length).fill(defaultPostColor);
+        _line.preColorChoice = 'single';
+        _line.postColorChoice = 'single';
+
+        if (_line.repeatsPreviousTextShown) {
+            _line.preColors = _line.postColors;
+        }
+
+        elaboratedLines.push(_line)
+    }
+    const [lines, setLines] = useState(elaboratedLines)
+
+    const [lineCount, setLineCount] = useState(data.lineCount)
+    
     const [defaultEnterTransition, setDefaultEnterTransition] = useState('slidein')
     const [defaultExitTransition, setDefaultExitTransition] = useState('slideout')
     const transitionOptions = ['slide', 'cut', 'fade'];
@@ -34,11 +54,25 @@ function LineStylesInfoPage() {
         //     state: data
         // });
     }
+    const updateLine = (lineObject) => {
+        const updatedLines = lines;
+        for (let l = 0; l < lines.length; l++) {
+            if (updatedLines[l].id===lineObject.id) {
+                updatedLines[l] = lineObject;
+
+                if (l !== lines.length-1 && updatedLines[l+1].repeatsPreviousTextShown){
+                    updatedLines[l+1].preColorChoice=lineObject.postColorChoice;
+                    updatedLines[l+1].preColors=lineObject.postColors;
+                }
+                break;
+            } 
+        }
+        setLines(updatedLines);
+    }
 
     return (
         <div className='line-text-info-page-main'>
             <header className='header'>
-                {/* <SingAlongSongsLogo/> */}
             </header>
             
             <div className='content'>
@@ -106,23 +140,32 @@ function LineStylesInfoPage() {
                 <hr/>
                 {
                     lineCount>0 &&
-                    lines.map((line) =>{
+                    lines.map((line) => {
                         const _words = line.textShown.split(' ')
                         const words = []
                         for (let w = 0; w < _words.length; w++) {
                             words.push({wordId:w, word:_words[w], willBeSung:line.indexesOfShownWordsSung.includes(w)})
                         }
+                        
+                        let default_pre_color = defaultPreColor;
+                        if (line.repeatsPreviousTextShown) {
+                            if (lines[line.id - 1].postColorChoice==='single') {
+                                default_pre_color = lines[line.id - 1].postColors[0];
+                            }
+                        }
+
                         return (
                             <div key={line.id}> 
                                 <LyricStyleForm 
                                     defaultEnterTrans={defaultEnterTransition}
                                     defaultExitTrans={defaultExitTransition}
-                                    defaultPrecolor={defaultPreColor} 
+                                    defaultPrecolor={default_pre_color} 
                                     defaultPostcolor={defaultPostColor}
-                                    precolors={new Array(words.length).fill(defaultPreColor)} 
-                                    postcolors={new Array(words.length).fill(defaultPostColor)} 
+                                    precolors={line.preColors} 
+                                    postcolors={line.postColors} 
                                     lineInfo={line} 
-                                    words={words}/>
+                                    words={words}
+                                    confirmStyleInfo={updateLine}/>
                                 <br/>
                             </div>
                         )
