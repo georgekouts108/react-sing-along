@@ -5,104 +5,124 @@ function LyricStyleForm({
     lineInfo, words, defaultEnterTrans, defaultExitTrans}) {
 
     const [infoSaved, setInfoSaved] = useState(false);
+    const [colorsRefreshed, setColorsRefreshed] = useState(false);
+
+    useEffect(() => {
+        setColorsRefreshed(colorsRefreshed);
+        setInfoSaved(false);
+    }, [colorsRefreshed]);
 
     const [preColorChoice, setPreColorChoice] = useState('single')
     const [postColorChoice, setPostColorChoice] = useState('single')
 
     const [enterTransition, setEnterTransition] = useState(defaultEnterTrans);
+    
     useEffect(() => {
         setEnterTransition(defaultEnterTrans);
         setInfoSaved(false);
-      }, [defaultEnterTrans]);
+    }, [defaultEnterTrans]);
 
-      const [exitTransition, setExitTransition] = useState(defaultExitTrans);
-      useEffect(() => {
-          setExitTransition(defaultExitTrans);
-          setInfoSaved(false);
-        }, [defaultExitTrans]);
+    const [exitTransition, setExitTransition] = useState(defaultExitTrans);
+    
+    useEffect(() => {
+        setExitTransition(defaultExitTrans);
+        setInfoSaved(false); 
+    }, [defaultExitTrans]);
 
     const [singlePrecolor, setSinglePrecolor] = useState(defaultPrecolor);
+    
     useEffect(() => {
         setSinglePrecolor(defaultPrecolor);
         setInfoSaved(false);
-      }, [defaultPrecolor]);
-
-    const [multiplePrecolors, setMultiplePrecolors] = useState(precolors);
-    useEffect(() => {
-        setMultiplePrecolors(precolors);
-        setInfoSaved(false);
-      }, [precolors]);
-
-      const [singlePostcolor, setSinglePostcolor] = useState(defaultPostcolor);
+        setColorsRefreshed(false);
+    }, [defaultPrecolor]);
+    
+    const [singlePostcolor, setSinglePostcolor] = useState(defaultPostcolor);
+    
     useEffect(() => {
         setSinglePostcolor(defaultPostcolor);
         setInfoSaved(false);
-      }, [defaultPostcolor]);
+        setColorsRefreshed(false);
+    }, [defaultPostcolor]);
 
-      const [multiplePostcolors, setMultiplePostcolors] = useState(postcolors);
+
+    const [multiplePrecolors, setMultiplePrecolors] = useState(precolors);
+    
     useEffect(() => {
-        setMultiplePostcolors(postcolors);
+        if (!colorsRefreshed) {
+            setMultiplePrecolors(precolors);
+        }
         setInfoSaved(false);
+        setColorsRefreshed(false);
+      }, [precolors]);
+
+    const [multiplePostcolors, setMultiplePostcolors] = useState(postcolors);
+    useEffect(() => {
+        if (!colorsRefreshed) {
+            setMultiplePostcolors(postcolors);
+        }
+        setInfoSaved(false);
+        setColorsRefreshed(false);
       }, [postcolors]);
 
     const changeMultiColor = (color, index, preOrPost) => {
-        const palette = (preOrPost === 'pre' ? multiplePrecolors : multiplePostcolors );
-        palette[index]=color;
-        
         if (preOrPost==='pre') {
-            setMultiplePrecolors(palette);
+            precolors[index]=color
         }
         else {
-            setMultiplePostcolors(palette);
+            postcolors[index]=color
         }
         setInfoSaved(false);
+        setColorsRefreshed(false);
     }
     
     const enterTransitionIDs = {'cutin':0, 'slidein':1, 'fadein':2};
     const exitTransitionIDs = {'cutout':0, 'slideout':1, 'fadeout':2};
 
     const saveLineStyleDetails = () => {
-        
-        const preColors = [];
-        if (preColorChoice === 'single') {
-            const color = document.getElementById(`single_pre_color_for_line${lineInfo.id}`).value
-            for (let w = 0; w < words.length; w++) {
-                preColors.push(color);
-            }
+        if (!colorsRefreshed) {
+            alert(`Please confirm Line ${lineInfo.id+1}'s colors before saving the style details.`);
         }
         else {
-            for (let w = 0; w < words.length; w++) {
-                const color = document.getElementById(`pre_color_for_line${lineInfo.id}_word${w}`).value
-                preColors.push(color);
+            const preColors = [];
+            if (preColorChoice === 'single') {
+                const color = document.getElementById(`single_pre_color_for_line${lineInfo.id}`).value
+                for (let w = 0; w < words.length; w++) {
+                    preColors.push(color);
+                }
             }
-        }
-
-        const postColors = [];
-        if (postColorChoice === 'single') {
-            const color = document.getElementById(`single_post_color_for_line${lineInfo.id}`).value
-            for (let w = 0; w < words.length; w++) {
-                postColors.push(color)
+            else {
+                for (let w = 0; w < words.length; w++) {
+                    const color = document.getElementById(`pre_color_for_line${lineInfo.id}_word${w}`).value
+                    preColors.push(color);
+                }
             }
-        }
-        else {
-            for (let w = 0; w < words.length; w++) {
-                const color = document.getElementById(`post_color_for_line${lineInfo.id}_word${w}`).value
-                postColors.push(color);
+
+            const postColors = [];
+            if (postColorChoice === 'single') {
+                const color = document.getElementById(`single_post_color_for_line${lineInfo.id}`).value
+                for (let w = 0; w < words.length; w++) {
+                    postColors.push(color)
+                }
             }
+            else {
+                for (let w = 0; w < words.length; w++) {
+                    const color = document.getElementById(`post_color_for_line${lineInfo.id}_word${w}`).value
+                    postColors.push(color);
+                }
+            }
+
+            lineInfo.enterTransition = enterTransition;
+            lineInfo.exitTransition = exitTransition;
+            lineInfo.enterTransitionId = enterTransitionIDs[enterTransition];
+            lineInfo.exitTransitionId = exitTransitionIDs[exitTransition];
+            lineInfo.preColors = preColors;
+            lineInfo.postColors = postColors;
+
+            console.log(lineInfo)
+            setInfoSaved(true);
+            // props.confirmColors(lineInfo);
         }
-
-        lineInfo.enterTransition = enterTransition;
-        lineInfo.exitTransition = exitTransition;
-        lineInfo.enterTransitionId = enterTransitionIDs[enterTransition];
-        lineInfo.exitTransitionId = exitTransitionIDs[exitTransition];
-        lineInfo.preColors = preColors;
-        lineInfo.postColors = postColors;
-
-        console.log(lineInfo)
-        setInfoSaved(true);
-
-        // props.confirmColors(lineInfo);
-    
     }
 
     return (
@@ -142,7 +162,7 @@ function LyricStyleForm({
                                 <input  
                                 id={`single_pre_color_for_line${lineInfo.id}`} 
                                 type='color' 
-                                onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false)}}
+                                onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
                                 value={singlePrecolor} />
                             </td>
                         }
@@ -173,7 +193,7 @@ function LyricStyleForm({
                             <td colSpan={words.length} style={{border: '3px solid black'}}>
                                 <input id={`single_post_color_for_line${lineInfo.id}`} 
                                 type='color' 
-                                onChange={(e)=>{setSinglePostcolor(e.target.value); setInfoSaved(false)}}
+                                onChange={(e)=>{setSinglePostcolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
                                 value={singlePostcolor} />
                             </td>
                         }
@@ -208,6 +228,7 @@ function LyricStyleForm({
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
+                            <button disabled={colorsRefreshed} onClick={()=>setColorsRefreshed(true)}>Confirm Colors</button>
                             <button disabled={infoSaved} onClick={()=>saveLineStyleDetails()}>Save Style Details</button>
                         </td>
                     </tr>
