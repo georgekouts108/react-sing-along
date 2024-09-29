@@ -54,7 +54,7 @@ function LyricStyleForm({
         }
         setInfoSaved(false);
         setColorsRefreshed(false);
-      }, [precolors]);
+      }, [precolors, colorsRefreshed]);
 
     const [multiplePostcolors, setMultiplePostcolors] = useState(postcolors);
     useEffect(() => {
@@ -63,7 +63,7 @@ function LyricStyleForm({
         }
         setInfoSaved(false);
         setColorsRefreshed(false);
-      }, [postcolors]);
+      }, [postcolors, colorsRefreshed]);
 
     const changeMultiColor = (color, index, preOrPost) => {
         if (preOrPost==='pre') {
