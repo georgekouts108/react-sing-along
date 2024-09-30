@@ -97,14 +97,7 @@ function LineTextInfoForm(props) {
                                 <br/><br/>
                             </>
                         }
-                        {
-                            lineId === 0 &&
-                            <>
-                                <input id={`repPrevTS_line${lineId}`} onClick={(e)=>repeatPreviousTextShown(e.target.checked)} disabled={true} type='checkbox' defaultChecked={false} />
-                                <label htmlFor={`repPrevTS_line${lineId}`}>Repeats text shown of LINE #{lineId}<br/>(this line must be confirmed)<br/>NOT APPLICABLE FOR LINE #1</label>
-                                <br/><br/>
-                            </>
-                        }
+                        {lineId === 0 && <h3>not applicable to first line</h3> }
                         </td>
                         <td style={{textAlign:'center',border: '3px solid black'}}>
                             <>

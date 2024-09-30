@@ -89,7 +89,7 @@ function LineTextInfoPage() {
             </header>
             
             <div className='content'>
-                <h1>Line Text Information</h1>
+                <h1>Line Text</h1>
                 <hr/>
                 {
                 lineCount>0 &&

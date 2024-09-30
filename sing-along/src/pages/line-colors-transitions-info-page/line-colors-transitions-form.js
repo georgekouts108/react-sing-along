@@ -15,6 +15,7 @@ function LineColorsTransitionsForm({
     useEffect(() => {
         setEnterTransition(defaultEnterTrans);
         setInfoSaved(false);
+        unsaveColorsAndTransitions();
     }, [defaultEnterTrans]);
 
     const [exitTransition, setExitTransition] = useState(defaultExitTrans);
@@ -22,6 +23,7 @@ function LineColorsTransitionsForm({
     useEffect(() => {
         setExitTransition(defaultExitTrans);
         setInfoSaved(false); 
+        unsaveColorsAndTransitions();
     }, [defaultExitTrans]);
 
     const [singlePrecolor, setSinglePrecolor] = useState(defaultPrecolor);
@@ -30,6 +32,7 @@ function LineColorsTransitionsForm({
         setSinglePrecolor(defaultPrecolor);
         setInfoSaved(false);
         setColorsRefreshed(false);
+        unsaveColorsAndTransitions();
     }, [defaultPrecolor]);
     
     const [singlePostcolor, setSinglePostcolor] = useState(defaultPostcolor);
@@ -38,6 +41,7 @@ function LineColorsTransitionsForm({
         setSinglePostcolor(defaultPostcolor);
         setInfoSaved(false);
         setColorsRefreshed(false);
+        unsaveColorsAndTransitions();
     }, [defaultPostcolor]);
 
 
@@ -46,12 +50,14 @@ function LineColorsTransitionsForm({
     useEffect(() => {
         setMultiplePrecolors(precolors);
         setInfoSaved(false);
+        unsaveColorsAndTransitions();
       }, [precolors]);
 
     const [multiplePostcolors, setMultiplePostcolors] = useState(postcolors);
     useEffect(() => {
         setMultiplePostcolors(postcolors);
         setInfoSaved(false);
+        unsaveColorsAndTransitions();
       }, [postcolors]);
 
     const changeMultiColor = (color, index, preOrPost) => {
@@ -62,13 +68,14 @@ function LineColorsTransitionsForm({
             postcolors[index]=color
         }
         setInfoSaved(false);
+        unsaveColorsAndTransitions();
         setColorsRefreshed(false);
     }
     
     const enterTransitionIDs = {'cutin':0, 'slidein':1, 'fadein':2};
     const exitTransitionIDs = {'cutout':0, 'slideout':1, 'fadeout':2};
 
-    const saveLineStyleDetails = () => {
+    const saveColorsAndTransitions = () => {
         if (!colorsRefreshed) {
             alert(`Please confirm Line ${lineInfo.id+1}'s colors before saving the style details.`);
         }
@@ -114,10 +121,15 @@ function LineColorsTransitionsForm({
             lineInfo.postColors = postColors;
             lineInfo.preColorChoice = preColorChoice;
             lineInfo.postColorChoice = postColorChoice;
+            lineInfo.colorsAndTransitionsSaved = true;
 
             setInfoSaved(true);
             confirmStyleInfo(lineInfo);
         }
+    }
+    const unsaveColorsAndTransitions =()=>{
+        lineInfo.colorsAndTransitionsSaved = false;
+        confirmStyleInfo(lineInfo);
     }
 
     const changePostColorChoice = (choice) => {
@@ -168,9 +180,9 @@ function LineColorsTransitionsForm({
                             <>
                                 <td style={{border: '3px solid black'}}>
                                     PRE-COLOR(S)<br/><br/>
-                                    <input defaultChecked={lineInfo.preColorChoice==='single'} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
+                                    <input defaultChecked={lineInfo.preColorChoice==='single'} onClick={()=>{setPreColorChoice('single'); setInfoSaved(false);unsaveColorsAndTransitions();}} type='radio' name={`preColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_preColorChoice_single`}/>
                                     <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_single`}>Same color for all words</label><br/>
-                                    <input defaultChecked={lineInfo.preColorChoice==='multiple'} onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false)}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
+                                    <input defaultChecked={lineInfo.preColorChoice==='multiple'} onClick={()=>{setPreColorChoice('multiple'); setInfoSaved(false);unsaveColorsAndTransitions();}} type='radio' name={`preColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_preColorChoice_multiple`}/>
                                     <label htmlFor={`lineId_${lineInfo.id}_preColorChoice_multiple`}>Different color for each word</label><br/>
                                 </td>
 
@@ -180,7 +192,7 @@ function LineColorsTransitionsForm({
                                         <input  
                                         id={`single_pre_color_for_line${lineInfo.id}`} 
                                         type='color' 
-                                        onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
+                                        onChange={(e)=>{setSinglePrecolor(e.target.value); setInfoSaved(false); setColorsRefreshed(false);unsaveColorsAndTransitions();}}
                                         value={singlePrecolor} />
                                     </td>
                                 }
@@ -206,9 +218,9 @@ function LineColorsTransitionsForm({
                     <tr>
                         <td style={{border: '3px solid black'}}>
                             POST-COLOR(S)<br/><br/>
-                            <input defaultChecked={lineInfo.postColorChoice==='single'} onClick={(e)=>{changePostColorChoice(e.target.value); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_postColorChoice_single`}/>
+                            <input defaultChecked={lineInfo.postColorChoice==='single'} onClick={(e)=>{changePostColorChoice(e.target.value); setInfoSaved(false);unsaveColorsAndTransitions();}} type='radio' name={`postColorChoice${lineInfo.id}`} value='single' id={`lineId_${lineInfo.id}_postColorChoice_single`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_postColorChoice_single`}>Same color for all words</label><br/>
-                            <input defaultChecked={lineInfo.postColorChoice==='multiple'} onClick={(e)=>{changePostColorChoice(e.target.value); setInfoSaved(false)}} type='radio' name={`postColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_postColorChoice_multiple`}/>
+                            <input defaultChecked={lineInfo.postColorChoice==='multiple'} onClick={(e)=>{changePostColorChoice(e.target.value); setInfoSaved(false);unsaveColorsAndTransitions();}} type='radio' name={`postColorChoice${lineInfo.id}`} value='multiple' id={`lineId_${lineInfo.id}_postColorChoice_multiple`}/>
                             <label htmlFor={`lineId_${lineInfo.id}_postColorChoice_multiple`}>Different color for each word</label><br/>
                         </td>
                         {
@@ -216,7 +228,7 @@ function LineColorsTransitionsForm({
                             <td colSpan={words.length} style={{border: '3px solid black'}}>
                                 <input id={`single_post_color_for_line${lineInfo.id}`} 
                                 type='color' 
-                                onChange={(e)=>{changeSinglePostColor(e.target.value); setInfoSaved(false); setColorsRefreshed(false)}}
+                                onChange={(e)=>{changeSinglePostColor(e.target.value); setInfoSaved(false); setColorsRefreshed(false);unsaveColorsAndTransitions();}}
                                 value={singlePostcolor} />
                             </td>
                         }
@@ -236,23 +248,23 @@ function LineColorsTransitionsForm({
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
                             Enter Transition:
-                            <input checked={enterTransition==='slidein'} onClick={()=>{setEnterTransition('slidein'); setInfoSaved(false)}} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
-                            <input checked={enterTransition==='cutin'} onClick={()=>{setEnterTransition('cutin'); setInfoSaved(false)}} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
-                            <input checked={enterTransition==='fadein'} onClick={()=>{setEnterTransition('fadein'); setInfoSaved(false)}} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
+                            <input checked={enterTransition==='slidein'} onClick={()=>{setEnterTransition('slidein'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
+                            <input checked={enterTransition==='cutin'} onClick={()=>{setEnterTransition('cutin'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
+                            <input checked={enterTransition==='fadein'} onClick={()=>{setEnterTransition('fadein'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
                             Exit Transition:
-                            <input checked={exitTransition==='slideout'} onClick={()=>{setExitTransition('slideout'); setInfoSaved(false)}} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
-                            <input checked={exitTransition==='cutout'} onClick={()=>{setExitTransition('cutout'); setInfoSaved(false)}} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
-                            <input checked={exitTransition==='fadeout'} onClick={()=>{setExitTransition('fadeout'); setInfoSaved(false)}} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
+                            <input checked={exitTransition==='slideout'} onClick={()=>{setExitTransition('slideout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
+                            <input checked={exitTransition==='cutout'} onClick={()=>{setExitTransition('cutout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
+                            <input checked={exitTransition==='fadeout'} onClick={()=>{setExitTransition('fadeout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
-                            <button disabled={colorsRefreshed} onClick={()=>setColorsRefreshed(true)}>Confirm Colors</button>
-                            <button disabled={infoSaved} onClick={()=>saveLineStyleDetails()}>Save Style Details</button>
+                            <button disabled={colorsRefreshed} onClick={()=>setColorsRefreshed(true)}>Confirm Colors</button>&nbsp;&nbsp;
+                            <button disabled={infoSaved} onClick={()=>saveColorsAndTransitions()}>Save Details</button>
                         </td>
                     </tr>
                     

@@ -9,8 +9,8 @@ function LineColorsTransitionsInfoPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [defaultPreColor, setDefaultPreColor] = useState('#05dfd7')
-    const [defaultPostColor, setDefaultPostColor] = useState('#ffffff')
+    const [defaultPreColor, setDefaultPreColor] = useState('#05dfd7');
+    const [defaultPostColor, setDefaultPostColor] = useState('#ffffff');
 
     const data = location.state?.data;
 
@@ -32,7 +32,7 @@ function LineColorsTransitionsInfoPage() {
         if (_line.repeatsPreviousTextShown) {
             _line.preColors = _line.postColors;
         }
-
+        _line.colorsAndTransitionsSaved = false;
         elaboratedLines.push(_line)
     }
     const [lines, setLines] = useState(elaboratedLines)
@@ -43,16 +43,30 @@ function LineColorsTransitionsInfoPage() {
     const [defaultExitTransition, setDefaultExitTransition] = useState('slideout')
     const transitionOptions = ['slide', 'cut', 'fade'];
 
-    const [grammar, setGrammar] = useState('original')
+    // const [grammar, setGrammar] = useState('original')
 
     const confirmAllInformation = () => {
-        // const data = {
-        // }
-        // console.log(data)
+        let savedCount = 0;
+        for (let u = 0; u < lines.length; u++) {
+            savedCount += lines[u].colorsAndTransitionsSaved ? 1 : 0;
+        }
 
-        // navigate('/line-timing', { 
-        //     state: data
-        // });
+        if (savedCount === lines.length){
+            const data = {
+                lines: lines,
+                lineCount: lines.length
+            }
+            console.log(data)
+            // navigate('/', { 
+            //     state: data
+            // });
+        }
+        else {
+            alert(`ERROR: ${lines.length-savedCount} line(s) do not have their colors/transitions saved.`)
+        }
+        
+
+        
     }
     const updateLine = (lineObject) => {
         const updatedLines = lines;
@@ -64,11 +78,11 @@ function LineColorsTransitionsInfoPage() {
                     updatedLines[l+1].preColorChoice=lineObject.postColorChoice;
                     updatedLines[l+1].preColors=lineObject.postColors;
                 }
-                break;
+                
             } 
         }
+        
         setLines(updatedLines);
-        console.log(lines);
     }
 
     return (
@@ -77,16 +91,17 @@ function LineColorsTransitionsInfoPage() {
             </header>
             
             <div className='content'>
-                <h1>Line Styles Information</h1>
+                <h1>Colors and Transitions</h1>
                 <hr/>
+                <button onClick={()=>confirmAllInformation()}>Confirm All Information</button><br/><br/>
                 <table style={{textAlign:'center',border: '3px solid black'}}>
                     <tbody>
                         <tr >
                             <td style={{textAlign:'center',border: '3px solid black'}}>
-                            Default<br/>Pre-Color<br/>{defaultPreColor}
+                            Default<br/>Pre-Color
                             </td>
                             <td style={{textAlign:'center',border: '3px solid black'}}>
-                            Default<br/>Post-Color<br/>{defaultPostColor}
+                            Default<br/>Post-Color
                             </td>
                             <td style={{textAlign:'center',border: '3px solid black'}}>
                             Default<br/>Enter Transition
@@ -94,9 +109,9 @@ function LineColorsTransitionsInfoPage() {
                             <td style={{textAlign:'center',border: '3px solid black'}}>
                             Default<br/>Exit Transition
                             </td>
-                            <td style={{textAlign:'center', border: '3px solid black'}}>
+                            {/* <td style={{textAlign:'center', border: '3px solid black'}}>
                             Default<br/>Grammar Style
-                            </td>
+                            </td> */}
                         </tr>
                         <tr>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
@@ -127,13 +142,13 @@ function LineColorsTransitionsInfoPage() {
                                 ))
                                 }
                             </td>
-                            <td style={{textAlign:'center', border: '3px solid black'}}>
+                            {/* <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input defaultChecked={true} onClick={()=>setGrammar('original')} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
                                 <input onClick={()=>setGrammar('uppercase')} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
                                 <input onClick={()=>setGrammar('lowercase')} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
                                 <input onClick={()=>setGrammar('capsfirstonly')} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
                                 <input onClick={()=>setGrammar('capsallwords')} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
-                            </td>
+                            </td> */}
                         </tr>
                     </tbody>
                 </table>
