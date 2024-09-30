@@ -7,11 +7,6 @@ function LyricStyleForm({
     const [infoSaved, setInfoSaved] = useState(false);
     const [colorsRefreshed, setColorsRefreshed] = useState(false);
 
-    useEffect(() => {
-        setColorsRefreshed(colorsRefreshed);
-        setInfoSaved(false);
-    }, [colorsRefreshed]);
-
     const [preColorChoice, setPreColorChoice] = useState(lineInfo.preColorChoice)
     const [postColorChoice, setPostColorChoice] = useState(lineInfo.postColorChoice)
 
@@ -49,21 +44,15 @@ function LyricStyleForm({
     const [multiplePrecolors, setMultiplePrecolors] = useState(precolors);
     
     useEffect(() => {
-        if (!colorsRefreshed) {
-            setMultiplePrecolors(precolors);
-        }
+        setMultiplePrecolors(precolors);
         setInfoSaved(false);
-        setColorsRefreshed(false);
-      }, [precolors, colorsRefreshed]);
+      }, [precolors]);
 
     const [multiplePostcolors, setMultiplePostcolors] = useState(postcolors);
     useEffect(() => {
-        if (!colorsRefreshed) {
-            setMultiplePostcolors(postcolors);
-        }
+        setMultiplePostcolors(postcolors);
         setInfoSaved(false);
-        setColorsRefreshed(false);
-      }, [postcolors, colorsRefreshed]);
+      }, [postcolors]);
 
     const changeMultiColor = (color, index, preOrPost) => {
         if (preOrPost==='pre') {
@@ -84,18 +73,23 @@ function LyricStyleForm({
             alert(`Please confirm Line ${lineInfo.id+1}'s colors before saving the style details.`);
         }
         else {
-            const preColors = [];
-            if (preColorChoice === 'single') {
-                const color = document.getElementById(`single_pre_color_for_line${lineInfo.id}`).value
-                for (let w = 0; w < words.length; w++) {
-                    preColors.push(color);
+            let preColors = [];
+            if (!lineInfo.repeatsPreviousTextShown) {
+                if (preColorChoice === 'single') {
+                    const color = document.getElementById(`single_pre_color_for_line${lineInfo.id}`).value
+                    for (let w = 0; w < words.length; w++) {
+                        preColors.push(color);
+                    }
+                }
+                else {
+                    for (let w = 0; w < words.length; w++) {
+                        const color = document.getElementById(`pre_color_for_line${lineInfo.id}_word${w}`).value
+                        preColors.push(color);
+                    }
                 }
             }
             else {
-                for (let w = 0; w < words.length; w++) {
-                    const color = document.getElementById(`pre_color_for_line${lineInfo.id}_word${w}`).value
-                    preColors.push(color);
-                }
+                preColors = precolors;
             }
 
             const postColors = [];
