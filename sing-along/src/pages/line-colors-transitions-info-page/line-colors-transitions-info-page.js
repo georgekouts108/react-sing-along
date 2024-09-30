@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import './line-styles-info-page.styles.css'
-import LyricStyleForm from '../../components/lyric-style-form';
+import './line-colors-transitions-info-page.styles.css'
+import LineColorsTransitionsForm from './line-colors-transitions-form'
 
-function LineStylesInfoPage() {
+function LineColorsTransitionsInfoPage() {
     document.title = 'Line Styles Info: Sing-Along Subtitle Generator'
    
     const navigate = useNavigate();
@@ -157,7 +157,7 @@ function LineStylesInfoPage() {
 
                         return (
                             <div key={line.id}> 
-                                <LyricStyleForm 
+                                <LineColorsTransitionsForm 
                                     defaultEnterTrans={defaultEnterTransition}
                                     defaultExitTrans={defaultExitTransition}
                                     defaultPrecolor={default_pre_color} 
@@ -178,4 +178,4 @@ function LineStylesInfoPage() {
     )
 }
 
-export default LineStylesInfoPage;
+export default LineColorsTransitionsInfoPage;

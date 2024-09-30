@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import './line-text-info-page.styles.css'
-import LineEntryForm from '../../components/line-entry-form';
+import LineTextInfoForm from './line-text-info-form'
 
 function LineTextInfoPage() {
     document.title = 'Line Text Info: Sing-Along Subtitle Generator'
@@ -76,9 +76,8 @@ function LineTextInfoPage() {
             lines: lines, 
             lineCount: lineCount
         }
-        // console.log(data)
 
-        navigate('/line-styles-info', { 
+        navigate('/line-colors-transitions-info', { 
             state: {data: data}
         });
     }
@@ -96,7 +95,7 @@ function LineTextInfoPage() {
                 lineCount>0 &&
                 lines.map((line) => (
                     <div key={line.id}> 
-                        <LineEntryForm latestLineIsConfirmed={latestLineConfirmed} clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
+                        <LineTextInfoForm latestLineIsConfirmed={latestLineConfirmed} clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
                     </div>
                 ))
             }

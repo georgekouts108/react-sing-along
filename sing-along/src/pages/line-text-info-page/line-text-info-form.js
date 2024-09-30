@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-function LineEntryForm(props) {
+function LineTextInfoForm(props) {
     const [lineId] = useState(props.line.id)
 
     const [repeatsPreviousTextShown, setRepeatsPreviousTextShown] = useState(props.line.wasCloned ? props.line.repeatsPreviousTextShown : false);
@@ -167,4 +167,4 @@ function LineEntryForm(props) {
     )
 }
 
-export default LineEntryForm;
+export default LineTextInfoForm;

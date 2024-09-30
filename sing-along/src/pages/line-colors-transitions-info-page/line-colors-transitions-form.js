@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-function LyricStyleForm({
+function LineColorsTransitionsForm({
     defaultPrecolor, defaultPostcolor, precolors, postcolors, 
     lineInfo, words, defaultEnterTrans, defaultExitTrans, confirmStyleInfo}) {
     const _words=words;
@@ -263,4 +263,4 @@ function LyricStyleForm({
     )
 }
 
-export default LyricStyleForm;
+export default LineColorsTransitionsForm;
