@@ -45,6 +45,7 @@ function FontPicker(props) {
                             </tr>
                         ))
                     }     
+                    
                 </tbody>
             </table>
         </div>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import './line-typography-frame-info-page.styles.css'
 import oneLinePic from '../../assets/images/screenshots/oneLinePic.png'
@@ -13,6 +13,8 @@ function LineTypographyFrameInfoPage() {
 
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
+    
+
     const data = location.state?.data;
     
     let _frame_width = 640
@@ -22,18 +24,23 @@ function LineTypographyFrameInfoPage() {
     let _max_line_count = 1
     let _y_sing = _centered ? ((_frame_height/2) + _font_size): (_frame_height - (_font_size * _max_line_count));        
     let _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
+ 
+    const [recommendedFontSize, setRecommendedFontSize] = useState(font.recommendedSizePercentages.mixed.oneLine * _frame_height);
+    const [fontWordSpacing, setFontWordSpacing] = useState(font.wordSpacing);
 
     const confirmFrameDetails = () => {
         _frame_width = parseFloat(document.getElementById('frameWidth').value)
         _frame_height = parseFloat(document.getElementById('frameHeight').value)
-        _font_size = parseFloat(document.getElementById('fontSize').value)
+        _font_size = (font.name==='Other Font') ? parseFloat(document.getElementById('customFontSize').value)
+        : recommendedFontSize
+
         _centered = document.getElementById('framePositionCentered').checked
         _max_line_count = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
         _y_sing = _centered ? (parseFloat(_frame_height/2) + _font_size) : (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));        
         _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
         
-        const _font_info = font;
-        _font_info.fontSize = _font_size;
+        const _font_name = (font.name==='Other Font') ? document.getElementById('customFontName').value : font.name
+        const _font_info = {fontName: _font_name, fontWordSpacing:font.wordSpacing, fontSize: _font_size};
         const _state = {
             data: {
                 lines: data.lines,
@@ -53,7 +60,8 @@ function LineTypographyFrameInfoPage() {
             // state: _state
         // });
     }
-    const getRecommendedFontSize = () => {
+    const setRecommendedFontSizeAndWordSpacing = () => {
+    
         let rfsp = 0;  
         let isUppercase = document.getElementById('grammar_uppercase').checked;
         let maxLineCount = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
@@ -66,8 +74,13 @@ function LineTypographyFrameInfoPage() {
             rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.mixed.oneLine 
                 : font.recommendedSizePercentages.mixed.twoLine)
         }
-        return rfsp * frameHeight;
+        setRecommendedFontSize(Math.round(rfsp * frameHeight, 2));
+        setFontWordSpacing(font.wordSpacing);
     }
+    
+    useEffect(()=>{
+        setRecommendedFontSizeAndWordSpacing();
+    }, [font])
 
     return (
         <div className='line-typography-frame-info-page-main'>
@@ -106,20 +119,31 @@ function LineTypographyFrameInfoPage() {
                                 <input style={{textAlign:'center'}}
                                 defaultValue={480} 
                                 id='frameHeight' 
+                                onChange={()=>setRecommendedFontSizeAndWordSpacing()}
                                 type='number'/><br/>pixels <br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
-                                <input defaultChecked={true} onClick={()=>setGrammar('original')} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
-                                <input onClick={()=>setGrammar('uppercase')} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
-                                <input onClick={()=>setGrammar('lowercase')} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
-                                <input onClick={()=>setGrammar('capsfirstonly')} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
-                                <input onClick={()=>setGrammar('capsallwords')} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
+                                <input defaultChecked={true} onClick={()=>{setGrammar('original');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
+                                <input onClick={()=>{setGrammar('uppercase');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
+                                <input onClick={()=>{setGrammar('lowercase');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
+                                <input onClick={()=>{setGrammar('capsfirstonly');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
+                                <input onClick={()=>{setGrammar('capsallwords');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
-                                <input style={{textAlign:'center'}}
-                                defaultValue={40} 
-                                id='fontSize' 
-                                type='number'/>
+                                {
+                                    font.name !== 'Other Font' &&
+                                    <h1>{Math.round(recommendedFontSize,2)}</h1>
+                                }
+                                {
+                                    font.name === 'Other Font' &&
+                                    <>
+                                        <h4>Enter custom font size:</h4>
+                                        <input style={{textAlign:'center'}}
+                                        placeholder='custom font size'
+                                        id='customFontSize' 
+                                        type='number'/>
+                                    </>
+                                }
                             </td>
                             <td style={{textAlign:'center',border: '3px solid black'}}>
                                 <input name='framePosition' value={true} id='framePositionCentered' type='radio'/>
@@ -155,15 +179,30 @@ function LineTypographyFrameInfoPage() {
                                     </ul>
                                     </i>
                                 </h4>
-                                <h4 style={{color:'orange'}}>
+                                {
+                                    font.name !== 'Other Font' &&
+                                    <h4 style={{color:'orange'}}>
                                     For the font <i>{font.name}</i>, the following is recommended based on the frame dimensions and grammar choice:
                                     <ul>
                                         <li>
-                                            Font Size: {getRecommendedFontSize()}
+                                            Suggested maximum font size: {recommendedFontSize}
                                         </li>
-                                        <li>Spaces between each word: {font.wordSpacing}</li>
+                                        <li>Spaces between each word: {fontWordSpacing}</li>
                                     </ul>
                                 </h4>
+                                }
+                                {
+                                    font.name === 'Other Font' &&
+                                    <>
+                                        Enter custom font name:
+                                        <input style={{textAlign:'center'}}
+                                        placeholder='custom font name'
+                                        id='customFontName' 
+                                        type='text'/>
+                                    </>
+
+                                }
+                                
                             </td>
                         </tr>
                         <tr style={{border: '3px solid black'}}>
@@ -173,7 +212,7 @@ function LineTypographyFrameInfoPage() {
                                         <tr style={{border: '3px solid black'}}>
                                             <td style={{border: '3px solid black'}}>
                                                 <div id='maxOneLine'>
-                                                    <input defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
+                                                    <input onClick={()=>setRecommendedFontSizeAndWordSpacing()} defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
                                                     <label htmlFor='maxOneLineBtn'>Max. 1 Line</label>
                                                     <br/>
                                                     <label htmlFor='maxOneLineBtn'><img width={200} height={200} src={oneLinePic} alt="f"/><br/></label>
@@ -181,7 +220,7 @@ function LineTypographyFrameInfoPage() {
                                             </td>
                                             <td style={{border: '3px solid black'}}>
                                                 <div id='maxTwoLines'>
-                                                    <input name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
+                                                    <input onClick={()=>setRecommendedFontSizeAndWordSpacing()} name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
                                                     <label htmlFor='maxTwoLinesBtn'>Max. 2 Lines</label>
                                                     <br/>
                                                     <label htmlFor='maxTwoLinesBtn'><img width={200} height={200} src={twoLinePic} alt="g"/></label>

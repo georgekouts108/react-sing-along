@@ -4,8 +4,8 @@ export const fonts = [
         name:'Dom Casual D',
         wordSpacing: 1,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.16, twoLine:0.1},
-            uppercase:{oneLine: 0.16, twoLine:0.1} // tweak uppercase object
+            mixed: {oneLine: 0.16, twoLine:0.11},
+            uppercase:{oneLine: 0.19, twoLine:0.12} // tweak uppercase object
         }
     },
     {
@@ -13,8 +13,8 @@ export const fonts = [
         name:'ITC Korinna Std',
         wordSpacing: 1,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.10, twoLine:0.1},
-            uppercase:{oneLine: 0.10, twoLine:0.3} // tweak uppercase object
+            mixed: {oneLine: 0.10, twoLine:0.12},
+            uppercase:{oneLine: 0.11, twoLine:0.13} // tweak uppercase object
         }
     },
     {
@@ -22,8 +22,8 @@ export const fonts = [
         name:'Muro',
         wordSpacing: 1,
         recommendedSizePercentages: { 
-            mixed:{oneLine: 0.0875, twoLine:0.1},
-            uppercase:{oneLine: 0.0875, twoLine:0.1} // tweak uppercase object
+            mixed:{oneLine: 0.0875, twoLine:0.13},
+            uppercase:{oneLine: 0.1, twoLine:0.12} // tweak uppercase object
         }
     },
     {
@@ -31,8 +31,8 @@ export const fonts = [
         name:'Kapra',
         wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.125, twoLine:0.1},
-            uppercase: {oneLine: 0.125, twoLine:0.1}// tweak uppercase object
+            mixed: {oneLine: 0.125, twoLine:0.14},
+            uppercase: {oneLine: 0.14, twoLine:0.15}// tweak uppercase object
         }
     },
     {
@@ -40,9 +40,18 @@ export const fonts = [
         name:'Data70',
         wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.10, twoLine: 0.1},
-            uppercase:{oneLine: 0.10, twoLine: 0.1} // tweak uppercase object
+            mixed: {oneLine: 0.10, twoLine: 0.15},
+            uppercase:{oneLine: 0.11, twoLine: 0.14} // tweak uppercase object
         }
-    }
+    },
+    {
+        fid:'other',
+        name:'Other Font',
+        wordSpacing: 1,
+        recommendedSizePercentages: { 
+            mixed: {oneLine: 0.16, twoLine:0.11},
+            uppercase:{oneLine: 0.19, twoLine:0.12} // tweak uppercase object
+        }
+    },
 ]
 
