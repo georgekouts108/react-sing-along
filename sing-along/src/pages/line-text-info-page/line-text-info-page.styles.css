@@ -5,7 +5,7 @@
     background-size: auto;
     width: auto;                
     height: auto;     
-    /* overflow: hidden; */
+    overflow: auto;
     display: block;
 }
 .header {

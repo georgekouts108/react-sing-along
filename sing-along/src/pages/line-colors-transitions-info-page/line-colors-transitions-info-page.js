@@ -43,8 +43,6 @@ function LineColorsTransitionsInfoPage() {
     const [defaultExitTransition, setDefaultExitTransition] = useState('slideout')
     const transitionOptions = ['slide', 'cut', 'fade'];
 
-    // const [grammar, setGrammar] = useState('original')
-
     const confirmAllInformation = () => {
         let savedCount = 0;
         for (let u = 0; u < lines.length; u++) {
@@ -57,9 +55,9 @@ function LineColorsTransitionsInfoPage() {
                 lineCount: lines.length
             }
             console.log(data)
-            // navigate('/', { 
-            //     state: data
-            // });
+            navigate('/line-typography-frame-info', { 
+                state: data
+            });
         }
         else {
             alert(`ERROR: ${lines.length-savedCount} line(s) do not have their colors/transitions saved.`)
@@ -86,7 +84,7 @@ function LineColorsTransitionsInfoPage() {
     }
 
     return (
-        <div className='line-text-info-page-main'>
+        <div className='line-colors-transitions-info-page-main'>
             <header className='header'>
             </header>
             
