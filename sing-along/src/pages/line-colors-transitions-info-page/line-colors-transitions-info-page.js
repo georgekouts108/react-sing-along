@@ -54,9 +54,9 @@ function LineColorsTransitionsInfoPage() {
                 lines: lines,
                 lineCount: lines.length
             }
-            console.log(data)
+            
             navigate('/line-typography-frame-info', { 
-                state: data
+                state: {data: data}
             });
         }
         else {
@@ -107,9 +107,6 @@ function LineColorsTransitionsInfoPage() {
                             <td style={{textAlign:'center',border: '3px solid black'}}>
                             Default<br/>Exit Transition
                             </td>
-                            {/* <td style={{textAlign:'center', border: '3px solid black'}}>
-                            Default<br/>Grammar Style
-                            </td> */}
                         </tr>
                         <tr>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
@@ -140,13 +137,6 @@ function LineColorsTransitionsInfoPage() {
                                 ))
                                 }
                             </td>
-                            {/* <td style={{textAlign:'center', border: '3px solid black'}}>
-                                <input defaultChecked={true} onClick={()=>setGrammar('original')} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
-                                <input onClick={()=>setGrammar('uppercase')} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
-                                <input onClick={()=>setGrammar('lowercase')} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
-                                <input onClick={()=>setGrammar('capsfirstonly')} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
-                                <input onClick={()=>setGrammar('capsallwords')} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
-                            </td> */}
                         </tr>
                     </tbody>
                 </table>

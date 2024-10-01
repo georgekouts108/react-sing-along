@@ -12,6 +12,7 @@ function LineTypographyFrameInfoPage() {
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState('Dom Casual D')
     const data = location.state?.data;
+    
 
     let _frame_width = 640
     let _frame_height = 480
@@ -21,63 +22,33 @@ function LineTypographyFrameInfoPage() {
     let _y_sing = _centered ? ((_frame_height/2) + _font_size): (_frame_height - (_font_size * _max_line_count));        
     let _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
 
-    // const updateInformation = () => {
-    //     _frame_width = parseFloat(document.getElementById('frameWidth').value)
-    //     _frame_height = parseFloat(document.getElementById('frameHeight').value)
-    //     _font_size = parseFloat(document.getElementById('fontSize').value)
-    //     _centered = document.getElementById('framePositionCentered').checked
-    //     _max_line_count = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
-    //     _y_sing = _centered ? (parseFloat(_frame_height/2) + _font_size) : (_frame_height - (_font_size * _max_line_count));        
-    //     _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
-         
-    //     console.log("$$$$$$$")
-    //     console.log(`frame_width = ${_frame_width}`)
-    //     console.log(`frame_height = ${_frame_height}`)
-    //     console.log(`font_size = ${_font_size}`)
-    //     console.log(`centered = ${_centered}`)
-    //     console.log(`max_line_count = ${_max_line_count} line(s)`)
-    //     console.log(`y_sing = ${_y_sing}`)
-    //     console.log(`y_wait = ${_y_wait}`)
-    //     console.log(`grammar = ${grammar}`)
-    //     console.log(`font = ${font}`)
-
-    // }
-
     const confirmFrameDetails = () => {
         _frame_width = parseFloat(document.getElementById('frameWidth').value)
         _frame_height = parseFloat(document.getElementById('frameHeight').value)
         _font_size = parseFloat(document.getElementById('fontSize').value)
         _centered = document.getElementById('framePositionCentered').checked
         _max_line_count = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
-        _y_sing = _centered ? (parseFloat(_frame_height/2) + _font_size) : (_frame_height - (_font_size * _max_line_count));        
+        _y_sing = _centered ? (parseFloat(_frame_height/2) + _font_size) : (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));        
         _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
          
-        console.log("$$$$$$$")
-        console.log(`frame_width = ${_frame_width}`)
-        console.log(`frame_height = ${_frame_height}`)
-        console.log(`font_size = ${_font_size}`)
-        console.log(`centered = ${_centered}`)
-        console.log(`max_line_count = ${_max_line_count} line(s)`)
-        console.log(`y_sing = ${_y_sing}`)
-        console.log(`y_wait = ${_y_wait}`)
-        console.log(`grammar = ${grammar}`)
-        console.log(`font = ${font}`)
+        const _state = {
+            data: {
+                lines: data.lines,
+                lineCount: data.lineCount,
+                grammar: grammar,
+                frameHeight: _frame_height, 
+                frameWidth: _frame_width,
+                ySing: _y_sing, 
+                yWait: _y_wait, 
+                maxLineCount: _max_line_count,
+                centered: _centered,
+                font:font,
+                fontSize: _font_size
+            }
+        }
+        console.log(_state)
         // navigate('/finished', { 
-        //     state: {
-        //         data: {
-        //             lines: data.lines,
-        //             lineCount: data.lineCount,
-        //             grammar: grammar,
-        //             frameHeight: frameHeight, 
-        //             frameWidth: frameWidth,
-        //             ySing: ySing, 
-        //             yWait: yWait, 
-        //             maxLineCount: maxLineCount,
-        //             centered: centered,
-        //             font:font,
-        //             fontSize: fontSize
-        //         }
-        //     }
+            // state: _state
         // });
     }
 
@@ -111,14 +82,12 @@ function LineTypographyFrameInfoPage() {
                         <tr>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
-                                // onChange={()=>updateInformation()} 
                                 defaultValue={640} 
                                 id='frameWidth' 
                                 type='number'/><br/>pixels <br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
-                                // onChange={()=>updateInformation()} 
                                 defaultValue={480} 
                                 id='frameHeight' 
                                 type='number'/><br/>pixels <br/>
@@ -132,7 +101,6 @@ function LineTypographyFrameInfoPage() {
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
-                                // onChange={(e)=>updateInformation()} 
                                 defaultValue={40} 
                                 id='fontSize' 
                                 type='number'/>
@@ -150,29 +118,62 @@ function LineTypographyFrameInfoPage() {
 
 
                 <hr/>
-                <h2>Select the maximum number of lines on the screen at once</h2>
                 <table>
                     <tbody style={{border: '3px solid black'}}>
-                        <tr style={{border: '3px solid black'}}>
-                            <td style={{border: '3px solid black'}}>
-                                <div id='maxOneLine'>
-                                    <input defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
-                                    <label htmlFor='maxOneLineBtn'>Max. 1 Line</label>
-                                    <br/>
-                                    <img width={200} height={200} src={oneLinePic} alt="f"/><br/>
-                                </div>
+                        <tr>
+                            <td style={{border: '3px solid black'}}> 
+                                <h2>Select the maximum number of lines<br/>on the screen at once</h2>   
                             </td>
                             <td style={{border: '3px solid black'}}>
-                                <div id='maxTwoLines'>
-                                    <input name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
-                                    <label htmlFor='maxTwoLinesBtn'>Max. 2 Lines</label>
-                                    <br/>
-                                    <img width={200} height={200} src={twoLinePic} alt="g"/><br/>
-                                </div>
+                                <h2>Select your default font for each line</h2>
+                                <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.</h4>
+
+                                <h4>All the fonts below have been used in one or more of these videocassette series: 
+                                    <i>
+                                    <ul>
+                                        <li>Disney Sing-Along Songs</li>
+                                        <li>Alvin & the Chipmunks Sing-Alongs</li>
+                                        <li>Screen Songs by Fleischer Studios</li>
+                                        <li>Dr. Seuss Sing-Along Classics</li>
+                                    </ul>
+                                    </i>
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr style={{border: '3px solid black'}}>
+                            <td style={{border: '3px solid black'}}>
+                                <table>
+                                    <tbody style={{border: '3px solid black'}}>
+                                        <tr style={{border: '3px solid black'}}>
+                                            <td style={{border: '3px solid black'}}>
+                                                <div id='maxOneLine'>
+                                                    <input defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
+                                                    <label htmlFor='maxOneLineBtn'>Max. 1 Line</label>
+                                                    <br/>
+                                                    <label htmlFor='maxOneLineBtn'><img width={200} height={200} src={oneLinePic} alt="f"/><br/></label>
+                                                </div>
+                                            </td>
+                                            <td style={{border: '3px solid black'}}>
+                                                <div id='maxTwoLines'>
+                                                    <input name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
+                                                    <label htmlFor='maxTwoLinesBtn'>Max. 2 Lines</label>
+                                                    <br/>
+                                                    <label htmlFor='maxTwoLinesBtn'><img width={200} height={200} src={twoLinePic} alt="g"/></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td style={{border: '3px solid black'}}>
+                            (font repertoire here)
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+
+                
                 <hr/>
                     <button onClick={()=>confirmFrameDetails()}>Confirm Frame Details</button>
                 <hr/>
