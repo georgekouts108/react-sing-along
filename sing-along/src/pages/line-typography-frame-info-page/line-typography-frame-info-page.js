@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './line-typography-frame-info-page.styles.css'
 import oneLinePic from '../../assets/images/screenshots/oneLinePic.png'
 import twoLinePic from '../../assets/images/screenshots/twoLinePic.jpg'
+import FontPicker from './font-picker';
+import { fonts } from '../../data/fonts/font-names';
 
 function LineTypographyFrameInfoPage() {
     document.title = 'Typography & Frame Details: Sing-Along Subtitle Generator'
@@ -10,10 +12,9 @@ function LineTypographyFrameInfoPage() {
     const location = useLocation();
 
     const [grammar, setGrammar] = useState('original')
-    const [font, setFont] = useState('Dom Casual D')
+    const [font, setFont] = useState(fonts[0]);
     const data = location.state?.data;
     
-
     let _frame_width = 640
     let _frame_height = 480
     let _font_size = 40
@@ -30,7 +31,9 @@ function LineTypographyFrameInfoPage() {
         _max_line_count = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
         _y_sing = _centered ? (parseFloat(_frame_height/2) + _font_size) : (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));        
         _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
-         
+        
+        const _font_info = font;
+        _font_info.fontSize = _font_size;
         const _state = {
             data: {
                 lines: data.lines,
@@ -42,8 +45,7 @@ function LineTypographyFrameInfoPage() {
                 yWait: _y_wait, 
                 maxLineCount: _max_line_count,
                 centered: _centered,
-                font:font,
-                fontSize: _font_size
+                fontInfo: _font_info,
             }
         }
         console.log(_state)
@@ -51,7 +53,21 @@ function LineTypographyFrameInfoPage() {
             // state: _state
         // });
     }
-
+    const getRecommendedFontSize = () => {
+        let rfsp = 0;  
+        let isUppercase = document.getElementById('grammar_uppercase').checked;
+        let maxLineCount = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
+        let frameHeight = parseFloat(document.getElementById('frameHeight').value)
+        if (isUppercase) {
+            rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.uppercase.oneLine 
+                : font.recommendedSizePercentages.uppercase.twoLine)
+        }
+        else {
+            rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.mixed.oneLine 
+                : font.recommendedSizePercentages.mixed.twoLine)
+        }
+        return rfsp * frameHeight;
+    }
 
     return (
         <div className='line-typography-frame-info-page-main'>
@@ -126,7 +142,8 @@ function LineTypographyFrameInfoPage() {
                             </td>
                             <td style={{border: '3px solid black'}}>
                                 <h2>Select your default font for each line</h2>
-                                <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.</h4>
+                                <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.<br/>
+                                In order to use a font, you must have it installed on your local operating system.</h4>
 
                                 <h4>All the fonts below have been used in one or more of these videocassette series: 
                                     <i>
@@ -137,6 +154,15 @@ function LineTypographyFrameInfoPage() {
                                         <li>Dr. Seuss Sing-Along Classics</li>
                                     </ul>
                                     </i>
+                                </h4>
+                                <h4 style={{color:'orange'}}>
+                                    For the font <i>{font.name}</i>, the following is recommended based on the frame dimensions and grammar choice:
+                                    <ul>
+                                        <li>
+                                            Font Size: {getRecommendedFontSize()}
+                                        </li>
+                                        <li>Spaces between each word: {font.wordSpacing}</li>
+                                    </ul>
                                 </h4>
                             </td>
                         </tr>
@@ -166,7 +192,7 @@ function LineTypographyFrameInfoPage() {
                                 </table>
                             </td>
                             <td style={{border: '3px solid black'}}>
-                            (font repertoire here)
+                                <FontPicker configureFont={setFont}/>
                             </td>
                         </tr>
                     </tbody>
