@@ -41,6 +41,14 @@ function LineTypographyFrameInfoPage() {
         let _custom_y_sing = parseFloat(document.getElementById('customYsing').value)
         const _font_name = (font.name==='Other Font') ? document.getElementById('customFontName').value : font.name
 
+        let _word_spacing = 1;
+        if (font.name==='Other Font') {
+            _word_spacing = document.getElementById('customWordSpacing1').checked ? 1 : 2;
+        }
+        else {
+            _word_spacing = font.wordSpacing;
+        } 
+
         if (isNaN(_frame_height) || isNaN(_frame_width)) {
             alert('ERROR: The frame width and/or height are missing.')
         }
@@ -71,7 +79,7 @@ function LineTypographyFrameInfoPage() {
             _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
             
             
-            const _font_info = {fontName: _font_name, fontWordSpacing:font.wordSpacing, fontSize: _font_size};
+            const _font_info = {fontName: _font_name, fontWordSpacing: _word_spacing, fontSize: _font_size};
             const _state = {
                 data: {
                     lines: data.lines,
@@ -223,10 +231,10 @@ function LineTypographyFrameInfoPage() {
                                 {
                                     font.name !== 'Other Font' &&
                                     <h4 style={{color:'orange'}}>
-                                    For the font <i>{font.name}</i>, the following is recommended based on the frame dimensions and grammar choice:
+                                    For the font <i>{font.name}</i>, the following must apply based on the frame dimensions and grammar choice:
                                     <ul>
                                         <li>
-                                            Suggested maximum font size: {recommendedFontSize}
+                                            Maximum Font Size: {recommendedFontSize}
                                         </li>
                                         <li>Spaces between each word: {fontWordSpacing}</li>
                                     </ul>
@@ -239,7 +247,10 @@ function LineTypographyFrameInfoPage() {
                                         <input style={{textAlign:'center'}}
                                         placeholder='custom font name'
                                         id='customFontName' 
-                                        type='text'/>
+                                        type='text'/><br/>
+                                        Enter number of spaces between each word: 
+                                        <input defaultChecked={true} name='customWordSpacing' id='customWordSpacing1' type='radio'/><label htmlFor='customWordSpacing1'>1 Space</label>
+                                        <input name='customWordSpacing' id='customWordSpacing2' type='radio'/><label htmlFor='customWordSpacing2'>2 Spaces</label>
                                     </>
 
                                 }
