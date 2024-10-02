@@ -14,7 +14,6 @@ function LineTypographyFrameInfoPage() {
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
     
-
     const data = location.state?.data;
     
     let _frame_width = 640
@@ -31,12 +30,12 @@ function LineTypographyFrameInfoPage() {
     const confirmFrameDetails = () => {
         _frame_width = parseFloat(document.getElementById('frameWidth').value)
         _frame_height = parseFloat(document.getElementById('frameHeight').value)
-        _font_size = (font.name==='Other Font') ? parseFloat(document.getElementById('customFontSize').value)
-        : recommendedFontSize
+        _font_size = parseFloat(document.getElementById('fontSize').value)
 
         _centered = document.getElementById('framePositionCentered').checked
         _max_line_count = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
-        _y_sing = _centered ? (parseFloat(_frame_height/2) + _font_size) : (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));        
+        
+        _y_sing = _centered ? ((_frame_height/2) + _font_size) : (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));        
         _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
         
         const _font_name = (font.name==='Other Font') ? document.getElementById('customFontName').value : font.name
@@ -130,20 +129,11 @@ function LineTypographyFrameInfoPage() {
                                 <input onClick={()=>{setGrammar('capsallwords');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
-                                {
-                                    font.name !== 'Other Font' &&
-                                    <h1>{Math.round(recommendedFontSize,2)}</h1>
-                                }
-                                {
-                                    font.name === 'Other Font' &&
-                                    <>
-                                        <h4>Enter custom font size:</h4>
-                                        <input style={{textAlign:'center'}}
-                                        placeholder='custom font size'
-                                        id='customFontSize' 
-                                        type='number'/>
-                                    </>
-                                }
+                                <input style={{textAlign:'center'}}
+                                placeholder='font size'
+                                id='fontSize' 
+                                defaultValue={Math.round(recommendedFontSize,2)}
+                                type='number'/>
                             </td>
                             <td style={{textAlign:'center',border: '3px solid black'}}>
                                 <input name='framePosition' value={true} id='framePositionCentered' type='radio'/>
