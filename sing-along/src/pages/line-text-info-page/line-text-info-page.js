@@ -91,14 +91,26 @@ function LineTextInfoPage() {
             <div className='content'>
                 <h1>Line Text</h1>
                 <hr/>
-                {
-                lineCount>0 &&
-                lines.map((line) => (
-                    <div key={line.id}> 
-                        <LineTextInfoForm latestLineIsConfirmed={latestLineConfirmed} clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
-                    </div>
-                ))
-            }
+                <table style={{border: '3px solid black'}}>
+                    <tbody>
+                        <tr style={{textAlign:'center', fontWeight:'bold'}}>
+                            <td style={{border: '3px solid black', backgroundColor:'black'}}></td>
+                            <td style={{border: '3px solid black'}}>Line ID</td>
+                            <td style={{border: '3px solid black'}}>Repeats Previous Text Shown?</td>
+                            <td style={{border: '3px solid black'}}>Text Shown</td>
+                            <td style={{border: '3px solid black'}}>Text Heard</td>
+                            <td style={{border: '3px solid black'}}>Sung Words Shown</td>
+                            <td style={{border: '3px solid black', backgroundColor:'black'}}></td>
+                        </tr>
+                        {
+                            lineCount>0 &&
+                            lines.map((line) => (
+                                <LineTextInfoForm key={line.id} latestLineIsConfirmed={latestLineConfirmed} clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            
             <h4>Total number of lines: <span style={{color: (lineCount===0 ? 'rgb(216, 5, 5)': 'white') }}>{lineCount}</span></h4>
                 <button disabled={!latestLineConfirmed && lineCount>0} onClick={()=>updateLineCount(true)}>Add New Blank Line</button>
                 <button disabled={!lineCount} onClick={()=>updateLineCount(false)}>Delete Latest Line</button>

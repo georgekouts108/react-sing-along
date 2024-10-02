@@ -55,7 +55,7 @@ function LineTypographyFrameInfoPage() {
             }
         }
         console.log(_state)
-        // navigate('/finished', { 
+        // navigate('/', { 
             // state: _state
         // });
     }
@@ -166,6 +166,7 @@ function LineTypographyFrameInfoPage() {
                                         <li>Alvin & the Chipmunks Sing-Alongs</li>
                                         <li>Screen Songs by Fleischer Studios</li>
                                         <li>Dr. Seuss Sing-Along Classics</li>
+                                        <li>Animaniacs Sing-Along</li>
                                     </ul>
                                     </i>
                                 </h4>
