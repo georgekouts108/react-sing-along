@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './line-typography-frame-info-page.styles.css'
 import oneLinePic from '../../assets/images/screenshots/oneLinePic.png'
 import twoLinePic from '../../assets/images/screenshots/twoLinePic.jpg'
+import bottomPosition from '../../assets/images/screenshots/bottomPosition.png'
+import centerPosition from '../../assets/images/screenshots/centerPosition.png'
 import FontPicker from './font-picker';
 import { fonts } from '../../data/fonts/font-names';
 
@@ -19,9 +21,9 @@ function LineTypographyFrameInfoPage() {
     let _frame_width = 640
     let _frame_height = 480
     let _font_size = 40
-    let _centered = false
+    const [position, setPosition] = useState('bottom')
     let _max_line_count = 1
-    let _y_sing = _centered ? ((_frame_height/2) + _font_size): (_frame_height - (_font_size * _max_line_count));        
+    let _y_sing = _frame_height - (_font_size * _max_line_count);        
     let _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
  
     const [recommendedFontSize, setRecommendedFontSize] = useState(font.recommendedSizePercentages.mixed.oneLine * _frame_height);
@@ -31,33 +33,64 @@ function LineTypographyFrameInfoPage() {
         _frame_width = parseFloat(document.getElementById('frameWidth').value)
         _frame_height = parseFloat(document.getElementById('frameHeight').value)
         _font_size = parseFloat(document.getElementById('fontSize').value)
-
-        _centered = document.getElementById('framePositionCentered').checked
         _max_line_count = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
         
-        _y_sing = _centered ? ((_frame_height/2) + _font_size) : (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));        
-        _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
-        
+        let _pos_centered = document.getElementById('framePositionCentered').checked
+        let _pos_bottom = document.getElementById('framePositionBottom').checked
+        let _pos_custom = document.getElementById('framePositionCustom').checked
+        let _custom_y_sing = parseFloat(document.getElementById('customYsing').value)
         const _font_name = (font.name==='Other Font') ? document.getElementById('customFontName').value : font.name
-        const _font_info = {fontName: _font_name, fontWordSpacing:font.wordSpacing, fontSize: _font_size};
-        const _state = {
-            data: {
-                lines: data.lines,
-                lineCount: data.lineCount,
-                grammar: grammar,
-                frameHeight: _frame_height, 
-                frameWidth: _frame_width,
-                ySing: _y_sing, 
-                yWait: _y_wait, 
-                maxLineCount: _max_line_count,
-                centered: _centered,
-                fontInfo: _font_info,
-            }
+
+        if (isNaN(_frame_height) || isNaN(_frame_width)) {
+            alert('ERROR: The frame width and/or height are missing.')
         }
-        console.log(_state)
-        // navigate('/', { 
-            // state: _state
-        // });
+        else if (font.name === 'Other Font' && _font_name==='') {
+            alert('ERROR: You have not specified the name of a custom font.')
+        }
+        else if (isNaN(_font_size) || _font_size > recommendedFontSize) {
+            alert('ERROR: The font size is either missing or exceeds the recommended maximum for the selected font.')
+        }
+        else if (_pos_custom && (isNaN(_custom_y_sing) || _custom_y_sing-_font_size<0 || _custom_y_sing>_frame_height)) {
+            alert('ERROR: The custom Y-Sing coordinate is either missing or will make lines appear partially or entirely off-screen.')
+        }
+        else {
+            let _position = '';
+            if (_pos_centered) {
+                _y_sing = ((_frame_height/2) + _font_size)
+                _position = 'centered'
+            }
+            else if (_pos_bottom) {
+                _y_sing = (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));
+                _position = 'bottom'
+            }
+            else if (_pos_custom) {
+                _position = 'custom'
+                _y_sing = parseFloat(document.getElementById('customYsing').value)
+            }
+
+            _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
+            
+            
+            const _font_info = {fontName: _font_name, fontWordSpacing:font.wordSpacing, fontSize: _font_size};
+            const _state = {
+                data: {
+                    lines: data.lines,
+                    lineCount: data.lineCount,
+                    grammar: grammar,
+                    frameHeight: _frame_height, 
+                    frameWidth: _frame_width,
+                    ySing: _y_sing, 
+                    yWait: _y_wait, 
+                    maxLineCount: _max_line_count,
+                    position: _position,
+                    fontInfo: _font_info,
+                }
+            }
+            console.log(_state)
+            // navigate('/', { 
+                // state: _state
+            // });
+        }
     }
     const setRecommendedFontSizeAndWordSpacing = () => {
     
@@ -103,9 +136,6 @@ function LineTypographyFrameInfoPage() {
                             <td style={{textAlign:'center',border: '3px solid black'}}>
                             Font Size
                             </td>
-                            <td style={{textAlign:'center',border: '3px solid black'}}>
-                            Lines on<br/>Frame Center?
-                            </td>
                         </tr>
                         <tr>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
@@ -135,13 +165,7 @@ function LineTypographyFrameInfoPage() {
                                 defaultValue={Math.round(recommendedFontSize,2)}
                                 type='number'/>
                             </td>
-                            <td style={{textAlign:'center',border: '3px solid black'}}>
-                                <input name='framePosition' value={true} id='framePositionCentered' type='radio'/>
-                                <label htmlFor='ysing_centered'>Middle Of Frame</label><br/>
-
-                                <input  defaultChecked={true} value={false} name='framePosition' id='framePositionCustom' type='radio'/>
-                                <label htmlFor='ysing_custom'>Custom Coordinate</label><br/>           
-                            </td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -151,24 +175,50 @@ function LineTypographyFrameInfoPage() {
                 <table>
                     <tbody style={{border: '3px solid black'}}>
                         <tr>
-                            <td style={{border: '3px solid black'}}> 
-                                <h2>Select the maximum number of lines<br/>on the screen at once</h2>   
+                            <td style={{border: '3px solid black', textAlign:'center'}}> 
+                                <h2>Select the position of the lines</h2>
+                                <table>
+                                    <tbody style={{border: '3px solid black'}}>
+                                        <tr>
+                                            <td style={{border: '3px solid black'}}>
+                                                <input onClick={()=>{setPosition('bottom')}} defaultChecked={true} value='bottom' name='framePosition' id='framePositionBottom' type='radio'/>
+                                                <label htmlFor='framePositionBottom'>Bottom of Frame</label><br/>   
+                                                <label htmlFor='framePositionBottom'><img width={250} height={200} src={bottomPosition} alt="f"/><br/></label>
+                                               
+                                            </td>
+                                            <td style={{border: '3px solid black'}}>
+                                                <input onClick={()=>{setPosition('centered')}} name='framePosition' value='centered' id='framePositionCentered' type='radio'/>
+                                                <label htmlFor='framePositionCentered'>Middle Of Frame</label><br/>
+                                                <label htmlFor='framePositionCentered'><img width={250} height={200} src={centerPosition} alt="f"/><br/></label>
+                                            </td>
+                                            <td style={{border: '3px solid black'}}>
+                                                <input onClick={()=>{setPosition('custom')}} name='framePosition' value='custom' id='framePositionCustom' type='radio'/>
+                                                <label htmlFor='framePositionCustom'>Custom Position</label><br/>
+                                                <input style={{textAlign:'center'}}
+                                                placeholder='custom Y-Sing'
+                                                id='customYsing' 
+                                                disabled={position!=='custom'}
+                                                type='number'/>
+                                                </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
-                            <td style={{border: '3px solid black'}}>
+                            <td rowSpan={2} style={{border: '3px solid black'}}>
                                 <h2>Select your default font for each line</h2>
                                 <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.<br/>
                                 In order to use a font, you must have it installed on your local operating system.</h4>
 
                                 <h4>All the fonts below have been used in one or more of these videocassette series: 
-                                    <i>
+                                    
                                     <ul>
-                                        <li>Disney Sing-Along Songs</li>
-                                        <li>Alvin & the Chipmunks Sing-Alongs</li>
-                                        <li>Screen Songs by Fleischer Studios</li>
-                                        <li>Dr. Seuss Sing-Along Classics</li>
-                                        <li>Animaniacs Sing-Along</li>
+                                        <li><i>Disney Sing-Along Songs</i></li>
+                                        <li><i>Alvin & the Chipmunks Sing-Alongs</i></li>
+                                        <li><i>Screen Songs</i> by Fleischer Studios</li>
+                                        <li><i>Dr. Seuss Sing-Along Classics</i></li>
+                                        <li><i>Animaniacs Sing-Along</i></li>
                                     </ul>
-                                    </i>
+                                    
                                 </h4>
                                 {
                                     font.name !== 'Other Font' &&
@@ -193,11 +243,12 @@ function LineTypographyFrameInfoPage() {
                                     </>
 
                                 }
-                                
+                                <FontPicker configureFont={setFont}/>
                             </td>
                         </tr>
                         <tr style={{border: '3px solid black'}}>
-                            <td style={{border: '3px solid black'}}>
+                            <td style={{border: '3px solid black', textAlign:'center'}}>
+                            <h2>Select the maximum number of lines<br/>on the screen at once</h2>  
                                 <table>
                                     <tbody style={{border: '3px solid black'}}>
                                         <tr style={{border: '3px solid black'}}>
@@ -221,15 +272,9 @@ function LineTypographyFrameInfoPage() {
                                     </tbody>
                                 </table>
                             </td>
-                            <td style={{border: '3px solid black'}}>
-                                <FontPicker configureFont={setFont}/>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
-
-
-                
                 <hr/>
                     <button onClick={()=>confirmFrameDetails()}>Confirm Frame Details</button>
                 <hr/>
