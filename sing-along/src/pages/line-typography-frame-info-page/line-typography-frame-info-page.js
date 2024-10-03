@@ -55,7 +55,7 @@ function LineTypographyFrameInfoPage() {
         else if (font.name === 'Other Font' && _font_name==='') {
             alert('ERROR: You have not specified the name of a custom font.')
         }
-        else if (isNaN(_font_size) || _font_size > recommendedFontSize) {
+        else if (isNaN(_font_size) || (_font_size > recommendedFontSize && font.name !== 'Other Font')) {
             alert('ERROR: The font size is either missing or exceeds the recommended maximum for the selected font.')
         }
         else if (_pos_custom && (isNaN(_custom_y_sing) || _custom_y_sing-_font_size<0 || _custom_y_sing>_frame_height)) {

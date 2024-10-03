@@ -4,8 +4,8 @@ export const fonts = [
         name:'Dom Casual D',
         wordSpacing: 1,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.16, twoLine:0.11},
-            uppercase:{oneLine: 0.19, twoLine:0.12} // tweak uppercase object
+            mixed: {oneLine: 0.16, twoLine:0.115},
+            uppercase:{oneLine: 0.14, twoLine:0.104}
         }
     },
     {
@@ -13,17 +13,17 @@ export const fonts = [
         name:'ITC Korinna Std',
         wordSpacing: 1,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.10, twoLine:0.12},
-            uppercase:{oneLine: 0.11, twoLine:0.13} // tweak uppercase object
+            mixed: {oneLine: 0.09375, twoLine:0.083},
+            uppercase:{oneLine: 0.083, twoLine:0.079}
         }
     },
     {
         fid:'c0c43bef-b9b3-4ae7-b326-58e7fc941d09',
         name:'Muro',
-        wordSpacing: 1,
+        wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed:{oneLine: 0.0875, twoLine:0.13},
-            uppercase:{oneLine: 0.1, twoLine:0.12} // tweak uppercase object
+            mixed:{oneLine: 0.083, twoLine:0.076},
+            uppercase:{oneLine: 0.083, twoLine:0.076}
         }
     },
     {
@@ -31,8 +31,8 @@ export const fonts = [
         name:'Kapra',
         wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.125, twoLine:0.14},
-            uppercase: {oneLine: 0.14, twoLine:0.15}// tweak uppercase object
+            mixed: {oneLine: 0.118, twoLine:0.094},
+            uppercase: {oneLine: 0.097, twoLine:0.094}
         }
     },
     {
@@ -40,8 +40,8 @@ export const fonts = [
         name:'Data70',
         wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.10, twoLine: 0.15},
-            uppercase:{oneLine: 0.11, twoLine: 0.14} // tweak uppercase object
+            mixed: {oneLine: 0.111, twoLine: 0.15},
+            uppercase:{oneLine: 0.104, twoLine: 0.097}
         }
     },
     {
@@ -49,8 +49,8 @@ export const fonts = [
         name:'Other Font',
         wordSpacing: 1,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.16, twoLine:0.11},
-            uppercase:{oneLine: 0.19, twoLine:0.12} // tweak uppercase object
+            mixed: {oneLine: 0, twoLine:0},
+            uppercase:{oneLine: 0, twoLine:0} // these are dummy values
         }
     },
 ]
