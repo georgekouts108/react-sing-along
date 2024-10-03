@@ -10,6 +10,8 @@ import sansmaticaScreenshot1 from '../../assets/images/screenshots/fontExamples/
 import sansmaticaScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_sansmatica.png'
 import greyhoundScreenshot1 from '../../assets/images/screenshots/fontExamples/ex1_greyhound.png'
 import greyhoundScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_greyhound.png'
+import jasmineupcScreenshot1 from '../../assets/images/screenshots/fontExamples/ex1_jasmineupc.png'
+import jasmineupcScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_jasmineupc.png'
 
 export const fonts = [
     {
@@ -101,7 +103,7 @@ export const fonts = [
     {
         fid:'26ca3a1b-fe16-4388-8ee4-21c6375bd5fb',
         name:'Greyhound',
-        wordSpacing: 2,
+        wordSpacing: 1,
         recommendedSizePercentages: { // tweak this...
             mixed: {oneLine: 0.111, twoLine: 0.15},
             uppercase:{oneLine: 0.104, twoLine: 0.097}
@@ -113,6 +115,23 @@ export const fonts = [
         example2: {
             screenshot: greyhoundScreenshot2,
             videoName: "Disney's Sing-Along Songs: The Twelve Days of Christmas (1993)"
+        },
+    },
+    {
+        fid:'1d77f104-a391-4483-a84f-dafd0c57148d',
+        name:'JasmineUPC',
+        wordSpacing: 1,
+        recommendedSizePercentages: { // tweak this...
+            mixed: {oneLine: 0.111, twoLine: 0.15},
+            uppercase:{oneLine: 0.104, twoLine: 0.097}
+        },
+        example1: {
+            screenshot: jasmineupcScreenshot1,
+            videoName: "Disney's Sing-Along Songs: The Twelve Days of Christmas (1993)"
+        },
+        example2: {
+            screenshot: jasmineupcScreenshot2,
+            videoName: 'Alvin & The Chipmunks Sing-Alongs - Ragtime Cowboy Joe (1993)'
         },
     },
     {

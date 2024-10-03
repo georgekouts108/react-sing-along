@@ -15,7 +15,6 @@ function LineTypographyFrameInfoPage() {
 
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
-    console.log(font)
     const data = location.state?.data;
     
     let _frame_width = 640
