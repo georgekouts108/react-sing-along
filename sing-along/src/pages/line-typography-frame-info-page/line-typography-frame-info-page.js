@@ -15,7 +15,7 @@ function LineTypographyFrameInfoPage() {
 
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
-    
+    console.log(font)
     const data = location.state?.data;
     
     let _frame_width = 640
@@ -212,7 +212,7 @@ function LineTypographyFrameInfoPage() {
                                     </tbody>
                                 </table>
                             </td>
-                            <td rowSpan={2} style={{border: '3px solid black'}}>
+                            <td colSpan={3} rowSpan={2} style={{border: '3px solid black'}}>
                                 <h2>Select your default font for each line</h2>
                                 <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.<br/>
                                 In order to use a font, you must have it installed on your local operating system.</h4>
@@ -228,8 +228,12 @@ function LineTypographyFrameInfoPage() {
                                     </ul>
                                     
                                 </h4>
+                                
+                                
+                                <FontPicker configureFont={setFont}/>
                                 {
                                     font.name !== 'Other Font' &&
+                                    <>
                                     <h4 style={{color:'orange'}}>
                                     For the font <i>{font.name}</i>, the following must apply based on the frame dimensions and grammar choice:
                                     <ul>
@@ -238,7 +242,13 @@ function LineTypographyFrameInfoPage() {
                                         </li>
                                         <li>Spaces between each word: {fontWordSpacing}</li>
                                     </ul>
-                                </h4>
+                                    </h4>
+                                        <div style={{textAlign:'center'}}>
+                                            <h3>Example usage: </h3>
+                                            <img width={240} height={200} src={font.example.screenshot} alt="f"/>
+                                            <h4>{font.example.videoName}</h4>
+                                        </div>
+                                    </>
                                 }
                                 {
                                     font.name === 'Other Font' &&
@@ -254,7 +264,6 @@ function LineTypographyFrameInfoPage() {
                                     </>
 
                                 }
-                                <FontPicker configureFont={setFont}/>
                             </td>
                         </tr>
                         <tr style={{border: '3px solid black'}}>
