@@ -191,8 +191,7 @@ function LineTypographyFrameInfoPage() {
                                             <td style={{border: '3px solid black'}}>
                                                 <input onClick={()=>{setPosition('bottom')}} defaultChecked={true} value='bottom' name='framePosition' id='framePositionBottom' type='radio'/>
                                                 <label htmlFor='framePositionBottom'>Bottom of Frame</label><br/>   
-                                                <label htmlFor='framePositionBottom'><img width={250} height={200} src={bottomPosition} alt="f"/><br/></label>
-                                               
+                                                <label htmlFor='framePositionBottom'><img width={250} height={200} src={bottomPosition} alt="f"/><br/></label> 
                                             </td>
                                             <td style={{border: '3px solid black'}}>
                                                 <input onClick={()=>{setPosition('centered')}} name='framePosition' value='centered' id='framePositionCentered' type='radio'/>
@@ -212,7 +211,7 @@ function LineTypographyFrameInfoPage() {
                                     </tbody>
                                 </table>
                             </td>
-                            <td colSpan={3} rowSpan={2} style={{border: '3px solid black'}}>
+                            <td colSpan={3} rowSpan={2} style={{border: '3px solid black', textAlign:'center'}}>
                                 <h2>Select your default font for each line</h2>
                                 <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.<br/>
                                 In order to use a font, you must have it installed on your local operating system.</h4>
@@ -243,25 +242,41 @@ function LineTypographyFrameInfoPage() {
                                         <li>Spaces between each word: {fontWordSpacing}</li>
                                     </ul>
                                     </h4>
-                                        <div style={{textAlign:'center'}}>
-                                            <h3>Example usage: </h3>
-                                            <img width={240} height={200} src={font.example.screenshot} alt="f"/>
-                                            <h4>{font.example.videoName}</h4>
-                                        </div>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div style={{border: '3px solid black', textAlign:'center'}}>
+                                                        <h3>Example 1: </h3>
+                                                        <img width={240} height={200} src={font.example1.screenshot} alt="f"/>
+                                                        <h4><i>{font.example1.videoName}</i></h4>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style={{border: '3px solid black', textAlign:'center'}}>
+                                                        <h3>Example 2: </h3>
+                                                        <img width={240} height={200} src={font.example2.screenshot} alt="f"/>
+                                                        <h4><i>{font.example2.videoName}</i></h4>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                        
                                     </>
                                 }
                                 {
                                     font.name === 'Other Font' &&
-                                    <>
-                                        Enter custom font name:
-                                        <input style={{textAlign:'center'}}
+                                    <div style={{textAlign:'center'}}>
+                                        <p>Enter custom font name:</p>
+                                        <input style={{textAlign:'center', width:250}}
                                         placeholder='custom font name'
                                         id='customFontName' 
                                         type='text'/><br/>
-                                        Enter number of spaces between each word: 
-                                        <input defaultChecked={true} name='customWordSpacing' id='customWordSpacing1' type='radio'/><label htmlFor='customWordSpacing1'>1 Space</label>
+                                        <p>Select the number of spaces between each word: </p>
+                                        <input defaultChecked={true} name='customWordSpacing' id='customWordSpacing1' type='radio'/><label htmlFor='customWordSpacing1'>1 Space</label><br/>
                                         <input name='customWordSpacing' id='customWordSpacing2' type='radio'/><label htmlFor='customWordSpacing2'>2 Spaces</label>
-                                    </>
+                                    </div>
 
                                 }
                             </td>

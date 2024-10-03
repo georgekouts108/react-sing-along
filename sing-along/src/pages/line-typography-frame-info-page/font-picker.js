@@ -17,7 +17,7 @@ function FontPicker(props) {
     const getFontButton = (font) => {
         return <>
             <input 
-            defaultChecked={font.name==='Dom Casual D'} 
+            defaultChecked={font.name==='ITC Korinna Std'} 
             onClick={()=>props.configureFont(font)} 
             name='font' 
             id={`font_${font.fid}`} 
@@ -29,7 +29,7 @@ function FontPicker(props) {
     }
 
     return (
-        <div>
+        <div style={{textAlign:'center'}}>
             <table style={{border: '3px solid black'}}>
                 <tbody>
                     {
