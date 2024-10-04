@@ -5,6 +5,7 @@ import LineColorsTransitionsInfoPage from './pages/line-colors-transitions-info-
 import LineTypographyFrameInfoPage from './pages/line-typography-frame-info-page/line-typography-frame-info-page';
 // import LineTimingInfoPage from './pages/line-timing-info-page/line-timing-info-page';
 import LineTimingInfoPage2 from './pages/line-timing-info-page/line-timing-info-page2';
+import SrtGeneratorPage from './pages/srt-generator-page/srt-generator-page';
 
 function App() {  
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route exact path='/line-colors-transitions-info' element={<LineColorsTransitionsInfoPage />}/>
           <Route exact path='/line-typography-frame-info' element={<LineTypographyFrameInfoPage />}/>
           <Route exact path='/line-timing-info' element={<LineTimingInfoPage2 />}/>
+          <Route exact path='/srt-generator' element={<SrtGeneratorPage />}/>
         </Routes>
       </Router>
     </div>

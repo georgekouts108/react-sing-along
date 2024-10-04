@@ -5,9 +5,9 @@ function LineTimingInfoPage2() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // const [timestampTypeInProgress, setTimestampTypeInProgress] = useState('sing')
-
     const data = location.state?.data;
+    console.log(data)
+    
     const stamps =[];
     for (let s = 0; s < data.lines.length; s++) {
         stamps.push({
@@ -258,14 +258,14 @@ function LineTimingInfoPage2() {
         }
         
         data.lines = finalLinesInfo;
-        console.log("🎊 FINAL DATA: ")
-        console.log(data)
+        // console.log("🎊 FINAL DATA: ")
+        // console.log(data)
 
-        // navigate('/lyric-styles', { 
-        //     state: {
-        //         lines:stamps
-        //     }
-        // });
+        navigate('/srt-generator', { 
+            state: {
+                data: data
+            }
+        });
     }
 
     useEffect(() => {
