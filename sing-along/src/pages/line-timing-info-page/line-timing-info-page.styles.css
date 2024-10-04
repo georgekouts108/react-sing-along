@@ -1,0 +1,49 @@
+.line-timing-info-page-main {
+    /* background-image: url('../../assets/images/backgrounds/purple_bg.png'); */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: auto;                
+    height: auto;     
+    overflow: auto;
+    display: block;
+    /* place-items: center; */
+}
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 0.5%;
+}
+
+.content {
+    margin-top: 100px; /* Adds space below the header if needed */
+    padding: 20px;
+    text-align: left; /* Prevents centering of content */
+  }
+/* .dsas-logo-home {
+    width: 60vw;
+    height: 40vh; 
+} */
+.line-timing-info-page-content {
+    display: grid;
+    place-items: center;
+}
+/* .home-page-subtitle {
+    color: gold;
+    font-family: 'ITC Korinna Std';
+    font-size: xxx-large;
+} */
+/* .home-page-subtitle2 {
+    color: rgb(216, 5, 5);
+    font-family: 'ITC Korinna Std';
+    font-size: xx-large;
+} */
+/* .start-button {
+    width: 200px;
+    height: 45px;
+    font-family: 'ITC Korinna Std';
+    font-size: 25px;
+    text-align: center;
+    cursor: pointer;
+} */

@@ -39,7 +39,7 @@ function LineTextInfoPage() {
                     wasCloned: true, 
                     clonedLineID: clonedLineID,
                     indexesOfShownWordsSung: clonedLine.indexesOfShownWordsSung,
-                    repeatsPreviousTextShown: clonedLine.repeatsPreviousTextShown,
+                    repeatsPreviousTextShown: false,
                     textHeard: clonedLine.textHeard,
                     textShown: clonedLine.textShown
                 }

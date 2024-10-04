@@ -93,10 +93,10 @@ function LineTypographyFrameInfoPage() {
                     fontInfo: _font_info,
                 }
             }
-            console.log(_state)
-            // navigate('/', { 
-                // state: _state
-            // });
+            
+            navigate('/line-timing-info', { 
+                state: _state
+            });
         }
     }
     const setRecommendedFontSizeAndWordSpacing = () => {

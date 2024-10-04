@@ -3,6 +3,7 @@ import HomePage from './pages/home-page/home-page';
 import LineTextInfoPage from './pages/line-text-info-page/line-text-info-page';
 import LineColorsTransitionsInfoPage from './pages/line-colors-transitions-info-page/line-colors-transitions-info-page';
 import LineTypographyFrameInfoPage from './pages/line-typography-frame-info-page/line-typography-frame-info-page';
+import LineTimingInfoPage from './pages/line-timing-info-page/line-timing-info-page';
 function App() {  
   return (
     <div>
@@ -12,6 +13,7 @@ function App() {
           <Route exact path='/line-text-info' element={<LineTextInfoPage />}/>
           <Route exact path='/line-colors-transitions-info' element={<LineColorsTransitionsInfoPage />}/>
           <Route exact path='/line-typography-frame-info' element={<LineTypographyFrameInfoPage />}/>
+          <Route exact path='/line-timing-info' element={<LineTimingInfoPage />}/>
         </Routes>
       </Router>
     </div>
