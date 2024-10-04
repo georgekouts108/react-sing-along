@@ -36,7 +36,31 @@ function LineTimingInfoPage() {
         }
     }
 
+    const recordSingTime = () => {
+        console.log(`sing time recorded for line ${pendingLineID+1}`)
+        if (pendingLineID+1 === timestamps.length) {
+            setSingTimesDone(true);
+            setTimerRunning(false);
+        }
+        updatePendingLineID(true);
+    }
+
+    const recordExitTime = () => {
+        console.log(`exit time recorded for line ${pendingLineID+1}`)
+        if (pendingLineID+1 === timestamps.length) {
+            setExitTimesDone(true);
+            setTimerRunning(false);
+        }
+        updatePendingLineID(true);
+    }
+
     const [pendingLineID, setPendingLineID] = useState(0);
+    const [timestampTypeInProgress, setTimestampTypeInProgress] = useState('sing') // 'sing' or 'exit'
+    const [singTimesDone, setSingTimesDone] = useState(false);
+    const [exitTimesDone, setExitTimesDone] = useState(false);
+    const [singTimesConfirmed, setSingTimesConfirmed] = useState(false);
+    const [exitTimesConfirmed, setExitTimesConfirmed] = useState(false);
+    const [timerRunning, setTimerRunning] = useState(false);
 
     return (
         <div className='line-timing-info-page-main'>
@@ -54,21 +78,49 @@ function LineTimingInfoPage() {
                         </tr>
                         <tr>
                             <td style={{border:'3px solid black'}}>
-                                <button disabled={pendingLineID===0} onClick={()=>updatePendingLineID(false)}>Backward</button>
+                                <button disabled={pendingLineID===0 || timerRunning} onClick={()=>updatePendingLineID(false)}>Backward</button>
                             </td>
                             <td style={{border:'3px solid black'}}>
                                 <h3 style={{color:'blue'}}>Line {timestamps[pendingLineID].lineId+1} of {timestamps.length} 
-                                    {data.lines[pendingLineID].repeatsPreviousTextShown && <><br/>{`\n(repeats Line ${timestamps[pendingLineID].lineId} text)`}</>}
+                                    {data.lines[pendingLineID].repeatsPreviousTextShown && <>{`\n(repeats Line ${timestamps[pendingLineID].lineId} text)`}</>}
                                 </h3>
                                 <h4>Text Shown:<br/><i style={{color:'green'}}>{data.lines[pendingLineID].textShown}</i></h4>  
                                 <h4>Text Heard:<br/><i style={{color:'red'}}>{data.lines[pendingLineID].textHeard}</i></h4>      
                             </td> 
                             <td style={{border:'3px solid black'}}>
-                                <button disabled={pendingLineID===timestamps.length-1} onClick={()=>updatePendingLineID(true)}>Forward</button>
+                                <button disabled={pendingLineID===timestamps.length-1  || timerRunning} onClick={()=>updatePendingLineID(true)}>Forward</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <h1>{timestampTypeInProgress==='sing' ? 'SING TIME = ' : 'EXIT TIME = '}00:00:00.000</h1>
+                {
+                    timestampTypeInProgress==='sing' &&
+                    <div>
+                        <p>Press the button below to start the timer and/or record the sing time for the next pending line.</p>
+                        <p>(NOTE: Starting the timer on '00:00:00.000' will record 00:00:00.000)</p>
+                        <p>If you make a mistake, click "Pause Timer" and then keep clicking "Backward" until you reach the line<br/> where you'd like to restart from.</p>
+                        <p>If you do not wish to do all the lines in one shot, click "Pause Timer" and then click "Start Timer"<br/>again when you're ready to resume.</p>
+                        
+                        <button disabled={singTimesDone} onClick={()=>{setTimerRunning(true) ; recordSingTime()}}>Start Timer and/or <br/>Record Sing Time</button>&nbsp;&nbsp;
+                        <button disabled={!timerRunning} onClick={()=>{setTimerRunning(false)}}>Pause<br/>Timer</button><br/><br/>
+                        <button disabled={!singTimesDone} onClick={()=>{setPendingLineID(0); setSingTimesConfirmed(true); setTimestampTypeInProgress('exit')}}>Confirm All Sing Timestamps</button>
+                    </div>
+                }
+                {
+                    timestampTypeInProgress==='exit' &&
+                    <div>
+                        <p>Press the button below to start the timer or record the exit time for the next pending line.</p>
+                        <p>(NOTE: Starting the timer on '00:00:00.000' will NOT record 00:00:00.000)</p>
+                        <button disabled={exitTimesDone} onClick={()=>{setTimerRunning(true) ; recordExitTime()}}>Start Timer or <br/>Record Exit Time</button>&nbsp;&nbsp;
+                        <button disabled={!timerRunning} onClick={()=>{setTimerRunning(false)}}>Pause<br/>Timer</button><br/><br/>
+                        
+                        <button disabled={!exitTimesDone} onClick={()=>{setExitTimesConfirmed(true);}}>Confirm All Exit Timestamps</button>
+                   
+                    </div>
+                }
+                <hr/>
+                <button disabled={!(singTimesConfirmed && exitTimesConfirmed)} onClick={()=>confirmAllTimestamps()}>Finish</button>
             </div>
         </div>
     )
