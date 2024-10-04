@@ -83,7 +83,7 @@ function LineTextInfoForm(props) {
     return (
         <tr>
             <td style={{textAlign:'center',border: '3px solid black'}}>
-                <button disabled={!props.latestLineIsConfirmed} onClick={()=>props.clone(lineId)}>Duplicate</button>
+                <button disabled={!props.latestLineIsConfirmed} onClick={()=>props.clone(lineId)}>Duplicate<br/>Line</button>
             </td>
             <td style={{textAlign:'center',border: '3px solid black'}}>
                 <h2>{lineId + 1}</h2>
@@ -126,8 +126,8 @@ function LineTextInfoForm(props) {
                         
                         wordsShown.length>0 && 
                         <div>
-                            <button disabled={lineConfirmed} onClick={()=>selectAllWords(true)}>Select All Words</button>
-                            <button disabled={lineConfirmed} onClick={()=>selectAllWords(false)}>Deselect All Words</button>
+                            <button disabled={lineConfirmed} onClick={()=>selectAllWords(true)}>Select<br/>All Words</button>&nbsp;&nbsp;
+                            <button disabled={lineConfirmed} onClick={()=>selectAllWords(false)}>Deselect<br/>All Words</button>
                             <br/>
                             {
                                 wordsShown.map((word)=>(
@@ -148,7 +148,7 @@ function LineTextInfoForm(props) {
                 </>
             </td>
             <td style={{textAlign:'center',border: '3px solid black'}}>
-                <button disabled={lineConfirmed || !textShown} onClick={()=>confirmLine()}>Confirm Line {`# ${lineId+1}`}</button>
+                <button disabled={lineConfirmed || !textShown} onClick={()=>confirmLine()}>Confirm<br/>Line {`# ${lineId+1}`}</button>
                 <br/>{lineConfirmed && <h1>✅</h1>}
             </td>
         </tr>

@@ -52,7 +52,7 @@ function LineTextInfoPage() {
     const cloneLine = (originalLineID) => {
         updateLineCount(true, true, originalLineID);
     }
-
+    
     const updateLines = (lineObject) => {
         if (lines.length > 0) {
             const updatedLines = lines;
@@ -105,7 +105,13 @@ function LineTextInfoPage() {
                         {
                             lineCount>0 &&
                             lines.map((line) => (
-                                <LineTextInfoForm key={line.id} latestLineIsConfirmed={latestLineConfirmed} clone={cloneLine} getPreviousLine={getPreviousLine} confirmEntry={updateLines} line={line}/>
+                                <LineTextInfoForm 
+                                key={line.id} 
+                                latestLineIsConfirmed={latestLineConfirmed} 
+                                clone={cloneLine} 
+                                getPreviousLine={getPreviousLine} 
+                                confirmEntry={updateLines} 
+                                line={line}/>
                             ))
                         }
                     </tbody>
