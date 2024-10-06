@@ -3,7 +3,6 @@ import HomePage from './pages/home-page/home-page';
 import LineTextInfoPage from './pages/line-text-info-page/line-text-info-page';
 import LineColorsTransitionsInfoPage from './pages/line-colors-transitions-info-page/line-colors-transitions-info-page';
 import LineTypographyFrameInfoPage from './pages/line-typography-frame-info-page/line-typography-frame-info-page';
-// import LineTimingInfoPage from './pages/line-timing-info-page/line-timing-info-page';
 import LineTimingInfoPage2 from './pages/line-timing-info-page/line-timing-info-page2';
 import SrtGeneratorPage from './pages/srt-generator-page/srt-generator-page';
 
