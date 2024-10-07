@@ -77,16 +77,3 @@ export const downloadSRT = (srtContent) => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
-
-export const mergeSRTfiles = (fileList, fileReader) => {
-    let mergedContent = '';
-    for (let f = 0; f < fileList.length; f++) {
-        const nextFile = fileList[f];
-        // const nextReader = new FileReader();
-
-        const content = fileReader.readAsText(nextFile);
-        mergedContent+=content;
-    }
-
-    return mergedContent;
-}

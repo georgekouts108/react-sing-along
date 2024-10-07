@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { get_all_scripts, mergeSRTfiles, writeSrtContent,downloadSRT } from "../../backend/main";
+import { get_all_scripts, writeSrtContent,downloadSRT } from "../../backend/main";
 
 function SrtGeneratorPage() {
     document.title = 'Generate SRT File: Sing-Along Subtitles Generator'

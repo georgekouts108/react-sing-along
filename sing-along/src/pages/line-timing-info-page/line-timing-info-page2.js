@@ -271,7 +271,7 @@ function LineTimingInfoPage2() {
     useEffect(() => {
         reportNextLyric();
         setButtonEnabledStatus('sing_time_saver', false);
-    }, []);
+    });
 
     return (
         <div>
