@@ -14,8 +14,12 @@ function HomePage() {
                 <h1 className='home-page-subtitle'>SUBTITLE GENERATOR</h1>
                 <h2 className='home-page-subtitle2'>So you at home can sing along!</h2>
             </div>
+            <h3>Click on one of the options below to begin</h3>
             <button className='start-button'
-                onClick={()=>navigate('/line-text-info')}>Get Started!
+                onClick={()=>navigate('/line-text-info')}>Start a New Set of Lyrics
+            </button>
+            <button className='start-button'
+                onClick={()=>navigate('/combine-srts')}>Merge Multiple Sets of Lyrics
             </button>
         </div>
     )

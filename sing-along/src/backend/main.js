@@ -78,20 +78,15 @@ export const downloadSRT = (srtContent) => {
     URL.revokeObjectURL(url);
 }
 
-// export const mergeScripts = (currentScripts, preSubtitles) => {
-//     const subsSplit = preSubtitles.split('\n');
+export const mergeSRTfiles = (fileList, fileReader) => {
+    let mergedContent = '';
+    for (let f = 0; f < fileList.length; f++) {
+        const nextFile = fileList[f];
+        // const nextReader = new FileReader();
 
-//     let latestSubIndex = parseInt(subsSplit[subsSplit.length - 5].trim());
-//     let latestSubTimeframe = subsSplit[subsSplit.length - 4].trim();
-//     let latestSubCode = subsSplit[subsSplit.length - 3].trim();
+        const content = fileReader.readAsText(nextFile);
+        mergedContent+=content;
+    }
 
-//     console.log(latestSubIndex)
-//     console.log(latestSubTimeframe)
-//     console.log(latestSubCode)
-
-//     console.log(currentScripts[0])
-
-//     const srtCurrent = writeSrtContent(currentScripts, latestSubIndex+1);
-//     const merged = preSubtitles + srtCurrent;
-//     console.log(merged);
-// }
+    return mergedContent;
+}

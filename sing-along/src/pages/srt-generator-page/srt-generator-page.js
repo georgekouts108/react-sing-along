@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { get_all_scripts, mergeScripts, writeSrtContent,downloadSRT } from "../../backend/main";
+import { get_all_scripts, mergeSRTfiles, writeSrtContent,downloadSRT } from "../../backend/main";
 
 function SrtGeneratorPage() {
     document.title = 'Generate SRT File: Sing-Along Subtitles Generator'
@@ -9,21 +9,10 @@ function SrtGeneratorPage() {
     const currentData = location.state?.data;
     
     const [srtIndexOffset, setSrtIndexOffset] = useState(1);
-    // // This function handles the file input change event
-    // const handleFileChange = (e) => {
-    //     console.log(e.target.files)
-    //     const file = e.target.files[0]; // Get the first file
-    //     const reader = new FileReader();
-    //     reader.onload = (event) => {
-    //         setFileContent(event.target.result);
-    //     };
-    //     reader.readAsText(file); // Read the file content as text
-    // };
-
+    
     const getSRTfile = () => {
         const currentScripts = get_all_scripts(currentData);
         const srtContent = writeSrtContent(currentScripts, srtIndexOffset);
-        console.log(srtContent)
         downloadSRT(srtContent);
     }
     return (
@@ -37,7 +26,7 @@ function SrtGeneratorPage() {
             </div><br/><br/>
             <div>
                 <button onClick={()=>getSRTfile()}>Generate Subtitle File</button>
-            </div>
+            </div>         
         </div>
     );
 }
