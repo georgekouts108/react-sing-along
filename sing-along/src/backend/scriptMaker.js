@@ -2,20 +2,20 @@ import { get_color_tag } from "./tags";
 
 // for max-1-line case
 
-export const entering_script = (clip_tag, move_tag, colors, lyric_text) => {
+export const entering_script = (clip_tag, move_tag, colors, lyric_text, word_spacing) => {
     const words = lyric_text.split(' ')
     let subtitle = ""
     for (let w=0; w < words.length; w++){
         let next_word = get_color_tag(colors[w]) + words[w];
         if (w !== words.length-1) {
-            next_word += ' '
+            next_word += ' '.repeat(word_spacing)
         }
         subtitle += next_word;
     }
     return `${clip_tag}${move_tag}${subtitle}`
 }
 
-export const singing_script = (clip_tag, pos_tag, pre_colors, post_colors, sung_word_indexes, lyric_text, screen_time) =>{
+export const singing_script = (clip_tag, pos_tag, pre_colors, post_colors, sung_word_indexes, lyric_text, screen_time, word_spacing) =>{
     const words = lyric_text.split(' ')
     const avg_k_time = parseInt((screen_time / 10) / sung_word_indexes.length)
 
@@ -28,7 +28,7 @@ export const singing_script = (clip_tag, pos_tag, pre_colors, post_colors, sung_
 
         let next_word = color_bf_tag + k_tag + color_af_tag + words[w]
         if (w !== words.length - 1){
-            next_word += ' '
+            next_word += ' '.repeat(word_spacing)
         } 
         subtitle += next_word
     }
@@ -36,13 +36,13 @@ export const singing_script = (clip_tag, pos_tag, pre_colors, post_colors, sung_
     return `${clip_tag}${pos_tag}${subtitle}`
 }
 
-export const exiting_script = (clip_tag, move_tag, colors, lyric_text) => {
+export const exiting_script = (clip_tag, move_tag, colors, lyric_text, word_spacing) => {
     const words = lyric_text.split(' ')
     let subtitle = ""
     for (let w=0; w < words.length; w++){
         let next_word = get_color_tag(colors[w]) + words[w];
         if (w !== words.length-1) {
-            next_word += ' '
+            next_word += ' '.repeat(word_spacing)
         }
         subtitle += next_word;
     }
@@ -51,13 +51,13 @@ export const exiting_script = (clip_tag, move_tag, colors, lyric_text) => {
 
 // for max-2-line case
 
-export const next_line_waiting_script = (clip_tag, pos_tag, colors, lyric_text) =>{
+export const next_line_waiting_script = (clip_tag, pos_tag, colors, lyric_text, word_spacing) =>{
     const words = lyric_text.split(' ');
     let subtitle = ''
     for (let w = 0; w < words.length; w++) {
         let next_word = get_color_tag(colors[w]) + words[w];
         if (w !== words.length-1) {
-            next_word += ' '
+            next_word += ' '.repeat(word_spacing)
         }
         subtitle += next_word;
     }
@@ -65,13 +65,13 @@ export const next_line_waiting_script = (clip_tag, pos_tag, colors, lyric_text) 
     return `${clip_tag}${pos_tag}${subtitle}`
 }
 
-export const move_up_script = (clip_tag, move_tag, colors, lyric_text) => {
+export const move_up_script = (clip_tag, move_tag, colors, lyric_text, word_spacing) => {
     const words = lyric_text.split(' ')
     let subtitle = ""
     for (let w=0; w < words.length; w++){
         let next_word = get_color_tag(colors[w]) + words[w];
         if (w !== words.length-1) {
-            next_word += ' '
+            next_word += ' '.repeat(word_spacing)
         }
         subtitle += next_word;
     }

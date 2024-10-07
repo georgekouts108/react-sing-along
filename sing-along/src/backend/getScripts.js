@@ -33,6 +33,7 @@ export const max_two_line_scripting=(lyrics_info, frame_details) => {
     const font_size = frame_details[1]
     const frame_width = frame_details[2]
     const font = frame_details[6]
+    const word_spacing = frame_details[7]
 
     const A = frame_details[4]
     const B = frame_details[5]
@@ -54,7 +55,7 @@ export const max_two_line_scripting=(lyrics_info, frame_details) => {
     const y_coords = [Y_SINGING, Y_NEXT_LINE, Y_LINE_AFTER, Y_SEC_TO_FIRST_LINE, Y_DISCARDED]
     const pos_tags = [POS_TAG_SINGING, POS_TAG_NEXT_LINE, POS_TAG_LINE_AFTER, POS_TAG_SEC_TO_FIRST_LINE]
 
-    return get_scripts_two_lines(font, font_size, frame_width / 2, y_coords, pos_tags, CLIP_TAG, lyrics_info)
+    return get_scripts_two_lines(font, font_size, frame_width / 2, y_coords, pos_tags, CLIP_TAG, lyrics_info, word_spacing)
 }
 
 export const max_one_line_scripting = (lyrics_info, frame_details) => {
@@ -62,6 +63,7 @@ export const max_one_line_scripting = (lyrics_info, frame_details) => {
     const frame_width = frame_details[2]
     const y_sing = frame_details[4]
     const font = frame_details[6]
+    const word_spacing = frame_details[7]
 
     const clip_y_upper = y_sing - font_size
     const clip_y_lower = y_sing
@@ -71,5 +73,5 @@ export const max_one_line_scripting = (lyrics_info, frame_details) => {
     const Y_DISCARDED = clip_y_upper
     const POS_TAG = get_pos_tag(frame_width / 2, y_sing)
 
-    return get_scripts_one_line(font, font_size, frame_width / 2, Y_WAITING, y_sing, Y_DISCARDED, CLIP_TAG, POS_TAG, lyrics_info)
+    return get_scripts_one_line(font, font_size, frame_width / 2, Y_WAITING, y_sing, Y_DISCARDED, CLIP_TAG, POS_TAG, lyrics_info, word_spacing)
 }
