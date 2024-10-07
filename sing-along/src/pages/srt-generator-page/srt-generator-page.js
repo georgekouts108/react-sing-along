@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
+import { get_all_scripts } from "../../backend/main";
 
 function SrtGeneratorPage() {
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ function SrtGeneratorPage() {
                             { 
                                 willCreateNewFile && 
                                 <div>
-                                    <button>Generate Subtitle File</button>
+                                    <button onClick={()=>get_all_scripts(currentData)}>Generate Subtitle File</button>
                                 </div>
                             }
                             {/* { 

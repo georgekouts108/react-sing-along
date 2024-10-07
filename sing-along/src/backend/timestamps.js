@@ -1,5 +1,5 @@
 export const to_milliseconds = (timestamp) =>{ // ex. "0:00:24.816" (quotes included)
-    let hms = timestamp.split('.')[0].split(':')
+    let hms = timestamp.substring(1, timestamp.length-1).split('.')[0].split(':')
     let hr = hms[0]
     let min = hms[1]
     let sec = hms[2]

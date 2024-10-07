@@ -2,7 +2,7 @@ import { entering_script, singing_script, move_up_script, next_line_waiting_scri
 import { get_clip_tag, get_color_tag, get_move_tag, get_pos_tag } from "./tags";
 import { alter_timestamp, to_milliseconds, millis_to_stamp, time_difference } from "./timestamps";
 
-const get_scripts_one_line = (font, font_size, X_position, y_waiting, y_singing, y_discarded, clip_tag, pos_tag, lyrics) => {
+export const get_scripts_one_line = (font, font_size, X_position, y_waiting, y_singing, y_discarded, clip_tag, pos_tag, lyrics) => {
 
     const SCRIPTS = []
 
@@ -133,7 +133,7 @@ const get_scripts_one_line = (font, font_size, X_position, y_waiting, y_singing,
     return SCRIPTS;
 }    
 
-const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos_tags, clip_tag, lyrics) => {
+export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos_tags, clip_tag, lyrics) => {
     //# 1. for each lyric, check to see how many times it will be repeated consecutively
     let repetitions = []
     let next_line = ''
@@ -156,8 +156,16 @@ const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos_tags, 
     }
     repetitions.push({parent_lyric_id:parent_lyric_id, next_line:next_line, count:count})
 
-    y_A, y_B, y_C, y_D, y_DISC = y_coords
-    pos_A, pos_B, pos_C, pos_D = pos_tags
+    const y_A = y_coords[0]
+    const y_B = y_coords[1]
+    const y_C = y_coords[2]
+    const y_D = y_coords[3]
+    const y_DISC = y_coords[4]
+
+    const pos_A = pos_tags[0]
+    const pos_B = pos_tags[1]
+    const pos_C = pos_tags[2]
+    const pos_D = pos_tags[3]
 
     //# move the first line from C to A
     let sing_time_of_first = lyrics[repetitions[0].parent_lyric_id].singTime
