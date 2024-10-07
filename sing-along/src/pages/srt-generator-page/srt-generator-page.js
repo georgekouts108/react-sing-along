@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import { get_all_scripts } from "../../backend/main";
+import { get_all_scripts, generateSRT, writeSrtContent } from "../../backend/main";
 
 function SrtGeneratorPage() {
     const navigate = useNavigate();
@@ -25,6 +25,11 @@ function SrtGeneratorPage() {
         reader.readAsText(file); // Read the file content as text
     };
 
+    const getSRTfile = () => {
+        const currentScripts = get_all_scripts(currentData);
+        generateSRT(currentScripts);
+
+    }
     return (
         <div>
             <h1>Select how you want to generate your subtitle file.</h1>
@@ -46,7 +51,7 @@ function SrtGeneratorPage() {
                             { 
                                 willCreateNewFile && 
                                 <div>
-                                    <button onClick={()=>get_all_scripts(currentData)}>Generate Subtitle File</button>
+                                    <button onClick={()=>getSRTfile()}>Generate Subtitle File</button>
                                 </div>
                             }
                             {/* { 

@@ -27,5 +27,55 @@ export const get_all_scripts = (data) => {
         SCRIPTS = max_two_line_scripting(lines, frame_details_info)
     }
 
-    console.log(SCRIPTS);
+    return SCRIPTS;
+}
+
+export const writeSrtContent = (currentScripts, firstIndexNum=1) => {
+    let content = '';
+
+    let sub_index = firstIndexNum;
+
+    for (let s = 0; s < currentScripts.length; s++){
+        const script = currentScripts[s];
+        const script_type = script['type']
+
+        let ti = ""
+        if (['ENTER', 'EXIT', 'WAIT'].includes(script_type) || script_type.includes('MOVE')) {
+            if (script['trigger_time'].includes("\"") || script['trigger_time'].includes("\'")){
+                ti = script['trigger_time'].substring(1, script['trigger_time'].length-1).replace('.', ',')
+            }
+            else {
+                ti = script['trigger_time'].replace('.', ',')
+            }
+        }
+
+        else if (script_type === 'SING'){
+            ti = script['sing_time'].substring(1, script['sing_time'].length-1).replace('.', ',')
+        }
+
+        const tf = script['stop_time'].substring(1, script['stop_time'].length-1).replace('.', ',')
+
+        content += 
+        `${sub_index}
+        ${ti} --> ${tf}
+        ${script['code']}
+
+        `
+        sub_index += 1
+    }
+    return content;
+}
+
+
+export const generateSRT = (currentScripts) => {
+    const srt = writeSrtContent(currentScripts);
+    const blob = new Blob([srt], { type: 'text/srt' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'subtitles.srt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
