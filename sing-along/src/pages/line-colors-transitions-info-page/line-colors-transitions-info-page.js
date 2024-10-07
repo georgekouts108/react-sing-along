@@ -30,7 +30,7 @@ function LineColorsTransitionsInfoPage() {
         _line.postColorChoice = 'single';
 
         if (_line.repeatsPreviousTextShown) {
-            _line.preColors = _line.postColors;
+            _line.preColors = data.lines[l-1].postColors;
         }
         _line.colorsAndTransitionsSaved = false;
         elaboratedLines.push(_line)
