@@ -1,6 +1,6 @@
 import { entering_script, singing_script, move_up_script, next_line_waiting_script, exiting_script } from "./scriptMaker";
-import { get_clip_tag, get_color_tag, get_move_tag, get_pos_tag } from "./tags";
-import { alter_timestamp, to_milliseconds, millis_to_stamp, time_difference } from "./timestamps";
+import { get_move_tag } from "./tags";
+import { alter_timestamp, to_milliseconds, time_difference } from "./timestamps";
 
 export const get_scripts_one_line = (font, font_size, X_position, y_waiting, y_singing, y_discarded, clip_tag, pos_tag, lyrics) => {
 
@@ -142,7 +142,7 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
     for (let l = 0; l < lyrics.length; l++){
         let lyric = lyrics[l];
 
-        if (lyric.textShown != next_line){
+        if (lyric.textShown !== next_line){
             if (next_line !== ''){
                 repetitions.push({parent_lyric_id:parent_lyric_id, next_line:next_line, count:count})
             }
@@ -164,12 +164,12 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
 
     const pos_A = pos_tags[0]
     const pos_B = pos_tags[1]
-    const pos_C = pos_tags[2]
-    const pos_D = pos_tags[3]
+    // const pos_C = pos_tags[2]
+    // const pos_D = pos_tags[3]
 
     //# move the first line from C to A
     let sing_time_of_first = lyrics[repetitions[0].parent_lyric_id].singTime
-    let stop_time_of_last = lyrics[repetitions[0].parent_lyric_id + repetitions[0].count - 1].exitTime
+    //let stop_time_of_last = lyrics[repetitions[0].parent_lyric_id + repetitions[0].count - 1].exitTime
     const m1 = {
         'type': 'MOVE C to A',
         'lyric_id': lyrics[repetitions[0].parent_lyric_id].id,
