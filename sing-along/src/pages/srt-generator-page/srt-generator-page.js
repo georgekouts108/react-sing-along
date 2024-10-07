@@ -1,80 +1,43 @@
 import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { get_all_scripts, generateSRT } from "../../backend/main";
+import { get_all_scripts, mergeScripts, writeSrtContent,downloadSRT } from "../../backend/main";
 
 function SrtGeneratorPage() {
     document.title = 'Generate SRT File: Sing-Along Subtitles Generator'
     const location = useLocation();
 
     const currentData = location.state?.data;
-    console.log(currentData);
-    const [fileContent, setFileContent] = useState("");
-
-    const [willCreateNewFile, setWillCreateNewFile] = useState(true);
-
-    // This function handles the file input change event
-    const handleFileChange = (e) => {
-        const file = e.target.files[0]; // Get the first file
-        console.log(file)
-        const reader = new FileReader();
-        // When the file is read successfully, update the state with its content
-        reader.onload = (event) => {
-            setFileContent(event.target.result);
-            console.log(fileContent)
-        };
-        reader.readAsText(file); // Read the file content as text
-    };
+    
+    const [srtIndexOffset, setSrtIndexOffset] = useState(1);
+    // // This function handles the file input change event
+    // const handleFileChange = (e) => {
+    //     console.log(e.target.files)
+    //     const file = e.target.files[0]; // Get the first file
+    //     const reader = new FileReader();
+    //     reader.onload = (event) => {
+    //         setFileContent(event.target.result);
+    //     };
+    //     reader.readAsText(file); // Read the file content as text
+    // };
 
     const getSRTfile = () => {
         const currentScripts = get_all_scripts(currentData);
-        generateSRT(currentScripts);
-
+        const srtContent = writeSrtContent(currentScripts, srtIndexOffset);
+        console.log(srtContent)
+        downloadSRT(srtContent);
     }
     return (
-        <div>
-            <h1>Select how you want to generate your subtitle file.</h1>
-
-            <table style={{border: '3px solid black', textAlign: 'center'}}>
-                <tbody>
-                    <tr>
-                        <td>
-                            <input defaultChecked={true} id='srt-gen-new' onClick={()=>setWillCreateNewFile(true)} type='radio' name='srt-gen-method'/>
-                            <label htmlFor='srt-gen-new'>Create new .srt file from scratch</label>
-                        </td>
-                        <td>
-                            <input id='srt-gen-add' onClick={()=>setWillCreateNewFile(false)} type='radio' name='srt-gen-method'/>
-                            <label htmlFor='srt-gen-add'>Add lyrics to existing .srt file</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colSpan={2} style={{border: '3px solid black', textAlign: 'center'}}>
-                            { 
-                                willCreateNewFile && 
-                                <div>
-                                    <button onClick={()=>getSRTfile()}>Generate Subtitle File</button>
-                                </div>
-                            }
-                            {/* { 
-                                !willCreateNewFile && 
-                                <div>
-                                    <h3>Upload an .srt file</h3>
-                                    <input type="file" accept=".srt" onChange={handleFileChange} />
-                                    {
-                                    fileContent && (
-                                        <div>
-                                            <h4>File Content:</h4>
-                                            <pre>{fileContent}</pre>
-                                        </div>
-                                    )}
-                                </div>
-                            } */}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        
-        
-        
+        <div style={{textAlign:'center'}}>
+            <h1>Generate Your Subtitle File</h1>
+            <div>
+                <p>If you are creating an .srt file that will be merged with another one you created before, change the SRT 
+                    Index Offset to the total number of subtitles from all your preceding .srt files, plus 1.
+                <br/>Otherwise, if this is the first .srt file for your song, leave it as 1. </p>
+                SRT Index Offset: <input defaultValue={1} onChange={(e)=>setSrtIndexOffset(parseInt(e.target.value))} type="number" min={1} />
+            </div><br/><br/>
+            <div>
+                <button onClick={()=>getSRTfile()}>Generate Subtitle File</button>
+            </div>
         </div>
     );
 }

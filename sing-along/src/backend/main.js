@@ -66,10 +66,8 @@ export const writeSrtContent = (currentScripts, firstIndexNum=1) => {
     return content;
 }
 
-
-export const generateSRT = (currentScripts) => {
-    const srt = writeSrtContent(currentScripts);
-    const blob = new Blob([srt], { type: 'text/srt' });
+export const downloadSRT = (srtContent) => {
+    const blob = new Blob([srtContent], { type: 'text/srt' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -79,3 +77,21 @@ export const generateSRT = (currentScripts) => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+// export const mergeScripts = (currentScripts, preSubtitles) => {
+//     const subsSplit = preSubtitles.split('\n');
+
+//     let latestSubIndex = parseInt(subsSplit[subsSplit.length - 5].trim());
+//     let latestSubTimeframe = subsSplit[subsSplit.length - 4].trim();
+//     let latestSubCode = subsSplit[subsSplit.length - 3].trim();
+
+//     console.log(latestSubIndex)
+//     console.log(latestSubTimeframe)
+//     console.log(latestSubCode)
+
+//     console.log(currentScripts[0])
+
+//     const srtCurrent = writeSrtContent(currentScripts, latestSubIndex+1);
+//     const merged = preSubtitles + srtCurrent;
+//     console.log(merged);
+// }
