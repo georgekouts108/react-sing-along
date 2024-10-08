@@ -1,7 +1,7 @@
 import { max_one_line_scripting, max_two_line_scripting, transform_text } from "./getScripts";
 
 export const get_all_scripts = (data) => {
-    console.log(data)
+
     const lines = data.lines;
 
     for (let l = 0; l <lines.length; l++) { 
@@ -64,7 +64,8 @@ export const writeSrtContent = (currentScripts, firstIndexNum=1) => {
         `
         sub_index += 1
     }
-    return content;
+    
+    return [content, sub_index];
 }
 
 export const downloadSRT = (srtContent) => {
