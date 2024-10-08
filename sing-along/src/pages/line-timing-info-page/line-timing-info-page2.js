@@ -6,7 +6,6 @@ function LineTimingInfoPage2() {
     const location = useLocation();
 
     const data = location.state?.data;
-    console.log(data)
     
     const stamps =[];
     for (let s = 0; s < data.lines.length; s++) {
@@ -110,7 +109,6 @@ function LineTimingInfoPage2() {
     const prepForExitTimes = () => {
 
         stamps[0].singTime = '00:00:00.000'
-        console.log(stamps)
         setButtonEnabledStatus('sing_time_saver', true)
         setButtonEnabledStatus('exit_time_saver', false)
         setButtonEnabledStatus('prep_for_exit_times', true)
@@ -168,10 +166,6 @@ function LineTimingInfoPage2() {
                 stamps[current_lyric_id - 1].exitTime = formattedTime
                 current_lyric_id++;
             } else {
-                console.log(stamps[current_lyric_id-1].singTime)
-                console.log("formatted time = "+formattedTime)
-                console.log(stamps[current_lyric_id].singTime)
-
                 before_singtime_of_next = timestampToMillis(formattedTime) <= timestampToMillis(stamps[current_lyric_id].singTime)
                 after_singtime_of_current = timestampToMillis(formattedTime) > timestampToMillis(stamps[current_lyric_id - 1].singTime)
 
@@ -247,25 +241,51 @@ function LineTimingInfoPage2() {
     }
 
     const confirmAllTimestamps = () => {
-        const finalLinesInfo = data.lines;
-        
-        var sing_time_1 = document.getElementById('sing_time_1').value;
-        for (let s = 0; s < stamps.length; s++) {
-            stamps[s].singTime = addTimestamps(stamps[s].singTime, sing_time_1)
-            stamps[s].exitTime = addTimestamps(stamps[s].exitTime, sing_time_1)
-            finalLinesInfo[s].singTime = stamps[s].singTime;
-            finalLinesInfo[s].exitTime = stamps[s].exitTime;
-        }
-        
-        data.lines = finalLinesInfo;
-        // console.log("🎊 FINAL DATA: ")
-        // console.log(data)
+        var sing_time1_hr = document.getElementById('sing_time1_hr').value;
+        var sing_time1_min = document.getElementById('sing_time1_min').value;
+        var sing_time1_sec = document.getElementById('sing_time1_sec').value;
+        var sing_time1_ms = document.getElementById('sing_time1_ms').value;
 
-        navigate('/srt-generator', { 
-            state: {
-                data: data
+        const complete = sing_time1_hr && sing_time1_min && sing_time1_sec && sing_time1_ms;
+        const hr_ok = sing_time1_hr>=0 && sing_time1_hr <= 99;
+        const min_ok = sing_time1_min>=0 && sing_time1_min <= 99;
+        const sec_ok = sing_time1_sec>=0 &&  sing_time1_sec <= 59;
+        const ms_ok = sing_time1_ms>=0 &&  sing_time1_ms <= 999;
+        const valid = hr_ok && min_ok && sec_ok && ms_ok;
+
+        if (!complete || !valid) {
+            alert("ERROR: The sing time of the first line is incomplete or invalid.");
+        }
+        else {
+            let _ms = '';
+            if (sing_time1_ms >= 100) {
+                _ms = `${sing_time1_ms}`
             }
-        });
+            else if (sing_time1_ms >= 10 && sing_time1_ms <= 99) {
+                _ms = `0${sing_time1_ms}`
+            }
+            else {
+                _ms = `00${sing_time1_ms}`
+            }
+            
+            const st1 = `${pad(sing_time1_hr,2)}:${pad(sing_time1_min,2)}:${pad(sing_time1_sec,2)}.${_ms}`
+     
+            const finalLinesInfo = data.lines;
+            for (let s = 0; s < stamps.length; s++) {
+                stamps[s].singTime = addTimestamps(stamps[s].singTime, st1)
+                stamps[s].exitTime = addTimestamps(stamps[s].exitTime, st1)
+                finalLinesInfo[s].singTime = stamps[s].singTime;
+                finalLinesInfo[s].exitTime = stamps[s].exitTime;
+            }
+            
+            data.lines = finalLinesInfo;
+    
+            navigate('/srt-generator', { 
+                state: {
+                    data: data
+                }
+            });
+        }
     }
 
     useEffect(() => {
@@ -285,7 +305,7 @@ function LineTimingInfoPage2() {
                             <h2>Next Line ID</h2>
                         </td>
                         <td style={{border: '3px solid black'}}>
-                            <h2 id="next_lyric_id" style={{color: 'blueviolet'}}></h2>
+                            <h2 id="next_lyric_id" style={{color: 'blueviolet'}}>{}</h2>
                         </td>
                     </tr>
                     <tr>
@@ -293,7 +313,7 @@ function LineTimingInfoPage2() {
                             <h2>Text Shown</h2>
                         </td>
                         <td style={{border: '3px solid black'}}>
-                            <h2 id="next_lyric_text_shown" style={{color: 'darkcyan', fontStyle: 'italic'}}></h2>
+                            <h2 id="next_lyric_text_shown" style={{color: 'darkcyan', fontStyle: 'italic'}}>{}</h2>
                         </td>
                     </tr>
                     <tr>
@@ -301,7 +321,7 @@ function LineTimingInfoPage2() {
                             <h2>Text Heard</h2>
                         </td>
                         <td style={{border: '3px solid black'}}>
-                            <h2 id="next_lyric_text_sung" style={{color: 'darkred', fontStyle: 'italic'}}></h2>
+                            <h2 id="next_lyric_text_sung" style={{color: 'darkred', fontStyle: 'italic'}}>{}</h2>
                         </td>
                     </tr>
                 </tbody>
@@ -323,8 +343,12 @@ function LineTimingInfoPage2() {
             
             <button id="finish_btn" onClick={finish}>Finish</button><br/><br/>
     
-            <label>Enter the actual SING_TIME of the 1st Line in the media:</label>
-            <input required placeholder="00:00:00.000" type="text" id="sing_time_1" name="string1"/>
+            <label>SING TIME of 1st Line:</label>
+            <input defaultValue={0} required placeholder="hours [0,99]" type="number" id="sing_time1_hr" name="string1"/>
+            <input defaultValue={0} required placeholder="minutes [0,99]" type="number" id="sing_time1_min" name="string1"/>
+            <input defaultValue={0} required placeholder="seconds [0,59]" type="number" id="sing_time1_sec" name="string1"/>
+            <input defaultValue={0} required placeholder="milliseconds [0,999]" type="number" id="sing_time1_ms" name="string1"/>
+            
             <div>
                 <button id="save_stamps" onClick={confirmAllTimestamps}>Confirm All Timestamps</button>
             </div>
