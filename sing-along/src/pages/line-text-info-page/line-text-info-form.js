@@ -8,9 +8,15 @@ function LineTextInfoForm(props) {
     
     const [textHeard, setTextHeard] = useState(props.line.wasCloned ? props.line.textHeard : '');
     
+    let postFiller = ''
+
     let indexesOfSungWords = props.line.wasCloned ? props.line.indexesOfShownWordsSung : '';
 
     const [lineConfirmed, setLineConfirmed] = useState(props.line.wasCloned ? props.line.lineConfirmed : false);
+
+    const setPostFiller = (text) => {
+        postFiller = text;
+    }
 
     const getWords = (text) => {
         const wordArray = [];
@@ -64,6 +70,7 @@ function LineTextInfoForm(props) {
         _line.textHeard = textHeard 
         _line.indexesOfShownWordsSung = indexesOfSungWords
         _line.repeatsPreviousTextShown = repeatsPreviousTextShown
+        _line.postFiller = postFiller
 
         props.confirmEntry(_line)
     }
@@ -147,6 +154,15 @@ function LineTextInfoForm(props) {
                     }
                 </>
             </td>
+            <td style={{textAlign:'center',border: '3px solid black'}}>   
+                <textarea 
+                id={`postFillerLine${lineId}`} 
+                style={{width:500, height:75}}
+                disabled={lineConfirmed}
+                onChange={(e) => setPostFiller(e.target.value)}
+                placeholder='Text in here is heard in between this line and the next, but no sing-along subtitles will be made for it.'
+                />
+            </td >
             <td style={{textAlign:'center',border: '3px solid black'}}>
                 <button disabled={lineConfirmed || !textShown} onClick={()=>confirmLine()}>Confirm<br/>Line {`# ${lineId+1}`}</button>
                 <br/>{lineConfirmed && <h1>✅</h1>}

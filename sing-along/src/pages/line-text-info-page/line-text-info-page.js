@@ -76,7 +76,7 @@ function LineTextInfoPage() {
             lines: lines, 
             lineCount: lineCount
         }
-
+     
         navigate('/line-colors-transitions-info', { 
             state: {data: data}
         });
@@ -84,9 +84,7 @@ function LineTextInfoPage() {
 
     return (
         <div className='line-text-info-page-main'>
-            <header className='header'>
-                {/* <SingAlongSongsLogo/> */}
-            </header>
+            <header className='header'></header>
             
             <div className='content'>
                 <h1>Line Text</h1>
@@ -100,6 +98,7 @@ function LineTextInfoPage() {
                             <td style={{border: '3px solid black'}}>Text Shown</td>
                             <td style={{border: '3px solid black'}}>Text Heard</td>
                             <td style={{border: '3px solid black'}}>Sung Words Shown</td>
+                            <td style={{border: '3px solid black'}}>Post Filler (Optional)</td>
                             <td style={{border: '3px solid black', backgroundColor:'black'}}></td>
                         </tr>
                         {

@@ -154,6 +154,10 @@ function LineTimingInfoPage2() {
         if (j) {
             j.textContent = stamps[current_lyric_id - 1].textHeard;
         }
+        const k = document.getElementById('next_lyric_text_filler');
+        if (k) {
+            k.textContent = data.lines[current_lyric_id - 1].postFiller;
+        }
     }
 
     const recordExitTime = ()  => {
@@ -322,6 +326,14 @@ function LineTimingInfoPage2() {
                         </td>
                         <td style={{border: '3px solid black'}}>
                             <h2 id="next_lyric_text_sung" style={{color: 'darkred', fontStyle: 'italic'}}>{}</h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{border: '3px solid black'}}>
+                            <h2>Post Filler</h2>
+                        </td>
+                        <td style={{border: '3px solid black'}}>
+                            <h3 id="next_lyric_text_filler">{}</h3>
                         </td>
                     </tr>
                 </tbody>
