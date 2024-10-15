@@ -21,7 +21,6 @@ function CombineSRTPage() {
         _fc.push(loadedFileContent);
         setFileContents(_fc);
         clearLoadedSRT();
-        console.log(fileContents);
     };
 
     const clearLoadedSRT=()=>{
@@ -31,8 +30,8 @@ function CombineSRTPage() {
 
     const downloadCombinedSRT = () => {
         let combinedSRT = '';
-        for (let f = 0; f < fileContents.length; f++) {
-            combinedSRT += fileContents[f];
+        for (let f = 0; f < fileContents.length; f++) {            
+            combinedSRT += fileContents[f];            
         }
         downloadSRT(combinedSRT);
     }
