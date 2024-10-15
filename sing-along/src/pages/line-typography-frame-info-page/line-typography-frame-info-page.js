@@ -28,6 +28,8 @@ function LineTypographyFrameInfoPage() {
     const [recommendedFontSize, setRecommendedFontSize] = useState(font.recommendedSizePercentages.mixed.oneLine * _frame_height);
     const [fontWordSpacing, setFontWordSpacing] = useState(font.wordSpacing);
 
+    const [sampleText, setSampleText] = useState('')
+
     const confirmFrameDetails = () => {
         _frame_width = parseFloat(document.getElementById('frameWidth').value)
         _frame_height = parseFloat(document.getElementById('frameHeight').value)
@@ -216,7 +218,6 @@ function LineTypographyFrameInfoPage() {
                                 In order to use a font (listed or custom), you must have it installed on your local operating system.</h4>
 
                                 <h4>All the fonts below were used in one or more of the following videocassette series: 
-                                    
                                     <ul>
                                         <li><i>Disney Sing-Along Songs</i></li>
                                         <li><i>Alvin & the Chipmunks Sing-Alongs</i></li>
@@ -224,11 +225,19 @@ function LineTypographyFrameInfoPage() {
                                         <li><i>Dr. Seuss Sing-Along Classics</i></li>
                                         <li><i>Animaniacs Sing-Along</i></li>
                                     </ul>
-                                    
                                 </h4>
                                 
+                                Enter sample text: 
+                                <input style={{textAlign:'center', width:250}}
+                                placeholder='Sample text here'
+                                id='fontSampleText' 
+                                type='text'
+                                value={sampleText}
+                                onChange={(e)=>setSampleText(e.target.value)}/><br/><br/>
+                                <div style={{justifyContent:'center'}}>
+                                    <FontPicker sampleText={sampleText} grammarChoice={grammar} configureFont={setFont}/>
+                                </div>
                                 
-                                <FontPicker grammarChoice={grammar} configureFont={setFont}/>
                                 {
                                     font.name !== 'Other Font' &&
                                     <>
