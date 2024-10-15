@@ -1,4 +1,4 @@
-import { entering_script, singing_script, move_up_script, next_line_waiting_script, exiting_script } from "./scriptMaker";
+import { singing_script, next_line_waiting_script, moving_script } from "./scriptMaker";
 import { get_move_tag } from "./tags";
 import { alter_timestamp, to_milliseconds, time_difference } from "./timestamps";
 
@@ -64,7 +64,7 @@ export const get_scripts_one_line = (font, font_size, X_position, y_waiting, y_s
             }
 
             enter_script['stop_time'] = sing_time
-            enter_script['code'] = `{\\fn${font}}{\\fs${font_size}}${entering_script(clip_tag, transition_tag1, pre_colors, lyric_text_shown, word_spacing)}`
+            enter_script['code'] = `{\\fn${font}}{\\fs${font_size}}${moving_script(clip_tag, transition_tag1, pre_colors, lyric_text_shown, word_spacing)}`
 
             SCRIPTS.push(enter_script)
         }
@@ -125,7 +125,7 @@ export const get_scripts_one_line = (font, font_size, X_position, y_waiting, y_s
             else if (will_exit === 2){
                 transition_tag2 = `{\\fad(0,${exit_script['move_duration']})}${pos_tag}`
             }
-            exit_script['code'] = `{\\fn${font}}{\\fs${font_size}}${exiting_script(clip_tag, transition_tag2, post_colors, lyric_text_shown, word_spacing)}`
+            exit_script['code'] = `{\\fn${font}}{\\fs${font_size}}${moving_script(clip_tag, transition_tag2, post_colors, lyric_text_shown, word_spacing)}`
             SCRIPTS.push(exit_script)
         }
     }
@@ -189,7 +189,7 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
         }
     }
     let move_tag1 = get_move_tag(X_position, y_C, X_position, y_A, m1['move_duration'])
-    let move_script1 = move_up_script(clip_tag, move_tag1, lyrics[repetitions[0].parent_lyric_id].preColors, lyrics[repetitions[0].parent_lyric_id].textShown, word_spacing)
+    let move_script1 = moving_script(clip_tag, move_tag1, lyrics[repetitions[0].parent_lyric_id].preColors, lyrics[repetitions[0].parent_lyric_id].textShown, word_spacing)
     m1['code'] = `{\\fn${font}}{\\fs${font_size}}${move_script1}`
 
     //# move the second line from D to B
@@ -215,7 +215,7 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
     }
 
     let move_tag2 = get_move_tag(X_position, y_D, X_position, y_B, m2['move_duration'])
-    let move_script2 = move_up_script(clip_tag, move_tag2, lyrics[repetitions[1].parent_lyric_id].preColors, lyrics[repetitions[1].parent_lyric_id].textShown, word_spacing)    
+    let move_script2 = moving_script(clip_tag, move_tag2, lyrics[repetitions[1].parent_lyric_id].preColors, lyrics[repetitions[1].parent_lyric_id].textShown, word_spacing)    
     m2['code'] = `{\\fn${font}}{\\fs${font_size}}${move_script2}`
     
     const SCRIPTS = [m1, m2]
@@ -293,7 +293,7 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
         }
 
         let move_tag = get_move_tag(X_position, y_A, X_position, y_DISC, move_duration)
-        let move_script = move_up_script(clip_tag, move_tag, lyrics[lyric_id_of_last_occurrence].postColors, lyrics[lyric_id_of_last_occurrence].textShown, word_spacing)
+        let move_script = moving_script(clip_tag, move_tag, lyrics[lyric_id_of_last_occurrence].postColors, lyrics[lyric_id_of_last_occurrence].textShown, word_spacing)
 
         const m = {
             'type': 'MOVE A to DISCARD',
@@ -313,7 +313,7 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
         if (r !== repetitions.length - 1){
             let lyric_id_of_next_line = repetitions[r + 1].parent_lyric_id
             move_tag2 = get_move_tag(X_position, y_B, X_position, y_A, move_duration)
-            move_script2 = move_up_script(clip_tag, move_tag2, lyrics[lyric_id_of_next_line].preColors,
+            move_script2 = moving_script(clip_tag, move_tag2, lyrics[lyric_id_of_next_line].preColors,
                                           lyrics[lyric_id_of_next_line].textShown, word_spacing)
             const m2 = {
                 'type': 'MOVE B to A',
@@ -331,7 +331,7 @@ export const get_scripts_two_lines = (font, font_size, X_position, y_coords, pos
             if (r + 1 !== repetitions.length - 1){
                 let lyric_id_of_line_after = repetitions[r + 2].parent_lyric_id
                 let move_tag3 = get_move_tag(X_position, y_C, X_position, y_B, move_duration)
-                let move_script3 = move_up_script(clip_tag, move_tag3, lyrics[lyric_id_of_line_after].preColors, lyrics[lyric_id_of_line_after].textShown, word_spacing)
+                let move_script3 = moving_script(clip_tag, move_tag3, lyrics[lyric_id_of_line_after].preColors, lyrics[lyric_id_of_line_after].textShown, word_spacing)
                 
                 const m3 = {
                     'type': 'MOVE C to B',
