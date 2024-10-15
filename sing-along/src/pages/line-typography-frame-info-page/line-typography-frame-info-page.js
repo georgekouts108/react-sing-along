@@ -212,10 +212,10 @@ function LineTypographyFrameInfoPage() {
                             </td>
                             <td colSpan={3} rowSpan={2} style={{border: '3px solid black', textAlign:'center'}}>
                                 <h2>Select your default font for each line</h2>
-                                <h4>You may choose from the font catalogue below, or type the name of the font you wish to use.<br/>
-                                In order to use a font, you must have it installed on your local operating system.</h4>
+                                <h4>Choose a font from the catalogue below, or select "Other Font" to enter a custom font.<br/>
+                                In order to use a font (listed or custom), you must have it installed on your local operating system.</h4>
 
-                                <h4>All the fonts below have been used in one or more of these videocassette series: 
+                                <h4>All the fonts below were used in one or more of the following videocassette series: 
                                     
                                     <ul>
                                         <li><i>Disney Sing-Along Songs</i></li>
@@ -228,7 +228,7 @@ function LineTypographyFrameInfoPage() {
                                 </h4>
                                 
                                 
-                                <FontPicker configureFont={setFont}/>
+                                <FontPicker grammarChoice={grammar} configureFont={setFont}/>
                                 {
                                     font.name !== 'Other Font' &&
                                     <>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { fonts } from '../../data/fonts/font-names'
+import { transform_text } from '../../backend/getScripts';
 
-function FontPicker(props) {
+function FontPicker({grammarChoice, configureFont}) {
     
     const font_rows = [];
     let f = 0;
@@ -18,13 +19,13 @@ function FontPicker(props) {
         return <>
             <input 
             defaultChecked={font.name==='ITC Korinna Std'} 
-            onClick={()=>props.configureFont(font)} 
+            onClick={()=>configureFont(font)} 
             name='font' 
             id={`font_${font.fid}`} 
             type='radio'/>
             <label 
             style={{fontFamily:font.name, fontSize:20}} 
-            htmlFor={`font_${font.fid}`}>{font.name}</label>
+            htmlFor={`font_${font.fid}`}>{transform_text(font.name, grammarChoice)}</label>
             </>      
     }
 
@@ -37,7 +38,7 @@ function FontPicker(props) {
                             <tr key={fontrow[0].fid}>
                                 {
                                     fontrow.map((font) => (
-                                        <td key={font.fid}>
+                                        <td key={font.fid} style={{border: '3px solid black'}}>
                                             {getFontButton(font)}
                                         </td>
                                     ))
