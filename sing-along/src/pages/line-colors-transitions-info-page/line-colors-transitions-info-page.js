@@ -9,7 +9,7 @@ function LineColorsTransitionsInfoPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [defaultPreColor, setDefaultPreColor] = useState('#05dfd7');
+    const [defaultPreColor, setDefaultPreColor] = useState('#0fd249');
     const [defaultPostColor, setDefaultPostColor] = useState('#ffffff');
 
     const data = location.state?.data;
@@ -54,7 +54,7 @@ function LineColorsTransitionsInfoPage() {
                 lines: lines,
                 lineCount: lines.length
             }
-            
+            console.log(data)
             navigate('/line-typography-frame-info', { 
                 state: {data: data}
             });

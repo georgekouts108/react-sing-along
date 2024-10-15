@@ -16,7 +16,9 @@ function LineTextInfoPage() {
         if (!up) {
             if (lineCount > 0) {
                 setLineCount(lineCount - 1);
-                setLines(lines.slice(0, lines.length-1))
+                const _lines = lines.slice(0, lines.length-1)
+                _lines[_lines.length - 1].nextLineRepeatsTextShown = false
+                setLines(_lines)
                 setLatestLineConfirmed(true)
             }
         }
@@ -27,7 +29,8 @@ function LineTextInfoPage() {
                     id: lineCount, 
                     lineConfirmed: false, 
                     wasCloned: false, 
-                    clonedLineID: clonedLineID
+                    clonedLineID: clonedLineID,
+                    nextLineRepeatsTextShown: false
                 }])
             }
             else {
@@ -40,6 +43,7 @@ function LineTextInfoPage() {
                     clonedLineID: clonedLineID,
                     indexesOfShownWordsSung: clonedLine.indexesOfShownWordsSung,
                     repeatsPreviousTextShown: false,
+                    nextLineRepeatsTextShown: false,
                     textHeard: clonedLine.textHeard,
                     textShown: clonedLine.textShown
                 }
@@ -59,6 +63,9 @@ function LineTextInfoPage() {
             for (let u = 0; u < updatedLines.length; u++) {
                 if (updatedLines[u].id === lineObject.id) {
                     updatedLines[u] = lineObject;
+                    if (lineObject.repeatsPreviousTextShown) {
+                        updatedLines[u-1].nextLineRepeatsTextShown = true;
+                    }
                     break;
                 }
             }

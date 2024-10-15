@@ -10,7 +10,7 @@ function LineColorsTransitionsForm({
     const [preColorChoice, setPreColorChoice] = useState(lineInfo.preColorChoice)
     const [postColorChoice, setPostColorChoice] = useState(lineInfo.postColorChoice)
 
-    const [enterTransition, setEnterTransition] = useState(defaultEnterTrans);
+    const [enterTransition, setEnterTransition] = useState(lineInfo.repeatsPreviousTextShown ? 'cutin' : defaultEnterTrans);
     
     useEffect(() => {
         setEnterTransition(defaultEnterTrans);
@@ -18,7 +18,7 @@ function LineColorsTransitionsForm({
         unsaveColorsAndTransitions();
     }, [defaultEnterTrans]);
 
-    const [exitTransition, setExitTransition] = useState(defaultExitTrans);
+    const [exitTransition, setExitTransition] = useState(lineInfo.nextLineRepeatsTextShown ? 'cutout' : defaultExitTrans);
     
     useEffect(() => {
         setExitTransition(defaultExitTrans);
@@ -113,10 +113,10 @@ function LineColorsTransitionsForm({
                 }
             }
 
-            lineInfo.enterTransition = enterTransition;
-            lineInfo.exitTransition = exitTransition;
-            lineInfo.enterTransitionId = enterTransitionIDs[enterTransition];
-            lineInfo.exitTransitionId = exitTransitionIDs[exitTransition];
+            lineInfo.enterTransition = lineInfo.repeatsPreviousTextShown ? 'cutin' : enterTransition;
+            lineInfo.exitTransition = lineInfo.nextLineRepeatsTextShown ? 'cutout' : exitTransition;
+            lineInfo.enterTransitionId = enterTransitionIDs[lineInfo.enterTransition];
+            lineInfo.exitTransitionId = exitTransitionIDs[lineInfo.exitTransition];
             lineInfo.preColors = preColors;
             lineInfo.postColors = postColors;
             lineInfo.preColorChoice = preColorChoice;
@@ -147,8 +147,14 @@ function LineColorsTransitionsForm({
      
                 <tbody>
                     <tr colSpan={1+words.length} style={{fontWeight:'bold'}}>
-                        LINE {lineInfo.id +1} <span style={{color:'yellow'}}>{lineInfo.repeatsPreviousTextShown ? `(Repeats Line ${lineInfo.id}'s shown text)` : ''}</span>
-                    </tr>
+                        LINE {lineInfo.id +1} 
+                        {
+                            lineInfo.repeatsPreviousTextShown && <span style={{color:'yellow'}}>{`(Repeats Line ${lineInfo.id}'s shown text)`}</span>
+                        }
+                        {
+                            lineInfo.nextLineRepeatsTextShown && <span style={{color:'lime'}}>{`(Line ${lineInfo.id+2} repeats the shown text)`}</span>
+                        }
+                        </tr>
                     <tr>
                         <td style={{border: '3px solid black'}}>
                             WORD(S)
@@ -248,17 +254,44 @@ function LineColorsTransitionsForm({
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
                             Enter Transition:
-                            <input checked={enterTransition==='slidein'} onClick={()=>{setEnterTransition('slidein'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>slide in
-                            <input checked={enterTransition==='cutin'} onClick={()=>{setEnterTransition('cutin'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>cut in
-                            <input checked={enterTransition==='fadein'} onClick={()=>{setEnterTransition('fadein'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>fade in
+                            {
+                                !lineInfo.repeatsPreviousTextShown &&
+                                <>
+                                <input checked={enterTransition==='slidein'} onClick={()=>{setEnterTransition('slidein'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_slidein`} name={`enter_trans_line${lineInfo.id}`} type='radio' />
+                                <label htmlFor={`enter_trans_line${lineInfo.id}_slidein`}>slide in</label>
+                                </>
+                            }
+                            <input checked={enterTransition==='cutin' || lineInfo.repeatsPreviousTextShown} onClick={()=>{setEnterTransition('cutin'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_cutin`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>
+                            <label htmlFor={`enter_trans_line${lineInfo.id}_cutin`}>cut in</label>
+                            {
+                                !lineInfo.repeatsPreviousTextShown &&
+                                <>
+                                <input disabled={lineInfo.repeatsPreviousTextShown} checked={enterTransition==='fadein'} onClick={()=>{setEnterTransition('fadein'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`enter_trans_line${lineInfo.id}_fadein`} name={`enter_trans_line${lineInfo.id}`} type='radio'/>
+                                <label htmlFor={`enter_trans_line${lineInfo.id}_fadein`}>fade in</label>
+                                </>
+                            }
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
                         <td colSpan={1+words.length} >
                             Exit Transition:
-                            <input checked={exitTransition==='slideout'} onClick={()=>{setExitTransition('slideout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>slide out
-                            <input checked={exitTransition==='cutout'} onClick={()=>{setExitTransition('cutout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>cut out
-                            <input checked={exitTransition==='fadeout'} onClick={()=>{setExitTransition('fadeout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>fade out
+                            {
+                                !lineInfo.nextLineRepeatsTextShown &&
+                                <>
+                                <input checked={exitTransition==='slideout'} onClick={()=>{setExitTransition('slideout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_slideout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>
+                                <label htmlFor={`exit_trans_line${lineInfo.id}_slideout`}>slide out</label>
+                                </>
+                            }
+
+                            <input checked={exitTransition==='cutout' || lineInfo.nextLineRepeatsTextShown} onClick={()=>{setExitTransition('cutout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_cutout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>
+                            <label htmlFor={`exit_trans_line${lineInfo.id}_cutout`}>cut out</label>
+                            {
+                                !lineInfo.nextLineRepeatsTextShown &&
+                                <>
+                                <input checked={exitTransition==='fadeout'} onClick={()=>{setExitTransition('fadeout'); setInfoSaved(false);unsaveColorsAndTransitions();}} id={`exit_trans_line${lineInfo.id}_fadeout`} name={`exit_trans_line${lineInfo.id}`} type='radio'/>
+                                <label htmlFor={`exit_trans_line${lineInfo.id}_fadeout`}>fade out</label>
+                                </>
+                            }
                         </td>
                     </tr>
                     <tr style={{ border: '3px solid black'}}>
