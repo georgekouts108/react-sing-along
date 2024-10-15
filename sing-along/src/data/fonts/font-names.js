@@ -14,6 +14,8 @@ import jasmineupcScreenshot1 from '../../assets/images/screenshots/fontExamples/
 import jasmineupcScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_jasmineupc.png'
 import neueAachenScreenshot1 from '../../assets/images/screenshots/fontExamples/ex1_neue.png'
 import neueAachenScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_neue.png'
+import itcbenguiatScreenshot1 from '../../assets/images/screenshots/fontExamples/ex1_itcbenguiat.png'
+import itcbenguiatScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_itcbenguiat.png'
 
 export const fonts = [
     {
@@ -83,6 +85,23 @@ export const fonts = [
         example2: {
             screenshot: sansmaticaScreenshot2,
             videoName: "Screen Songs by Famous Studios - Snow Foolin' (1949)"
+        },
+    },
+    {
+        fid:'3077caee-ea9f-44aa-bcc2-96d5571295bd',
+        name:'ITC Benguiat Std',
+        wordSpacing: 2,
+        recommendedSizePercentages: { 
+            mixed: {oneLine: 0.083, twoLine: 0.079},
+            uppercase: {oneLine: 0.079, twoLine: 0.075}
+        },
+        example1: {
+            screenshot: itcbenguiatScreenshot1,
+            videoName: "Dr. Seuss: The Lorax (1994)"
+        },
+        example2: {
+            screenshot: itcbenguiatScreenshot2,
+            videoName: "Dr. Seuss: The Hoober-Bloob Highway (1994)"
         },
     },
     {

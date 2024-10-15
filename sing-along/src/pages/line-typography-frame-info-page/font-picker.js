@@ -7,7 +7,7 @@ function FontPicker(props) {
     let f = 0;
     while (f < fonts.length){
         let left = f;
-        let right = Math.min(f+10, fonts.length);
+        let right = Math.min(f+3, fonts.length);
         font_rows.push(fonts.slice(left, right));
         f = right;
     }
