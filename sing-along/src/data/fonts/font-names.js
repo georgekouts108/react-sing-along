@@ -12,6 +12,8 @@ import greyhoundScreenshot1 from '../../assets/images/screenshots/fontExamples/e
 import greyhoundScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_greyhound.png'
 import jasmineupcScreenshot1 from '../../assets/images/screenshots/fontExamples/ex1_jasmineupc.png'
 import jasmineupcScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_jasmineupc.png'
+import neueAachenScreenshot1 from '../../assets/images/screenshots/fontExamples/ex1_neue.png'
+import neueAachenScreenshot2 from '../../assets/images/screenshots/fontExamples/ex2_neue.png'
 
 export const fonts = [
     {
@@ -54,8 +56,8 @@ export const fonts = [
         name:'Muro',
         wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed:{oneLine: 0.083, twoLine:0.076},
-            uppercase:{oneLine: 0.083, twoLine:0.076}
+            mixed:{oneLine: 0.083, twoLine: 0.076},
+            uppercase:{oneLine: 0.083, twoLine: 0.076}
         },
         example1: {
             screenshot: muroScreenshot1,
@@ -71,8 +73,8 @@ export const fonts = [
         name:'Sansmatica',
         wordSpacing: 2,
         recommendedSizePercentages: { 
-            mixed: {oneLine: 0.118, twoLine:0.094},
-            uppercase: {oneLine: 0.097, twoLine:0.094}
+            mixed: {oneLine: 0.118, twoLine: 0.094},
+            uppercase: {oneLine: 0.097, twoLine: 0.094}
         },
         example1: {
             screenshot: sansmaticaScreenshot1,
@@ -81,6 +83,23 @@ export const fonts = [
         example2: {
             screenshot: sansmaticaScreenshot2,
             videoName: "Screen Songs by Famous Studios - Snow Foolin' (1949)"
+        },
+    },
+    {
+        fid:'dabf4552-1c99-4e92-9eac-c2bac2e49c40',
+        name:'Neue Aachen Pro',
+        wordSpacing: 2,
+        recommendedSizePercentages: { 
+            mixed: {oneLine: 0.115, twoLine: 0.094},
+            uppercase: {oneLine: 0.083, twoLine: 0.083}
+        },
+        example1: {
+            screenshot: neueAachenScreenshot1,
+            videoName: "Dr. Seuss' Green Eggs and Ham & Other Stories (1994)"
+        },
+        example2: {
+            screenshot: neueAachenScreenshot2,
+            videoName: "Dr. Seuss' Green Eggs and Ham & Other Stories (1994)"
         },
     },
     {
