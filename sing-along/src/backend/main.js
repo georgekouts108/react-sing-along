@@ -31,10 +31,10 @@ export const get_all_scripts = (data) => {
     return SCRIPTS;
 }
 
-export const writeSrtContent = (currentScripts, firstIndexNum=1) => {
+export const writeSrtContent = (currentScripts) => {
     let content = '';
 
-    let sub_index = firstIndexNum;
+    let sub_index = 1;
 
     for (let s = 0; s < currentScripts.length; s++){
         const script = currentScripts[s];
@@ -65,7 +65,7 @@ export const writeSrtContent = (currentScripts, firstIndexNum=1) => {
         sub_index += 1
     }
     
-    return [content, sub_index];
+    return content;
 }
 
 export const downloadSRT = (srtContent) => {
