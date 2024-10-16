@@ -22,11 +22,11 @@ function SrtGeneratorPage() {
             <div>
                 <p>
                     Download your subtitle file by clicking the button below.<br/><br/>Afterwards, open Aegisub, then drag-and-drop the file into the software.<br/>
-                    Then, make sure the video resolution <span style={{fontWeight:'bold'}}>(frame width x frame height)</span> is set to the same values you entered.<br/>
-                    Afterwards, you must manually set the exact timings for all the words' highlights in the song.
+                    Then, make sure the video resolution is set to <span style={{fontWeight:'bold'}}>{currentData.frameWidth} x {currentData.frameHeight}</span>.<br/>
+                    Afterwards, manually set the exact timings for all the words' highlightings in the song.
                     <br/><br/>
-                    Also, if the lyrics in your subtitle file are not all the lyrics in your song, you may create a new<br/>
-                    subtitle file from scratch with the rest of the lyrics, and then merge the .srt files together.
+                    Also, if there are more lyrics in your song, you may create more<br/>
+                    subtitle files from scratch with the continuing lyrics, and then merge the files together.
                 </p>
             </div><br/><br/>
             <div>
@@ -34,7 +34,7 @@ function SrtGeneratorPage() {
             </div>         
             <div>
                 {
-                    downloadDone && <h3>Your SRT file has been downloaded!<br/><br/>Happy singing! 🎶🎤</h3>
+                    downloadDone && <h2>Your SRT file has been downloaded! ✅<br/><br/>🎵 Happy singing! 🎵</h2>
                 }
             </div>
         </div>
