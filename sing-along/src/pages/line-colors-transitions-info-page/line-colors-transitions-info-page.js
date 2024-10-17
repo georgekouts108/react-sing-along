@@ -52,10 +52,11 @@ function LineColorsTransitionsInfoPage() {
         if (savedCount === lines.length){
             const data = {
                 lines: lines,
-                lineCount: lines.length
+                lineCount: lines.length,
+                longestTextShown: location.state?.data.longestTextShown
             }
-            console.log(data)
-            navigate('/line-typography-frame-info', { 
+
+            navigate('/line-typography-frame-info2', { 
                 state: {data: data}
             });
         }

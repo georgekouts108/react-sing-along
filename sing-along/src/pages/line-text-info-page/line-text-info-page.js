@@ -79,9 +79,24 @@ function LineTextInfoPage() {
     }
 
     const confirmAllLines = () => {
+
+        // get the longest textShown line
+        let longestTextShown = ''
+        for (let l = 0; l < lines.length; l++) {
+            if (l === 0) {
+                longestTextShown = lines[l].textShown;
+            }
+            else {
+                if (lines[l].textShown.length > longestTextShown.length){
+                    longestTextShown = lines[l].textShown
+                }
+            }
+        }
+
         const data = {
             lines: lines, 
-            lineCount: lineCount
+            lineCount: lineCount,
+            longestTextShown: longestTextShown
         }
      
         navigate('/line-colors-transitions-info', { 

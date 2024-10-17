@@ -7,15 +7,21 @@ import bottomPosition from '../../assets/images/screenshots/bottomPosition.png'
 import centerPosition from '../../assets/images/screenshots/centerPosition.png'
 import FontPicker from './font-picker';
 import { fonts } from '../../data/fonts/font-names';
+import { transform_text } from '../../backend/getScripts';
 
-function LineTypographyFrameInfoPage() {
+function LineTypographyFrameInfoPage2() {
     document.title = 'Typography & Frame Details: Sing-Along Subtitle Generator'
     const navigate = useNavigate();
     const location = useLocation();
 
+    const [frameWidth, setFrameWidth] = useState(640)
+    const [frameHeight, setFrameHeight] = useState(480)
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
+
     const data = location.state?.data;
+
+    const [longestTextShown, setLongestTextShown] = useState(data.longestTextShown)
     
     let _frame_width = 640
     let _frame_height = 480
@@ -101,34 +107,78 @@ function LineTypographyFrameInfoPage() {
             });
         }
     }
-    const setRecommendedFontSizeAndWordSpacing = () => {
-    
-        let rfsp = 0;  
-        let isUppercase = document.getElementById('grammar_uppercase').checked;
-        let maxLineCount = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
-        let frameHeight = parseFloat(document.getElementById('frameHeight').value)
-        if (isUppercase) {
-            rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.uppercase.oneLine 
-                : font.recommendedSizePercentages.uppercase.twoLine)
-        }
-        else {
-            rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.mixed.oneLine 
-                : font.recommendedSizePercentages.mixed.twoLine)
-        }
-        setRecommendedFontSize(Math.round(rfsp * frameHeight, 2));
+   
+    useEffect(() => {
         setFontWordSpacing(font.wordSpacing);
-    }
+        
+        let words = transform_text(longestTextShown, grammar).split(' ')
+        let phrase = ''
+        for (let w = 0; w < words.length; w++) {
+            phrase += words[w];
+            if (w !== words.length-1) {
+                phrase += ' '.repeat(font.wordSpacing)
+            }
+        }
+
+        // Function to calculate the maximum font size
+        const calculateMaxFontSize = () => {
+          const maxFontSize = frameHeight * 0.03; // Maximum font size is 10% of frame height
+          const sideMarginFactor = 0.03; // 10% margin on both sides (5% left, 5% right)
     
-    useEffect(()=>{
-        setRecommendedFontSizeAndWordSpacing();
-    }, [font])
+          // Create a temporary element to measure text width
+          const tempDiv = document.createElement('div');
+          tempDiv.style.position = 'absolute';
+          tempDiv.style.visibility = 'hidden';
+          tempDiv.style.whiteSpace = 'nowrap';
+          tempDiv.style.fontFamily = font.name; // Use the dynamically set font
+          document.body.appendChild(tempDiv);
+    
+          let fontSize = maxFontSize;
+          let textWidth;
+    
+          // Reduce font size until the text width fits within the available width
+          do {
+            tempDiv.style.fontSize = `${fontSize}px`;
+            tempDiv.textContent = transform_text(phrase, grammar)
+            textWidth = tempDiv.offsetWidth;
+    
+            if (textWidth <= frameWidth * (1 - 2 * sideMarginFactor)) {
+              break;
+            }
+    
+            fontSize--;
+          } while (fontSize > 0);
+    
+          // Clean up temporary element
+          document.body.removeChild(tempDiv);
+          return Math.round(fontSize);
+        };
+    
+        // Inject @font-face into the document style to load the font dynamically
+        const fontFaceStyle = document.createElement('style');
+        fontFaceStyle.innerHTML = `
+          @font-face {
+            font-family: '${font.name}';
+            src: url(${font.file}) format('truetype');
+          }
+        `;
+        document.head.appendChild(fontFaceStyle);
+    
+        // Calculate and set maxFontSize
+        setRecommendedFontSize(calculateMaxFontSize());
+        // Clean up font-face style when component or font changes
+        return () => {
+          document.head.removeChild(fontFaceStyle);
+        };
+
+    }, [frameWidth, frameHeight, font, grammar, longestTextShown]);
 
     return (
         <div className='line-typography-frame-info-page-main'>
             <header className='header'></header>
             
             <div className='content'>
-                <h1>Typography & Frame Details</h1>        
+                <h1>Typography & Frame Details</h1>
                 <hr/>
                 <table style={{textAlign:'center',border: '3px solid black'}}>
                     <tbody>
@@ -151,21 +201,22 @@ function LineTypographyFrameInfoPage() {
                                 <input style={{textAlign:'center'}}
                                 defaultValue={640} 
                                 id='frameWidth' 
+                                onChange={(e)=>{setFrameWidth(e.target.value);}}
                                 type='number'/><br/>pixels <br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
                                 defaultValue={480} 
                                 id='frameHeight' 
-                                onChange={()=>setRecommendedFontSizeAndWordSpacing()}
+                                onChange={(e)=>{setFrameHeight(e.target.value);}}
                                 type='number'/><br/>pixels <br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
-                                <input defaultChecked={true} onClick={()=>{setGrammar('original');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
-                                <input onClick={()=>{setGrammar('uppercase');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
-                                <input onClick={()=>{setGrammar('lowercase');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
-                                <input onClick={()=>{setGrammar('capsfirstonly');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
-                                <input onClick={()=>{setGrammar('capsallwords');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
+                                <input defaultChecked={true} onClick={()=>{setGrammar('original');}} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
+                                <input onClick={()=>{setGrammar('uppercase');}} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
+                                <input onClick={()=>{setGrammar('lowercase');}} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
+                                <input onClick={()=>{setGrammar('capsfirstonly');}} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
+                                <input onClick={()=>{setGrammar('capsallwords');}} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
@@ -242,7 +293,7 @@ function LineTypographyFrameInfoPage() {
                                     font.name !== 'Other Font' &&
                                     <>
                                     <h4 style={{color:'orange'}}>
-                                    For the font <i>{font.name}</i>, the following must apply based on the frame dimensions and grammar choice:
+                                    For the font <i>{font.name}</i>, the following must apply<br/>based on the frame dimensions, grammar choice, and the<br/>length of the longest line shown on screen:
                                     <ul>
                                         <li>
                                             Maximum Font Size: {recommendedFontSize}
@@ -297,7 +348,7 @@ function LineTypographyFrameInfoPage() {
                                         <tr style={{border: '3px solid black'}}>
                                             <td style={{border: '3px solid black'}}>
                                                 <div id='maxOneLine'>
-                                                    <input onClick={()=>setRecommendedFontSizeAndWordSpacing()} defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
+                                                    <input defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
                                                     <label htmlFor='maxOneLineBtn'>Max. 1 Line</label>
                                                     <br/>
                                                     <label htmlFor='maxOneLineBtn'><img width={200} height={200} src={oneLinePic} alt="f"/><br/></label>
@@ -305,7 +356,7 @@ function LineTypographyFrameInfoPage() {
                                             </td>
                                             <td style={{border: '3px solid black'}}>
                                                 <div id='maxTwoLines'>
-                                                    <input onClick={()=>setRecommendedFontSizeAndWordSpacing()} name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
+                                                    <input name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
                                                     <label htmlFor='maxTwoLinesBtn'>Max. 2 Lines</label>
                                                     <br/>
                                                     <label htmlFor='maxTwoLinesBtn'><img width={200} height={200} src={twoLinePic} alt="g"/></label>
@@ -326,4 +377,4 @@ function LineTypographyFrameInfoPage() {
     )
 }
 
-export default LineTypographyFrameInfoPage;
+export default LineTypographyFrameInfoPage2;
