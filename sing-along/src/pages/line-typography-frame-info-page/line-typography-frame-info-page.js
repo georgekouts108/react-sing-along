@@ -19,7 +19,7 @@ function LineTypographyFrameInfoPage() {
 
     const data = location.state?.data;
 
-    const [longestTextShown, setLongestTextShown] = useState(data.longestTextShown)
+    const [longestTextShown] = useState(data.longestTextShown)
     
     let _frame_width = 640
     let _frame_height = 480

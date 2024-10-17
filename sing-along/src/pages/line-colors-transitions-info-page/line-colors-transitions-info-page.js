@@ -37,7 +37,7 @@ function LineColorsTransitionsInfoPage() {
     }
     const [lines, setLines] = useState(elaboratedLines)
 
-    const [lineCount, setLineCount] = useState(data.lineCount)
+    const [lineCount] = useState(data.lineCount)
     
     const [defaultEnterTransition, setDefaultEnterTransition] = useState('slidein')
     const [defaultExitTransition, setDefaultExitTransition] = useState('slideout')
