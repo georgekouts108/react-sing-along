@@ -56,7 +56,7 @@ function LineColorsTransitionsInfoPage() {
                 longestTextShown: location.state?.data.longestTextShown
             }
 
-            navigate('/line-typography-frame-info2', { 
+            navigate('/line-typography-frame-info', { 
                 state: {data: data}
             });
         }

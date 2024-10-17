@@ -7,6 +7,7 @@ import bottomPosition from '../../assets/images/screenshots/bottomPosition.png'
 import centerPosition from '../../assets/images/screenshots/centerPosition.png'
 import FontPicker from './font-picker';
 import { fonts } from '../../data/fonts/font-names';
+import { transform_text } from '../../backend/getScripts';
 
 function LineTypographyFrameInfoPage() {
     document.title = 'Typography & Frame Details: Sing-Along Subtitle Generator'
@@ -15,7 +16,10 @@ function LineTypographyFrameInfoPage() {
 
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
+
     const data = location.state?.data;
+
+    const [longestTextShown, setLongestTextShown] = useState(data.longestTextShown)
     
     let _frame_width = 640
     let _frame_height = 480
@@ -25,7 +29,6 @@ function LineTypographyFrameInfoPage() {
     let _y_sing = _frame_height - (_font_size * _max_line_count);        
     let _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
  
-    const [recommendedFontSize, setRecommendedFontSize] = useState(font.recommendedSizePercentages.mixed.oneLine * _frame_height);
     const [fontWordSpacing, setFontWordSpacing] = useState(font.wordSpacing);
 
     const [sampleText, setSampleText] = useState('')
@@ -56,8 +59,8 @@ function LineTypographyFrameInfoPage() {
         else if (font.name === 'Other Font' && _font_name==='') {
             alert('ERROR: You have not specified the name of a custom font.')
         }
-        else if (isNaN(_font_size) || (_font_size > recommendedFontSize && font.name !== 'Other Font')) {
-            alert('ERROR: The font size is either missing or exceeds the recommended maximum for the selected font.')
+        else if (isNaN(_font_size) || _font_size <= 0) {
+            alert('ERROR: The font size is missing or invalid.')
         }
         else if (_pos_custom && (isNaN(_custom_y_sing) || _custom_y_sing-_font_size<0 || _custom_y_sing>_frame_height)) {
             alert('ERROR: The custom Y-Sing coordinate is either missing or will make lines appear partially or entirely off-screen.')
@@ -101,34 +104,17 @@ function LineTypographyFrameInfoPage() {
             });
         }
     }
-    const setRecommendedFontSizeAndWordSpacing = () => {
-    
-        let rfsp = 0;  
-        let isUppercase = document.getElementById('grammar_uppercase').checked;
-        let maxLineCount = parseInt((document.getElementById('maxTwoLinesBtn').checked ? 2 : 1)); 
-        let frameHeight = parseFloat(document.getElementById('frameHeight').value)
-        if (isUppercase) {
-            rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.uppercase.oneLine 
-                : font.recommendedSizePercentages.uppercase.twoLine)
-        }
-        else {
-            rfsp = (maxLineCount===1 ? font.recommendedSizePercentages.mixed.oneLine 
-                : font.recommendedSizePercentages.mixed.twoLine)
-        }
-        setRecommendedFontSize(Math.round(rfsp * frameHeight, 2));
+   
+    useEffect(() => {
         setFontWordSpacing(font.wordSpacing);
-    }
-    
-    useEffect(()=>{
-        setRecommendedFontSizeAndWordSpacing();
-    }, [font])
+    }, [font]);
 
     return (
         <div className='line-typography-frame-info-page-main'>
             <header className='header'></header>
             
             <div className='content'>
-                <h1>Typography & Frame Details</h1>        
+                <h1>Typography & Frame Details</h1>
                 <hr/>
                 <table style={{textAlign:'center',border: '3px solid black'}}>
                     <tbody>
@@ -157,21 +143,20 @@ function LineTypographyFrameInfoPage() {
                                 <input style={{textAlign:'center'}}
                                 defaultValue={480} 
                                 id='frameHeight' 
-                                onChange={()=>setRecommendedFontSizeAndWordSpacing()}
                                 type='number'/><br/>pixels <br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
-                                <input defaultChecked={true} onClick={()=>{setGrammar('original');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
-                                <input onClick={()=>{setGrammar('uppercase');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
-                                <input onClick={()=>{setGrammar('lowercase');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
-                                <input onClick={()=>{setGrammar('capsfirstonly');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
-                                <input onClick={()=>{setGrammar('capsallwords');setRecommendedFontSizeAndWordSpacing()}} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
+                                <input defaultChecked={true} onClick={()=>{setGrammar('original');}} name='grammar_choice' id='grammar_original' type='radio'/><label  htmlFor='grammar_original'>Keep as entered</label><br/>
+                                <input onClick={()=>{setGrammar('uppercase');}} name='grammar_choice' id='grammar_uppercase' type='radio'/><label  htmlFor='grammar_uppercase'>UPPERCASE</label><br/>
+                                <input onClick={()=>{setGrammar('lowercase');}} name='grammar_choice' id='grammar_lowercase' type='radio'/><label  htmlFor='grammar_lowercase'>lowercase</label><br/>
+                                <input onClick={()=>{setGrammar('capsfirstonly');}} name='grammar_choice' id='grammar_capsfirstonly' type='radio'/><label  htmlFor='grammar_capsfirstonly'>Capitalize only first word</label><br/>
+                                <input onClick={()=>{setGrammar('capsallwords');}} name='grammar_choice' id='grammar_capsallwords' type='radio'/><label htmlFor='grammar_capsallwords'>Capitalize Every Word</label><br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
                                 placeholder='font size'
                                 id='fontSize' 
-                                defaultValue={Math.round(recommendedFontSize,2)}
+                                defaultValue={48}
                                 type='number'/>
                             </td>
                             
@@ -242,13 +227,15 @@ function LineTypographyFrameInfoPage() {
                                     font.name !== 'Other Font' &&
                                     <>
                                     <h4 style={{color:'orange'}}>
-                                    For the font <i>{font.name}</i>, the following must apply based on the frame dimensions and grammar choice:
+                                    For the font <i>{font.name}</i>, the following must apply:
                                     <ul>
-                                        <li>
-                                            Maximum Font Size: {recommendedFontSize}
-                                        </li>
                                         <li>Spaces between each word: {fontWordSpacing}</li>
                                     </ul>
+                                    Also, open Aegisub and test the longest line that'll be shown on screen:<br/><br/>
+                                    <span style={{color:'lime', fontFamily:font.name, fontSize:24}}>{transform_text(longestTextShown, grammar)}</span><br/><br/> 
+                                    with {fontWordSpacing} space(s) in between each word, and try different font sizes<br/>
+                                    until there's one you're satisfied with.
+                                    
                                     </h4>
                                     <table>
                                         <tbody>
@@ -297,7 +284,7 @@ function LineTypographyFrameInfoPage() {
                                         <tr style={{border: '3px solid black'}}>
                                             <td style={{border: '3px solid black'}}>
                                                 <div id='maxOneLine'>
-                                                    <input onClick={()=>setRecommendedFontSizeAndWordSpacing()} defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
+                                                    <input defaultChecked={true} name='maxLines' id='maxOneLineBtn' type='radio' value='maxOneLine'/>
                                                     <label htmlFor='maxOneLineBtn'>Max. 1 Line</label>
                                                     <br/>
                                                     <label htmlFor='maxOneLineBtn'><img width={200} height={200} src={oneLinePic} alt="f"/><br/></label>
@@ -305,7 +292,7 @@ function LineTypographyFrameInfoPage() {
                                             </td>
                                             <td style={{border: '3px solid black'}}>
                                                 <div id='maxTwoLines'>
-                                                    <input onClick={()=>setRecommendedFontSizeAndWordSpacing()} name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
+                                                    <input name='maxLines' id='maxTwoLinesBtn' type='radio' value='maxTwoLines'/>
                                                     <label htmlFor='maxTwoLinesBtn'>Max. 2 Lines</label>
                                                     <br/>
                                                     <label htmlFor='maxTwoLinesBtn'><img width={200} height={200} src={twoLinePic} alt="g"/></label>

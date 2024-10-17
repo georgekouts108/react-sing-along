@@ -7,8 +7,6 @@ import LineTimingInfoPage2 from './pages/line-timing-info-page/line-timing-info-
 import SrtGeneratorPage from './pages/srt-generator-page/srt-generator-page';
 import CombineSRTPage from './pages/combine-srts-page/combine-srts-page';
 
-import LineTypographyFrameInfoPage2 from './pages/line-typography-frame-info-page/line-typography-frame-info-page2';
-
 function App() {  
   return (
     <div>
@@ -21,8 +19,6 @@ function App() {
           <Route exact path='/line-timing-info' element={<LineTimingInfoPage2 />}/>
           <Route exact path='/srt-generator' element={<SrtGeneratorPage />}/>
           <Route exact path='/combine-srts' element={<CombineSRTPage />}/>
-
-          <Route exact path='/line-typography-frame-info2' element={<LineTypographyFrameInfoPage2 />}/>
         </Routes>
       </Router>
     </div>
