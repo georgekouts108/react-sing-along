@@ -7,7 +7,7 @@ import bottomPosition from '../../assets/images/screenshots/bottomPosition.png'
 import centerPosition from '../../assets/images/screenshots/centerPosition.png'
 import FontPicker from './font-picker';
 import { fonts } from '../../data/fonts/font-names';
-import { transform_text } from '../../backend/getScripts';
+import { transform_text, get_longest_line_display } from '../../backend/getScripts';
 
 function LineTypographyFrameInfoPage() {
     document.title = 'Typography & Frame Details: Sing-Along Subtitle Generator'
@@ -16,6 +16,7 @@ function LineTypographyFrameInfoPage() {
 
     const [grammar, setGrammar] = useState('original')
     const [font, setFont] = useState(fonts[0]);
+    const [wouldBeFontSize, setWouldBeFontSize] = useState(50);
 
     const data = location.state?.data;
 
@@ -23,7 +24,7 @@ function LineTypographyFrameInfoPage() {
     
     let _frame_width = 640
     let _frame_height = 480
-    let _font_size = 40
+    let _font_size = 50
     const [position, setPosition] = useState('bottom')
     let _max_line_count = 1
     let _y_sing = _frame_height - (_font_size * _max_line_count);        
@@ -107,7 +108,7 @@ function LineTypographyFrameInfoPage() {
    
     useEffect(() => {
         setFontWordSpacing(font.wordSpacing);
-    }, [font]);
+    }, [font])
 
     return (
         <div className='line-typography-frame-info-page-main'>
@@ -154,9 +155,10 @@ function LineTypographyFrameInfoPage() {
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
-                                placeholder='font size'
+                                placeholder='Font size'
                                 id='fontSize' 
-                                defaultValue={48}
+                                value={wouldBeFontSize}
+                                onChange={(e) => setWouldBeFontSize(e.target.value)}
                                 type='number'/>
                             </td>
                             
@@ -226,17 +228,7 @@ function LineTypographyFrameInfoPage() {
                                 {
                                     font.name !== 'Other Font' &&
                                     <>
-                                    <h4 style={{color:'orange'}}>
-                                    For the font <i>{font.name}</i>, the following must apply:
-                                    <ul>
-                                        <li>Spaces between each word: {fontWordSpacing}</li>
-                                    </ul>
-                                    Also, open Aegisub and test the longest line that'll be shown on screen:<br/><br/>
-                                    <span style={{color:'lime', fontFamily:font.name, fontSize:24}}>{transform_text(longestTextShown, grammar)}</span><br/><br/> 
-                                    with {fontWordSpacing} space(s) in between each word, and try different font sizes<br/>
-                                    until there's one you're satisfied with.
                                     
-                                    </h4>
                                     <table>
                                         <tbody>
                                             <tr>
@@ -257,7 +249,17 @@ function LineTypographyFrameInfoPage() {
                                             </tr>
                                         </tbody>
                                     </table>
-                                        
+                                    <h4 style={{color:'orange'}}>
+                                    For the font <i>{font.name}</i>, the following must apply:
+                                    <ul>
+                                        <li>Spaces between each word: {fontWordSpacing}</li>
+                                    </ul>
+                                    Also, it is suggested to copy-paste the sample subtitle below (with the longest line that'll be shown on screen) into Aegisub with {fontWordSpacing} space(s) in between each word, and try different font sizes<br/>
+                                    until there's one you're satisfied with.<br/><br/>
+                                    <span style={{color:'lime', fontSize:24}}>{`{\\fs${wouldBeFontSize}}{\\fn${font.name}}`}{get_longest_line_display(transform_text(longestTextShown, grammar), fontWordSpacing)}</span><br/><br/> 
+                                    
+                                    
+                                    </h4>
                                     </>
                                 }
                                 {

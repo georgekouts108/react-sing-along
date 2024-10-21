@@ -1,6 +1,17 @@
 import { get_scripts_one_line, get_scripts_two_lines } from "./scripting";
 import { get_clip_tag, get_pos_tag } from "./tags";
 
+export const get_longest_line_display = (longestLine, spacesBetweenWords) => {
+    let words = longestLine.split(' ');
+    let displayedLongestTextShown = '';
+    for (let l = 0; l < words.length; l++) {
+        displayedLongestTextShown += words[l]
+        displayedLongestTextShown += (l !== words.length-1 ? ' '.repeat(spacesBetweenWords) : '')
+    }
+    console.log(displayedLongestTextShown)
+    return displayedLongestTextShown
+}
+
 export const transform_text = (lyric_text, choice) => {
     if (choice === 'uppercase'){
         return lyric_text.toUpperCase();
