@@ -77,6 +77,11 @@ function LineColorsTransitionsInfoPage() {
                     updatedLines[l+1].preColorChoice=lineObject.postColorChoice;
                     updatedLines[l+1].preColors=lineObject.postColors;
                 }
+
+                if (updatedLines[l].repeatsPreviousTextShown) {
+                    updatedLines[l].preColorChoice = updatedLines[l-1].postColorChoice;
+                    updatedLines[l].preColors=updatedLines[l-1].postColors;
+                }
                 
             } 
         }
