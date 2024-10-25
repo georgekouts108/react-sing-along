@@ -41,7 +41,7 @@ function LineTextInfoForm(props) {
         else {
             setWordsShown([])
         }
-        selectAllWords(false);
+        selectAllWords(true);
     }
 
     const selectAllWords = (choice) => {
@@ -62,7 +62,7 @@ function LineTextInfoForm(props) {
     }
     const confirmLine = () => {
         setLineConfirmed(true);
-        
+        updateIndexesOfSungWords();
         const _line = props.line;
         _line.id = lineId
         _line.lineConfirmed = true
