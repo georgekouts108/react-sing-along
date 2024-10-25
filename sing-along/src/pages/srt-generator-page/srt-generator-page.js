@@ -9,7 +9,7 @@ function SrtGeneratorPage() {
     const currentData = location.state?.data;
     
     const [downloadDone, setDownloadDone] = useState(false);
-    const [srtFileName, setSrtFileName] = useState('my_lyrics')
+    const [srtFileName, setSrtFileName] = useState('my_song')
     
     const getSRTfile = () => {
         const currentScripts = get_all_scripts(currentData);
@@ -22,7 +22,7 @@ function SrtGeneratorPage() {
             <h1>🎊 🎶 Your subtitle file is ready! 🎶 🎊</h1>
             <div>
                 <p>
-                    Download your subtitle file by clicking the button below.<br/><br/>Afterwards, open Aegisub, then drag-and-drop the file into the software.<br/>
+                    Enter the name of your subtitle file and then download it by clicking "Download Subtitle File".<br/><br/>Afterwards, open Aegisub, then drag-and-drop the file into the software.<br/>
                     Then, make sure the video resolution is set to <span style={{fontWeight:'bold'}}>{currentData.frameWidth} x {currentData.frameHeight}</span>.<br/>
                     Afterwards, manually set the exact timings for all the words' highlightings in the song.
                     <br/><br/>
@@ -31,7 +31,7 @@ function SrtGeneratorPage() {
                 </p>
             </div><br/><br/>
             <div>
-                <input placeholder=".srt file name" type="text" value={srtFileName} onChange={(e)=>setSrtFileName(e.target.value)}/>.srt<br/><br/>
+                Subtitle file name:&nbsp;&nbsp;<input placeholder=".srt file name" type="text" value={srtFileName} onChange={(e)=>setSrtFileName(e.target.value)}/>.srt<br/><br/>
                 <button disabled={!srtFileName} onClick={()=>getSRTfile()}>Download Subtitle File</button>
             </div>         
             <div>
