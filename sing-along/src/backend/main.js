@@ -68,12 +68,12 @@ export const writeSrtContent = (currentScripts) => {
     return content;
 }
 
-export const downloadSRT = (srtContent) => {
+export const downloadSRT = (srtContent, fileName) => {
     const blob = new Blob([srtContent], { type: 'text/srt' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'subtitles.srt';
+    a.download = `${fileName}.srt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

@@ -9,11 +9,12 @@ function SrtGeneratorPage() {
     const currentData = location.state?.data;
     
     const [downloadDone, setDownloadDone] = useState(false);
+    const [srtFileName, setSrtFileName] = useState('my_lyrics')
     
     const getSRTfile = () => {
         const currentScripts = get_all_scripts(currentData);
         const srtContent = writeSrtContent(currentScripts);
-        downloadSRT(srtContent);
+        downloadSRT(srtContent, srtFileName);
         setDownloadDone(true)
     }
     return (
@@ -30,7 +31,8 @@ function SrtGeneratorPage() {
                 </p>
             </div><br/><br/>
             <div>
-                <button onClick={()=>getSRTfile()}>Download Subtitle File</button>
+                <input placeholder=".srt file name" type="text" value={srtFileName} onChange={(e)=>setSrtFileName(e.target.value)}/>.srt<br/><br/>
+                <button disabled={!srtFileName} onClick={()=>getSRTfile()}>Download Subtitle File</button>
             </div>         
             <div>
                 {
