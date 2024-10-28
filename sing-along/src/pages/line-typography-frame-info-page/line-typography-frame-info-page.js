@@ -33,6 +33,7 @@ function LineTypographyFrameInfoPage() {
     const [fontWordSpacing, setFontWordSpacing] = useState(font.wordSpacing);
 
     const [sampleText, setSampleText] = useState('')
+    const [customFontName, setCustomFontName] = useState('MyFontName')
 
     const confirmFrameDetails = () => {
         _frame_width = parseFloat(document.getElementById('frameWidth').value)
@@ -117,19 +118,19 @@ function LineTypographyFrameInfoPage() {
             <div className='content'>
                 <h1>Typography & Frame Details</h1>
                 <hr/>
-                <table style={{textAlign:'center',border: '3px solid black'}}>
+                <table style={{textAlign:'center', border: '3px solid black'}}>
                     <tbody>
                         <tr >
-                            <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <td style={{textAlign:'center', border: '3px solid black'}}>
                             Frame Width
                             </td>
-                            <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <td style={{textAlign:'center', border: '3px solid black'}}>
                             Frame Height
                             </td>
-                            <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <td style={{textAlign:'center', border: '3px solid black'}}>
                             Grammar Choice
                             </td>
-                            <td style={{textAlign:'center',border: '3px solid black'}}>
+                            <td style={{textAlign:'center', border: '3px solid black'}}>
                             Font Size
                             </td>
                         </tr>
@@ -155,7 +156,7 @@ function LineTypographyFrameInfoPage() {
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
-                                placeholder='Font size'
+                                placeholder='Font Size'
                                 id='fontSize' 
                                 value={wouldBeFontSize}
                                 onChange={(e) => setWouldBeFontSize(e.target.value)}
@@ -250,15 +251,7 @@ function LineTypographyFrameInfoPage() {
                                         </tbody>
                                     </table>
                                     <h4 style={{color:'orange'}}>
-                                    For the font <i>{font.name}</i>, the following must apply:
-                                    <ul>
-                                        <li>Spaces between each word: {fontWordSpacing}</li>
-                                    </ul>
-                                    Also, it is suggested to copy-paste the sample subtitle below (with the longest line that'll be shown on screen) into Aegisub with {fontWordSpacing} space(s) in between each word, and try different font sizes<br/>
-                                    until there's one you're satisfied with.<br/><br/>
-                                    <span style={{color:'lime', fontSize:24}}>{`{\\fs${wouldBeFontSize}}{\\fn${font.name}}`}{get_longest_line_display(transform_text(longestTextShown, grammar), fontWordSpacing)}</span><br/><br/> 
-                                    
-                                    
+                                        For the font <i>{font.name}</i>, there will be {fontWordSpacing} space(s) between each word.
                                     </h4>
                                     </>
                                 }
@@ -269,13 +262,20 @@ function LineTypographyFrameInfoPage() {
                                         <input style={{textAlign:'center', width:250}}
                                         placeholder='custom font name'
                                         id='customFontName' 
+                                        value={customFontName}
+                                        onChange={(e)=>setCustomFontName(e.target.value)}
                                         type='text'/><br/>
                                         <p>Select the number of spaces between each word: </p>
                                         <input defaultChecked={true} name='customWordSpacing' id='customWordSpacing1' type='radio'/><label htmlFor='customWordSpacing1'>1 Space</label><br/>
                                         <input name='customWordSpacing' id='customWordSpacing2' type='radio'/><label htmlFor='customWordSpacing2'>2 Spaces</label>
                                     </div>
-
                                 }
+                                <h4>
+                                    Also, it is suggested to copy-paste the sample subtitle below (with the longest line that'll be shown on screen) into Aegisub {font.fid !== 'other' ? `with ${fontWordSpacing} space(s) in between each word`: '' }, and try different font sizes
+                                    until there's one you're satisfied with.<br/><br/>
+                                    <span style={{color:'lime', fontSize:24}}>{`{\\fs${wouldBeFontSize}}{\\fn${font.fid !== 'other' ? font.name : (customFontName ? customFontName : 'MyFont')}}`}{get_longest_line_display(transform_text(longestTextShown, grammar), fontWordSpacing)}</span><br/><br/> 
+                                    
+                                </h4>
                             </td>
                         </tr>
                         <tr style={{border: '3px solid black'}}>
