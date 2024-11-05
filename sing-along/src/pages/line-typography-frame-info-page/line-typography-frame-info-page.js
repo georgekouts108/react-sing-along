@@ -21,6 +21,8 @@ function LineTypographyFrameInfoPage() {
     const data = location.state?.data;
 
     const [longestTextShown] = useState(data.longestTextShown)
+    const [tentFrameWidth, setTentFrameWidth] = useState(640)
+    const [tentFrameHeight, setTentFrameHeight] = useState(480)
     
     let _frame_width = 640
     let _frame_height = 480
@@ -31,7 +33,6 @@ function LineTypographyFrameInfoPage() {
     let _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
  
     const [fontWordSpacing, setFontWordSpacing] = useState(font.wordSpacing);
-
     const [sampleText, setSampleText] = useState('')
     const [customFontName, setCustomFontName] = useState('MyFontName')
 
@@ -70,21 +71,27 @@ function LineTypographyFrameInfoPage() {
         else {
             let _position = '';
             if (_pos_centered) {
-                _y_sing = ((_frame_height/2) + _font_size)
+                _y_sing = ((_frame_height/2) + (_font_size/2))
+                _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.25));
                 _position = 'centered'
             }
             else if (_pos_bottom) {
-                _y_sing = (_frame_height - (_font_size * (_max_line_count===1? 1 : 2.5)));
+                if (_max_line_count === 1) {
+                    _y_sing = _frame_height * 0.93
+                    _y_wait = _y_sing + _font_size;
+                }
+                else {
+                    _y_wait = _frame_height * 0.93
+                    _y_sing = _y_wait - (_font_size * 1.5)
+                }
                 _position = 'bottom'
             }
             else if (_pos_custom) {
-                _position = 'custom'
                 _y_sing = parseFloat(document.getElementById('customYsing').value)
+                _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.25));
+                _position = 'custom'
             }
 
-            _y_wait = _y_sing + (_font_size * (_max_line_count===1 ? 1 : 1.5));
-            
-            
             const _font_info = {fontName: _font_name, fontWordSpacing: _word_spacing, fontSize: _font_size};
             const _state = {
                 data: {
@@ -138,12 +145,16 @@ function LineTypographyFrameInfoPage() {
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
                                 defaultValue={640} 
+                                value={tentFrameWidth}
+                                onChange={(e)=>setTentFrameWidth(e.target.value)}
                                 id='frameWidth' 
                                 type='number'/><br/>pixels <br/>
                             </td>
                             <td style={{textAlign:'center', border: '3px solid black'}}>
                                 <input style={{textAlign:'center'}}
                                 defaultValue={480} 
+                                value={tentFrameHeight}
+                                onChange={(e)=>setTentFrameHeight(e.target.value)}
                                 id='frameHeight' 
                                 type='number'/><br/>pixels <br/>
                             </td>
@@ -195,7 +206,7 @@ function LineTypographyFrameInfoPage() {
                                                 id='customYsing' 
                                                 disabled={position!=='custom'}
                                                 type='number'/>
-                                                </td>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -273,7 +284,7 @@ function LineTypographyFrameInfoPage() {
                                 <h4>
                                     Also, it is suggested to copy-paste the sample subtitle below (with the longest line that'll be shown on screen) into Aegisub {font.fid !== 'other' ? `with ${fontWordSpacing} space(s) in between each word`: '' }, and try different font sizes
                                     until there's one you're satisfied with.<br/><br/>
-                                    <span style={{color:'lime', fontSize:24}}>{`{\\fs${wouldBeFontSize}}{\\fn${font.fid !== 'other' ? font.name : (customFontName ? customFontName : 'MyFont')}}`}{get_longest_line_display(transform_text(longestTextShown, grammar), fontWordSpacing)}</span><br/><br/> 
+                                    <span style={{color:'lime', fontSize:24}}>{`{\\pos(${tentFrameWidth/2},${Math.round(tentFrameHeight*0.93, 2)})}{\\fs${wouldBeFontSize}}{\\fn${font.fid !== 'other' ? font.name : (customFontName ? customFontName : 'MyFont')}}`}{get_longest_line_display(transform_text(longestTextShown, grammar), fontWordSpacing)}</span><br/><br/> 
                                     
                                 </h4>
                             </td>
